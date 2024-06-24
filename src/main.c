@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/24 16:39:29 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/24 17:32:58 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,16 @@ void	handle_sigint(int status)
 	rl_redisplay();
 }
 
+// t_token	*add_token(, int index)
+// {
+
+// }
+
 int	main(int ac, char **av, char **env)
 {
 	char	*buf;
 	int		i;
-	// t_token	token;
+	// t_token	*token;
 
 	(void)ac;
 	(void)av;

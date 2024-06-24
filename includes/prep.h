@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/24 16:39:13 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/24 17:12:06 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_token
 	char			*value;
 	int				index;
 	t_token_type	type;
+	struct s_token	*next_token;
 }	t_token;
 
 // void	p_exec(char *path_av, char **env);
