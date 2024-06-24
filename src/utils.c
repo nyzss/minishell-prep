@@ -6,11 +6,11 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:53:22 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/24 15:32:08 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/24 16:39:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "prep.h"
 
 char	*p_get_env(char **env)
 {

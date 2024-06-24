@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/06/24 15:21:42 by okoca            ###   ########.fr        #
+#    Updated: 2024/06/24 16:38:48 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ CFLAGS = -Wall -Werror -Wextra -I${INCLUDES_DIR} -I${LIBFT} -g
 SRC_FILES = main.c \
 			utils.c \
 
-NAME = lexer
+NAME = prep
 
 SRC = ${addprefix ${SRC_DIR}, ${SRC_FILES}}
 

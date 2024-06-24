@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "prep.h"
 
 int	ft_prompt(char *prompt)
 {
