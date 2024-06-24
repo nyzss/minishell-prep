@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:53:22 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/24 16:39:35 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/24 21:23:39 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ char	*p_helper_path(char *arg, char *path, char **paths, int i)
 	if (!tmp)
 		return (NULL);
 	path = ft_strjoin(tmp, arg);
+	free(tmp);
 	if (!path)
 		return (NULL);
-	free(tmp);
 	return (path);
 }
 
@@ -126,9 +126,9 @@ void	p_cleanup_array(char **arr)
 	free(arr);
 }
 
-int	p_exec(char *path, char **args)
+int	p_exec(char *path, char **args, char **envp)
 {
-	if (execve(path, args, NULL) < 0)
+	if (execve(path, args, envp) < 0)
 	{
 		free(path);
 		p_cleanup_array(args);
