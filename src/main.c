@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 11:58:04 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 14:29:06 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	handle_sigint(int status)
 {
 	(void)status;
 	printf("\n");
+	signal_n = 1;
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -61,37 +62,65 @@ int	check_token(t_token *token)
 	return (0);
 }
 
+t_token	*get_next_command(t_token *head)
+{
+	while (head != NULL)
+	{
+		if (head->type == Command)
+			return (head);
+		head = head->next_token;
+	}
+	return (NULL);
+}
+
 // write from parent [1]
 // read from child [0]
 void	handle_execution(t_token *token, char **env)
 {
 	pid_t	pid;
-	pid_t	pid2;
+	// pid_t	pid2;
 	int		fds[2];
-	// char	buf[1024];
 
 	pipe(fds);
-	pid = fork();
-	if (pid == 0)
+	while (token != NULL && token->type == Command)
 	{
-		dup2(fds[1], STDOUT_FILENO);
+		pid = fork();
+		if (pid == 0)
+		{
+			dup2(fds[1], STDOUT_FILENO);
+			dup2(fds[0], STDIN_FILENO);
+			close(fds[0]);
+			close(fds[1]);
+			if (m_child(token->value, env) != 0)
+			{
+				printf("Command not found!\n");
+				exit(1);
+			}
+		}
+		token = get_next_command(token);
 		close(fds[0]);
 		close(fds[1]);
-		m_child(token->value, env);
+		// wait(NULL);
+		// waitpid(pid2, NULL, 0);
+		if (signal_n == 1)
+			kill(pid, SIGKILL);
+		waitpid(pid, NULL, 0);
 	}
-	pid2 = fork();
-	if (pid2 == 0)
-	{
-		dup2(fds[0], STDIN_FILENO);
-		close(fds[1]);
-		close(fds[0]);
-		m_child(token->next_token->next_token->value, env);
-	}
-	close(fds[0]);
-	close(fds[1]);
-	waitpid(pid, NULL, 0);
-	waitpid(pid2, NULL, 0);
 }
+
+// pid2 = fork();
+// if (pid2 == 0)
+// {
+// 	dup2(fds[0], STDIN_FILENO);
+// 	close(fds[1]);
+// 	close(fds[0]);
+// 	m_child(token->next_token->next_token->value, env);
+// 	if (m_child(token->next_token->next_token->value, env) != 0)
+// 	{
+// 		printf("Command not found!\n");
+// 		exit(1);
+// 	}
+// }
 
 int	main(int ac, char **av, char **env)
 {
@@ -120,8 +149,6 @@ int	main(int ac, char **av, char **env)
 		{
 			print_token(token);
 			handle_execution(token, env);
-			// if (m_child(buf, env) != 0)
-			// 	printf("Command not found!\n");
 		}
 		printf("%s\n", buf);
 		if (buf)
