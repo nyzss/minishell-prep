@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 11:41:41 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:58:04 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	m_child(char *buf, char **env)
 {
-	pid_t	pid;
 	char	**args;
 	char	*path;
 
@@ -29,10 +28,7 @@ int	m_child(char *buf, char **env)
 		p_cleanup_array(args);
 		return (1);
 	}
-	pid = fork();
-	if (pid == 0)
-		p_exec(path, args, env);
-	waitpid(pid, NULL, 0);
+	p_exec(path, args, env);
 	return (0);
 }
 
@@ -67,30 +63,34 @@ int	check_token(t_token *token)
 
 // write from parent [1]
 // read from child [0]
-void	handle_execution(t_token *token)
+void	handle_execution(t_token *token, char **env)
 {
 	pid_t	pid;
+	pid_t	pid2;
 	int		fds[2];
-	char	buf[1024];
+	// char	buf[1024];
 
 	pipe(fds);
 	pid = fork();
 	if (pid == 0)
 	{
-		int b_read = read(fds[0], buf, 1024);
-		buf[b_read] = '\0';
-		close(fds[1]);
-		printf("received buffer: %s\n", buf);
-		exit(0);
-	}
-	else
-	{
+		dup2(fds[1], STDOUT_FILENO);
 		close(fds[0]);
-		write(fds[1], token->value, ft_strlen(token->value));
+		close(fds[1]);
+		m_child(token->value, env);
+	}
+	pid2 = fork();
+	if (pid2 == 0)
+	{
+		dup2(fds[0], STDIN_FILENO);
+		close(fds[1]);
+		close(fds[0]);
+		m_child(token->next_token->next_token->value, env);
 	}
 	close(fds[0]);
 	close(fds[1]);
 	waitpid(pid, NULL, 0);
+	waitpid(pid2, NULL, 0);
 }
 
 int	main(int ac, char **av, char **env)
@@ -119,7 +119,7 @@ int	main(int ac, char **av, char **env)
 		else
 		{
 			print_token(token);
-			handle_execution(token);
+			handle_execution(token, env);
 			// if (m_child(buf, env) != 0)
 			// 	printf("Command not found!\n");
 		}
