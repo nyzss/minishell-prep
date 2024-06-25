@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 07:53:38 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 09:53:20 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	m_child(char *buf, char **env)
 	args = ft_split(buf, ' ');
 	if (!args)
 		return (2);
-	path = p_get_path(args[0], env);
+	path = p_get_path(args[0]);
 	if (access(path, F_OK | X_OK) != 0)
 	{
 		if (path)
@@ -45,6 +45,26 @@ void	handle_sigint(int status)
 	rl_redisplay();
 }
 
+int	check_token(t_token *token)
+{
+	int	single_quote_nb;
+	int	double_quote_nb;
+
+	single_quote_nb = 0;
+	double_quote_nb = 0;
+	while (token != NULL)
+	{
+		if (token->type == SingleQuote)
+			single_quote_nb++;
+		else if (token->type == DoubleQuote)
+			double_quote_nb++;
+		token = token->next_token;
+	}
+	if (single_quote_nb % 2 != 0 || double_quote_nb % 2 != 0)
+		return (1);
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*buf;
@@ -63,10 +83,15 @@ int	main(int ac, char **av, char **env)
 		}
 		signal(SIGINT, handle_sigint);
 		token = tokenize_line(buf);
-		print_token(token);
-		if (m_child(buf, env) != 0)
+		if (check_token(token) == 1)
+			printf("error: unclosed quotes\n");
+		else
 		{
-			printf("Command not found!\n");
+			print_token(token);
+			if (m_child(buf, env) != 0)
+			{
+				printf("Command not found!\n");
+			}
 		}
 		printf("%s\n", buf);
 		if (buf)

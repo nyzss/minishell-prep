@@ -6,25 +6,11 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:53:22 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/24 21:23:39 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 08:49:55 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
-
-char	*p_get_env(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
-			return (env[i] + 5);
-		i++;
-	}
-	return (NULL);
-}
 
 int	p_precheck_path(char *av)
 {
@@ -86,16 +72,16 @@ char	*p_helper_path(char *arg, char *path, char **paths, int i)
 	return (path);
 }
 
-char	*p_get_path(char *arg, char **env)
+char	*p_get_path(char *arg)
 {
 	char	*path;
 	char	**paths;
 	int		i;
 
 	i = 0;
-	if (p_get_env(env) == NULL)
+	if (getenv("PATH") == NULL)
 		return (ft_strdup(arg));
-	paths = ft_split(p_get_env(env), ':');
+	paths = ft_split(getenv("PATH"), ':');
 	if (!paths)
 		return (NULL);
 	path = ft_strdup(arg);

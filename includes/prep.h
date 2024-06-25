@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 07:54:38 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 08:52:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <errno.h>
+# include <termios.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
@@ -50,13 +51,11 @@ typedef struct s_token
 
 int		p_exec(char *path, char **args, char **envp);
 
-char	*p_get_env(char **env);
-
 char	*p_strjoin(char *first, char *second, char *add);
 
 void	p_cleanup_array(char **arr);
 
-char	*p_get_path(char *arg, char **env);
+char	*p_get_path(char *arg);
 
 char	*p_helper_path(char *arg, char *path, char **paths, int i);
 

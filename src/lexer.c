@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 08:25:16 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 09:44:23 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,13 @@ t_token	*tokenize_line(char *buf)
 		{
 			tmp = create_token(SingleQuote, &(buf[i]), i);
 			add_token(&head, tmp);
-			i++;
-			add_token(&head, create_token(String, create_string(&(buf[i]), SingleQuote, &i), i));
+			add_token(&head, create_token(String, create_string(&(buf[i + 1]), SingleQuote, &i), i));
 		}
 		else if (buf[i] == '\"')
 		{
 			tmp = create_token(SingleQuote, &(buf[i]), i);
 			add_token(&head, tmp);
-			i++;
-			add_token(&head, create_token(String, create_string(&(buf[i]), DoubleQuote, &i), i));
+			add_token(&head, create_token(String, create_string(&(buf[i + 1]), DoubleQuote, &i), i));
 		}
 		else if (buf[i] == '<')
 		{
@@ -148,6 +146,8 @@ int	clear_token(t_token **token)
 	{
 		tmp = next;
 		next = next->next_token;
+		if (tmp->type == String)
+			free(tmp->value);
 		free(tmp);
 	}
 	*token = NULL;
