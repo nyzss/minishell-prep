@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 09:53:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:41:41 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,34 @@ int	check_token(t_token *token)
 	return (0);
 }
 
+// write from parent [1]
+// read from child [0]
+void	handle_execution(t_token *token)
+{
+	pid_t	pid;
+	int		fds[2];
+	char	buf[1024];
+
+	pipe(fds);
+	pid = fork();
+	if (pid == 0)
+	{
+		int b_read = read(fds[0], buf, 1024);
+		buf[b_read] = '\0';
+		close(fds[1]);
+		printf("received buffer: %s\n", buf);
+		exit(0);
+	}
+	else
+	{
+		close(fds[0]);
+		write(fds[1], token->value, ft_strlen(token->value));
+	}
+	close(fds[0]);
+	close(fds[1]);
+	waitpid(pid, NULL, 0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*buf;
@@ -72,26 +100,28 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	(void)env;
 	token = NULL;
 	while (1)
 	{
+		signal(SIGINT, handle_sigint);
 		buf = readline("\033[1;33mlexer_prep -$ \033[0m");
+		if (buf <= 0)
+			break ;
 		if (strncmp(buf, "exit", 4) == 0)
 		{
 			free(buf);
 			break ;
 		}
-		signal(SIGINT, handle_sigint);
 		token = tokenize_line(buf);
 		if (check_token(token) == 1)
 			printf("error: unclosed quotes\n");
 		else
 		{
 			print_token(token);
-			if (m_child(buf, env) != 0)
-			{
-				printf("Command not found!\n");
-			}
+			handle_execution(token);
+			// if (m_child(buf, env) != 0)
+			// 	printf("Command not found!\n");
 		}
 		printf("%s\n", buf);
 		if (buf)

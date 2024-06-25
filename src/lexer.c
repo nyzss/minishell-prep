@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 10:45:17 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:38:55 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ t_token *create_command(char *str, int *index)
 	int		i;
 	int		len;
 	char	*new;
+	char	*tmp;
 	t_token	*new_token;
 
 	i = 0;
@@ -130,7 +131,9 @@ t_token *create_command(char *str, int *index)
 		i++;
 	}
 	new[i] = '\0';
-	new_token = create_token(Command, new, *index);
+	tmp = ft_strtrim(new, " ");
+	free(new);
+	new_token = create_token(Command, tmp, *index);
 	*index += i;
 	*index -= 1;
 	return (new_token);
