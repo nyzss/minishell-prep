@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 09:44:23 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 09:58:50 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 		i++;
 	}
 	new[i] = '\0';
-	*index += i;
+	*index += i + 1;
 	return (new);
 }
 
