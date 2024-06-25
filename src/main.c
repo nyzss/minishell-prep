@@ -6,32 +6,11 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/24 22:01:38 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 07:53:38 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
-
-int	print_token(t_token *token)
-{
-	while (token != NULL)
-	{
-		if (token->type == SingleQuote)
-			printf("(SingleQuote)");
-		else if (token->type == DoubleQuote)
-			printf("(DoubleQuote)");
-		else if (token->type == String)
-			printf("(String)");
-		else if (token->type == Infile)
-			printf("(Infile<)");
-		else if (token->type == Outfile)
-			printf("(Outfile>)");
-		printf(" - index: %d", token->index);
-		printf(" - value: %c\n", *(token->value));
-		token = token->next_token;
-	}
-	return (0);
-}
 
 int	m_child(char *buf, char **env)
 {
@@ -64,89 +43,6 @@ void	handle_sigint(int status)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-}
-
-t_token	*create_token(t_token_type type, char *value, int index)
-{
-	t_token	*token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->index = index;
-	token->value = value;
-	token->type = type;
-	token->next_token = NULL;
-	return (token);
-}
-
-t_token	*last_token(t_token *head)
-{
-	while (head->next_token != NULL)
-		head = head->next_token;
-	return (head);
-}
-
-int	add_token(t_token **head, t_token *new)
-{
-	if (new == NULL)
-		return (1);
-	if (*head == NULL)
-		*head = new;
-	else
-		last_token((*head))->next_token = new;
-	return (0);
-}
-
-t_token	*tokenize_line(char *buf)
-{
-	t_token	*head;
-	t_token	*tmp;
-	int		i;
-
-	i = 0;
-	head = NULL;
-	while (buf[i])
-	{
-		if (buf[i] == '\'')
-		{
-			tmp = create_token(SingleQuote, &(buf[i]), i);
-			add_token(&head, tmp);
-		}
-		else if (buf[i] == '\"')
-		{
-			tmp = create_token(SingleQuote, &(buf[i]), i);
-			add_token(&head, tmp);
-		}
-		else if (buf[i] == '<')
-		{
-			tmp = create_token(Infile, &(buf[i]), i);
-			add_token(&head, tmp);
-		}
-		else if (buf[i] == '>')
-		{
-			tmp = create_token(Outfile, &(buf[i]), i);
-			add_token(&head, tmp);
-		}
-		i++;
-	}
-	return (head);
-}
-
-int	clear_token(t_token **token)
-{
-	t_token	*next;
-	t_token	*tmp;
-
-	next = (*token);
-	while (next != NULL)
-	{
-		tmp = next;
-		next = next->next_token;
-		free(tmp);
-	}
-	*token = NULL;
-	return (0);
 }
 
 int	main(int ac, char **av, char **env)
