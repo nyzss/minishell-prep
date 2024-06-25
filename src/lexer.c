@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 09:58:50 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 10:45:17 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	print_token(t_token *token)
 {
 	while (token != NULL)
 	{
-		if (token->type == SingleQuote || token->type == DoubleQuote || token->type == Infile || token->type == Outfile)
+		if (token->type == SingleQuote || token->type == DoubleQuote
+			|| token->type == Infile || token->type == Outfile
+			|| token->type == Pipe)
 		{
 			if (token->type == SingleQuote)
 				printf("(SingleQuote)");
@@ -26,15 +28,19 @@ int	print_token(t_token *token)
 				printf("(Infile)");
 			else if (token->type == Outfile)
 				printf("(Outfile)");
-			printf(" - index: %d", token->index);
-			printf(" - value: %c\n", *(token->value));
+			else if (token->type == Pipe)
+				printf("(Pipe)");
+			printf(" - index: \"%d\"", token->index);
+			printf(" - value: \"%c\"\n", *(token->value));
 		}
 		else
 		{
 			if (token->type == String)
 				printf("(String)");
-			printf(" - index: %d", token->index);
-			printf(" - value: %s\n", token->value);
+			else if (token->type == Command)
+				printf("(Command)");
+			printf(" - index: \"%d\"", token->index);
+			printf(" - value: \"%s\"\n", token->value);
 		}
 		token = token->next_token;
 	}
@@ -99,6 +105,37 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 	return (new);
 }
 
+int	check_if_meta(char c)
+{
+	if (c == '\'' || c == '\"' || c == '<' || c == '>' || c == '|')
+		return (1);
+	return (0);
+}
+
+t_token *create_command(char *str, int *index)
+{
+	int		i;
+	int		len;
+	char	*new;
+	t_token	*new_token;
+
+	i = 0;
+	len = 0;
+	while (str[len] && check_if_meta(str[len]) == 0)
+		len++;
+	new = malloc(sizeof(char) * (len + 1));
+	while (i < len)
+	{
+		new[i] = str[i];
+		i++;
+	}
+	new[i] = '\0';
+	new_token = create_token(Command, new, *index);
+	*index += i;
+	*index -= 1;
+	return (new_token);
+}
+
 t_token	*tokenize_line(char *buf)
 {
 	t_token	*head;
@@ -131,6 +168,16 @@ t_token	*tokenize_line(char *buf)
 			tmp = create_token(Outfile, &(buf[i]), i);
 			add_token(&head, tmp);
 		}
+		else if (buf[i] == '|')
+		{
+			tmp = create_token(Pipe, &(buf[i]), i);
+			add_token(&head, tmp);
+		}
+		else if (buf[i] != ' ')
+		{
+			tmp = create_command(&(buf[i]), &i);
+			add_token(&head, tmp);
+		}
 		i++;
 	}
 	return (head);
@@ -146,7 +193,7 @@ int	clear_token(t_token **token)
 	{
 		tmp = next;
 		next = next->next_token;
-		if (tmp->type == String)
+		if (tmp->type == String || tmp->type == Command)
 			free(tmp->value);
 		free(tmp);
 	}

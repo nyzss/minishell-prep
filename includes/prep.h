@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 08:52:33 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/25 10:40:06 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ typedef enum e_token_type
 {
 	DoubleQuote,
 	String,
+	Command,
 	SingleQuote,
 	Infile,
 	Outfile,
+	Pipe,
 }	t_token_type;
 
 typedef struct s_token
