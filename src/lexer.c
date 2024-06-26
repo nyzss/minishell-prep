@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 11:38:55 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 10:16:20 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,10 @@ int	print_token(t_token *token)
 {
 	while (token != NULL)
 	{
-		if (token->type == SingleQuote || token->type == DoubleQuote
-			|| token->type == Infile || token->type == Outfile
+		if (token->type == Infile || token->type == Outfile
 			|| token->type == Pipe)
 		{
-			if (token->type == SingleQuote)
-				printf("(SingleQuote)");
-			else if (token->type == DoubleQuote)
-				printf("(DoubleQuote)");
-			else if (token->type == Infile)
+			if (token->type == Infile)
 				printf("(Infile)");
 			else if (token->type == Outfile)
 				printf("(Outfile)");
@@ -35,8 +30,10 @@ int	print_token(t_token *token)
 		}
 		else
 		{
-			if (token->type == String)
-				printf("(String)");
+			if (token->type == DoubleQuoteString)
+				printf("(DoubleQuoteString)");
+			else if (token->type == SingleQuoteString)
+				printf("(SingleQuoteString)");
 			else if (token->type == Command)
 				printf("(Command)");
 			printf(" - index: \"%d\"", token->index);
@@ -90,7 +87,7 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 	i = 0;
 	len = 0;
 	quote_type = '\"';
-	if (rec_type == SingleQuote)
+	if (rec_type == SingleQuoteString)
 		quote_type = '\'';
 	while (str[len] && str[len] != quote_type)
 		len++;
@@ -151,15 +148,13 @@ t_token	*tokenize_line(char *buf)
 	{
 		if (buf[i] == '\'')
 		{
-			tmp = create_token(SingleQuote, &(buf[i]), i);
+			tmp = create_token(SingleQuoteString, create_string(&(buf[i + 1]), SingleQuoteString, &i), i);
 			add_token(&head, tmp);
-			add_token(&head, create_token(String, create_string(&(buf[i + 1]), SingleQuote, &i), i));
 		}
 		else if (buf[i] == '\"')
 		{
-			tmp = create_token(SingleQuote, &(buf[i]), i);
+			tmp = create_token(DoubleQuoteString, create_string(&(buf[i + 1]), DoubleQuoteString, &i), i);
 			add_token(&head, tmp);
-			add_token(&head, create_token(String, create_string(&(buf[i + 1]), DoubleQuote, &i), i));
 		}
 		else if (buf[i] == '<')
 		{
@@ -196,7 +191,7 @@ int	clear_token(t_token **token)
 	{
 		tmp = next;
 		next = next->next_token;
-		if (tmp->type == String || tmp->type == Command)
+		if (tmp->type == SingleQuoteString || tmp->type == DoubleQuoteString || tmp->type == Command)
 			free(tmp->value);
 		free(tmp);
 	}

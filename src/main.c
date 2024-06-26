@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 09:22:17 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 10:25:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,25 @@ void	handle_sigint(int status)
 	rl_redisplay();
 }
 
-int	check_token(t_token *token)
-{
-	int	single_quote_nb;
-	int	double_quote_nb;
+// int	check_token(t_token *token)
+// {
+// 	int	single_quote_nb;
+// 	int	double_quote_nb;
 
-	single_quote_nb = 0;
-	double_quote_nb = 0;
-	while (token != NULL)
-	{
-		if (token->type == SingleQuote)
-			single_quote_nb++;
-		else if (token->type == DoubleQuote)
-			double_quote_nb++;
-		token = token->next_token;
-	}
-	if (single_quote_nb % 2 != 0 || double_quote_nb % 2 != 0)
-		return (1);
-	return (0);
-}
+// 	single_quote_nb = 0;
+// 	double_quote_nb = 0;
+// 	while (token != NULL)
+// 	{
+// 		if (token->type == SingleQuoteString)
+// 			single_quote_nb++;
+// 		else if (token->type == DoubleQuoteString)
+// 			double_quote_nb++;
+// 		token = token->next_token;
+// 	}
+// 	if (single_quote_nb % 2 != 0 || double_quote_nb % 2 != 0)
+// 		return (1);
+// 	return (0);
+// }
 
 t_token	*get_next_command(t_token *head)
 {
@@ -119,7 +119,6 @@ void	handle_execution(t_token *token, char **env)
 	int		total_command;
 
 	pid = fork();
-	(void)env;
 	count = 0;
 	total_command = count_commands(token);
 	if (pid == 0)
@@ -134,6 +133,7 @@ void	handle_execution(t_token *token, char **env)
 			token = get_next_command(token);
 		}
 		m_child(token->value, env);
+		handle_sigint(0);
 		exit(0);
 	}
 }
@@ -145,7 +145,6 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	(void)env;
 	token = NULL;
 	while (1)
 	{
@@ -159,13 +158,8 @@ int	main(int ac, char **av, char **env)
 			break ;
 		}
 		token = tokenize_line(buf);
-		if (check_token(token) == 1)
-			printf("error: unclosed quotes\n");
-		else
-		{
-			print_token(token);
-			handle_execution(token, env);
-		}
+		print_token(token);
+		handle_execution(token, env);
 		printf("%s\n", buf);
 		if (buf)
 			free(buf);
