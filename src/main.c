@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 13:52:11 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 15:02:08 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,12 @@ int	call_command(char *path, char **env, int last)
 	pid = fork();
 	if (pid == 0)
 	{
-		close(fds[0]);
 		if (last == 0)
 			dup2(fds[1], STDOUT_FILENO);
+		close(fds[0]);
+		close(fds[1]);
 		m_child(path, env);
-		exit(1);
+		// exit(1);
 	}
 	else
 	{
@@ -111,14 +112,13 @@ int	count_commands(t_token *token)
 	return (count);
 }
 
-// write from parent [1]
-// read from child [0]
 void	handle_execution(t_token *token, char **env)
 {
 	int		i;
 	int		count;
 	int		total_command;
 	int		last;
+	pid_t	pid;
 
 	i = 0;
 	last = 0;
@@ -126,26 +126,25 @@ void	handle_execution(t_token *token, char **env)
 	total_command = count_commands(token);
 	if (total_command > 0)
 	{
-		while (token != NULL && token->type == Command)
+		pid = fork();
+		if (pid == 0)
 		{
-			if (count == total_command - 1)
-				last = 1;
-			call_command(token->value, env, last);
-			token = get_next_command(token);
-			count++;
+			while (token != NULL && token->type == Command)
+			{
+				if (count == total_command - 1)
+					last = 1;
+				call_command(token->value, env, last);
+				token = get_next_command(token);
+				count++;
+			}
+			while (i < total_command)
+			{
+				wait(NULL);
+				i++;
+			}
+			exit(0);
 		}
-		while (i < total_command)
-		{
-			wait(NULL);
-			i++;
-		}
-		// while (i < total_command)
-		// {
-		// 	printf("pids: %d\n", pids[i]);
-		// 	waitpid(pids[i], NULL, 0);
-		// 	i++;
-		// }
-		// waitpid(pid, NULL, 0);
+		wait(NULL);
 	}
 }
 
@@ -160,7 +159,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
-		buf = readline("\033[1;33mlexer_prep -$ \033[0m");
+		buf = readline("\033[1;33mprep -$ \033[0m");
 		if (buf <= 0)
 			break ;
 		if (strncmp(buf, "exit", 4) == 0)
