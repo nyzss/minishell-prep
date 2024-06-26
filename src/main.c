@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 10:25:33 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 10:34:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,23 +118,25 @@ void	handle_execution(t_token *token, char **env)
 	int		count;
 	int		total_command;
 
-	pid = fork();
 	count = 0;
 	total_command = count_commands(token);
-	if (pid == 0)
+	if (total_command > 0)
 	{
-		while (token != NULL && token->type == Command)
+		pid = fork();
+		if (pid == 0)
 		{
-			if (count == total_command - 1)
-				break ;
-			call_command(token->value, env);
-			printf("value: %s\n", token->value);
-			count++;
-			token = get_next_command(token);
+			while (token != NULL && token->type == Command)
+			{
+				if (count == total_command - 1)
+					break ;
+				call_command(token->value, env);
+				count++;
+				token = get_next_command(token);
+			}
+			m_child(token->value, env);
+			// handle_sigint(0);
+			exit(0);
 		}
-		m_child(token->value, env);
-		handle_sigint(0);
-		exit(0);
 	}
 }
 
