@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 13:45:27 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 13:52:11 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_token	*get_next_command(t_token *head)
 	return (NULL);
 }
 
-int	call_command(char *path, char **env, pid_t *pids)
+int	call_command(char *path, char **env, int last)
 {
 	pid_t	pid;
 	int		fds[2];
@@ -82,15 +82,15 @@ int	call_command(char *path, char **env, pid_t *pids)
 	if (pid == 0)
 	{
 		close(fds[0]);
-		// if (last == 0)
-		dup2(fds[1], STDOUT_FILENO);
+		if (last == 0)
+			dup2(fds[1], STDOUT_FILENO);
 		m_child(path, env);
 		exit(1);
 	}
 	else
 	{
-		dup2(fds[0], STDIN_FILENO);
-		pids[0] = pid;
+		if (last == 0)
+			dup2(fds[0], STDIN_FILENO);
 	}
 	close(fds[0]);
 	close(fds[1]);
@@ -115,50 +115,37 @@ int	count_commands(t_token *token)
 // read from child [0]
 void	handle_execution(t_token *token, char **env)
 {
-	pid_t	pid;
+	int		i;
 	int		count;
 	int		total_command;
-	pid_t	*pids;
-	int		i;
+	int		last;
 
 	i = 0;
+	last = 0;
 	count = 0;
 	total_command = count_commands(token);
-	pids = malloc(sizeof(pid_t) * total_command);
 	if (total_command > 0)
 	{
-		pid = fork();
-		if (pid == 0)
+		while (token != NULL && token->type == Command)
 		{
-			while (token != NULL && token->type == Command)
-			{
-				// if (count == total_command - 1)
-				// 	break ;
-				call_command(token->value, env, &(pids[count]));
-				printf("pid: %d\n", pids[count]);
-				count++;
-				token = get_next_command(token);
-			}
-			m_child(token->value, env);
-			while (i < total_command)
-			{
-				wait(NULL);
-				i++;
-			}
-			exit(0);
+			if (count == total_command - 1)
+				last = 1;
+			call_command(token->value, env, last);
+			token = get_next_command(token);
+			count++;
 		}
-		else
+		while (i < total_command)
 		{
-
 			wait(NULL);
-			// while (i < total_command)
-			// {
-			// 	printf("pids: %d\n", pids[i]);
-			// 	waitpid(pids[i], NULL, 0);
-			// 	i++;
-			// }
-			// waitpid(pid, NULL, 0);
+			i++;
 		}
+		// while (i < total_command)
+		// {
+		// 	printf("pids: %d\n", pids[i]);
+		// 	waitpid(pids[i], NULL, 0);
+		// 	i++;
+		// }
+		// waitpid(pid, NULL, 0);
 	}
 }
 
