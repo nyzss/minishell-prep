@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 10:16:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 18:48:57 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ int	print_token(t_token *token)
 				printf("(SingleQuoteString)");
 			else if (token->type == Command)
 				printf("(Command)");
+			else if (token->type == HereDoc)
+				printf("(HereDoc)");
+			else if (token->type == Append)
+				printf("(Append)");
 			printf(" - index: \"%d\"", token->index);
 			printf(" - value: \"%s\"\n", token->value);
 		}
@@ -158,13 +162,31 @@ t_token	*tokenize_line(char *buf)
 		}
 		else if (buf[i] == '<')
 		{
-			tmp = create_token(Infile, &(buf[i]), i);
-			add_token(&head, tmp);
+			if (buf[i + 1] != '\0' && buf[i + 1] == '<')
+			{
+				tmp = create_token(HereDoc, "<<", i);
+				add_token(&head, tmp);
+				i++;
+			}
+			else
+			{
+				tmp = create_token(Infile, &(buf[i]), i);
+				add_token(&head, tmp);
+			}
 		}
 		else if (buf[i] == '>')
 		{
-			tmp = create_token(Outfile, &(buf[i]), i);
-			add_token(&head, tmp);
+			if (buf[i + 1] != '\0' && buf[i + 1] == '>')
+			{
+				tmp = create_token(Append, ">>", i);
+				add_token(&head, tmp);
+				i++;
+			}
+			else
+			{
+				tmp = create_token(Outfile, &(buf[i]), i);
+				add_token(&head, tmp);
+			}
 		}
 		else if (buf[i] == '|')
 		{

@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 15:02:08 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:19:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	call_command(char *path, char **env, int last)
 		close(fds[0]);
 		close(fds[1]);
 		m_child(path, env);
-		// exit(1);
 	}
 	else
 	{
