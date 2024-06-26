@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/25 14:27:28 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/26 08:42:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@
 # include <signal.h>
 
 # include "libft.h"
-
-int	signal_n = 0;
 
 typedef enum e_token_type
 {
