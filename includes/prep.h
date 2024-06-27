@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 09:12:49 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 10:07:15 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <fcntl.h>
 
 # include "libft.h"
 
@@ -67,7 +68,7 @@ typedef struct s_exec
 {
 	int				infile_fd;
 	int				outfile_fd;
-	t_cmd			*commands;
+	t_cmd			*cmds;
 	struct t_exec	*next_exec;
 }	t_exec;
 
@@ -102,5 +103,11 @@ int		print_token(t_token *token);
 // ------------------------------- PARSER (somewhat) ----------------------
 
 int		token_checker(t_token *token);
+
+// -------------------------------- EXEC BUILDER --------------------------
+
+t_exec	*build_exec(t_token *token);
+
+void	print_exec(t_exec *exec);
 
 #endif
