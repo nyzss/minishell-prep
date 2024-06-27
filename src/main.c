@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 10:44:36 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:36:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,8 @@ int	main(int ac, char **av, char **env)
 		else
 		{
 			exec = build_exec(token, env);
-			handle_execution(token, env);
+			do_exec(exec);
+			// handle_execution(token, env);
 		}
 		print_exec(exec);
 		printf("\ninput: \"%s\"\n", buf);

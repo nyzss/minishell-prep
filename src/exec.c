@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 10:44:10 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:35:20 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,43 @@ t_exec	*build_exec(t_token *token, char **env)
 	return (new);
 }
 
-// void	do_exec(t_exec *exec)
+void	do_exec(t_exec *exec)
+{
+	int		i;
+	pid_t	pid;
+	int		last;
+	t_cmd	*cmds;
+
+	i = 0;
+	last = 0;
+	cmds = exec->cmds;
+	if (exec->cmd_count > 0)
+	{
+		pid = fork();
+		// dup2(exec->infile_fd, STDIN_FILENO);
+		// close(exec->infile_fd);
+		if (pid == 0)
+		{
+			while (cmds != NULL)
+			{
+				if (i == exec->cmd_count - 1)
+					last = 1;
+				call_command(exec->cmds->value, exec->env, last);
+				cmds = cmds->next_cmd;
+				i++;
+			}
+			i = 0;
+			while (i < exec->cmd_count)
+			{
+				wait(NULL);
+				i++;
+			}
+			exit(EXIT_SUCCESS);
+		}
+		wait(NULL);
+	}
+}
+// void	handle_execution(t_token *token, char **env)
 // {
 // 	int		i;
 // 	int		count;

@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 10:44:45 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:24:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,9 @@ int		token_checker(t_token *token);
 t_exec	*build_exec(t_token *token, char **env);
 
 void	print_exec(t_exec *exec);
+
+int		call_command(char *path, char **env, int last);
+
+void	do_exec(t_exec *exec);
 
 #endif

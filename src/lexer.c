@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 09:01:30 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:29:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	print_token(t_token *token)
 		}
 		token = token->next_token;
 	}
+	printf("\n");
 	return (0);
 }
 
