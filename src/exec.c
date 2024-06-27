@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 10:09:07 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 10:44:10 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,23 @@ void	print_exec(t_exec *exec)
 	t_cmd	*cmds;
 
 	cmds = exec->cmds;
-	printf("-------------- EXEC -------------\n");
+	// printf("%s", BLUE_COLOR);
+	printf(COLOR_BLUE "-------------- EXEC -------------\n");
 	printf("IN_FD: %d\n", exec->infile_fd);
 	printf("OUT_FD: %d\n", exec->outfile_fd);
+	printf("CMD_COUNT: %d\n", exec->cmd_count);
+	printf("ENV: %p\n", exec->env);
 	printf("NEXT_EXEC: %p\n", exec->next_exec);
 	while (cmds != NULL)
 	{
 		printf("Command: %s\n", cmds->value);
 		cmds = cmds->next_cmd;
 	}
-	printf("--------------------------------\n");
+	printf("--------------------------------\n" COLOR_RESET);
+	// printf("%s", RESET_COLOR);
 }
 
-t_exec	*build_exec(t_token *token)
+t_exec	*build_exec(t_token *token, char **env)
 {
 	t_exec	*new;
 
@@ -68,6 +72,8 @@ t_exec	*build_exec(t_token *token)
 	new->infile_fd = STDIN_FILENO;
 	new->outfile_fd = STDOUT_FILENO;
 	new->next_exec = NULL;
+	new->cmd_count = 0;
+	new->env = env;
 	while (token != NULL)
 	{
 		if (token->type == Infile)
@@ -84,13 +90,56 @@ t_exec	*build_exec(t_token *token)
 		{
 			add_cmd(&(new->cmds), create_cmd(token->value));
 			// check if next token is pipe, if true then go to the next cmd after that one.
+			new->cmd_count += 1;
 			while (token->next_token != NULL && token->next_token->type == Pipe)
 			{
 				token = token->next_token->next_token;
 				add_cmd(&(new->cmds), create_cmd(token->value));
+				new->cmd_count += 1;
 			}
 		}
 		token = token->next_token;
 	}
 	return (new);
 }
+
+// void	do_exec(t_exec *exec)
+// {
+// 	int		i;
+// 	int		count;
+// 	int		total_command;
+// 	int		last;
+// 	pid_t	pid;
+
+// 	i = 0;
+// 	last = 0;
+// 	count = 0;
+// 	total_command = count_commands(token);
+// 	if (total_command > 0)
+// 	{
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			while (token != NULL)
+// 			{
+// 				if (token->type != RawString)
+// 					token = get_next_command(token);
+// 				else
+// 				{
+// 					if (count == total_command - 1)
+// 						last = 1;
+// 					call_command(token->value, env, last);
+// 					token = get_next_command(token);
+// 					count++;
+// 				}
+// 			}
+// 			while (i < total_command)
+// 			{
+// 				wait(NULL);
+// 				i++;
+// 			}
+// 			exit(0);
+// 		}
+// 		wait(NULL);
+// 	}
+// }

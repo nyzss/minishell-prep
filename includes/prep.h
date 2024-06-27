@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 10:07:15 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 10:44:45 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,25 @@
 
 # define READ_BUFFER 1024
 
-# define RED_COLOR "\033[0;31m"
-# define BLUE_COLOR "\033[1;34m"
-# define RESET_COLOR "\033[0m"
+// # define RED_COLOR "\033[0;31m"
+// # define BLUE_COLOR "\033[1;34m"
+// # define RESET_COLOR "\033[0m"
+
+#define COLOR_REDB     "\033[31m"
+#define COLOR_GREENB   "\033[32m"
+#define COLOR_YELLOWB  "\033[33m"
+#define COLOR_BLUEB    "\033[34m"
+#define COLOR_MAGENTAB "\033[35m"
+#define COLOR_CYANB    "\033[36m"
+
+#define COLOR_RED     "\033[1;31m"
+#define COLOR_GREEN   "\033[1;32m"
+#define COLOR_YELLOW  "\033[1;33m"
+#define COLOR_BLUE    "\033[1;34m"
+#define COLOR_MAGENTA "\033[1;35m"
+#define COLOR_CYAN    "\033[1;36m"
+
+#define COLOR_RESET   "\033[0m"
 
 # include <readline/readline.h>
 # include <stdlib.h>
@@ -68,6 +84,8 @@ typedef struct s_exec
 {
 	int				infile_fd;
 	int				outfile_fd;
+	int				cmd_count;
+	char			**env;
 	t_cmd			*cmds;
 	struct t_exec	*next_exec;
 }	t_exec;
@@ -106,7 +124,7 @@ int		token_checker(t_token *token);
 
 // -------------------------------- EXEC BUILDER --------------------------
 
-t_exec	*build_exec(t_token *token);
+t_exec	*build_exec(t_token *token, char **env);
 
 void	print_exec(t_exec *exec);
 

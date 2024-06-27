@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 10:07:49 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 10:44:36 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
-		buf = readline("\033[1;33mprep -$ \033[0m");
+		buf = readline(COLOR_YELLOW "prep -$ " COLOR_RESET);
 		if (buf <= 0)
 			break ;
 		if (strncmp(buf, "exit", 4) == 0)
@@ -178,10 +178,10 @@ int	main(int ac, char **av, char **env)
 			printf("nuh uh\n");
 		else
 		{
-			exec = build_exec(token);
-			print_exec(exec);
+			exec = build_exec(token, env);
 			handle_execution(token, env);
 		}
+		print_exec(exec);
 		printf("\ninput: \"%s\"\n", buf);
 		if (buf)
 			free(buf);
