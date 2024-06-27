@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 11:36:35 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 12:24:40 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,21 @@ t_token	*get_next_command(t_token *head)
 	return (NULL);
 }
 
-int	call_command(char *path, char **env, int last)
+int	call_command(char *path, char **env, int in_fd, int last)
 {
 	pid_t	pid;
 	int		fds[2];
 
 	pipe(fds);
+	if (last == -1)
+	{
+		dup2(in_fd, STDIN_FILENO);
+		close(in_fd);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
-		if (last == 0)
+		if (last != 1)
 			dup2(fds[1], STDOUT_FILENO);
 		close(fds[0]);
 		close(fds[1]);
@@ -89,7 +94,7 @@ int	call_command(char *path, char **env, int last)
 	}
 	else
 	{
-		if (last == 0)
+		if (last != 1)
 			dup2(fds[0], STDIN_FILENO);
 	}
 	close(fds[0]);
@@ -111,46 +116,46 @@ int	count_commands(t_token *token)
 	return (count);
 }
 
-void	handle_execution(t_token *token, char **env)
-{
-	int		i;
-	int		count;
-	int		total_command;
-	int		last;
-	pid_t	pid;
+// void	handle_execution(t_token *token, char **env)
+// {
+// 	int		i;
+// 	int		count;
+// 	int		total_command;
+// 	int		last;
+// 	pid_t	pid;
 
-	i = 0;
-	last = 0;
-	count = 0;
-	total_command = count_commands(token);
-	if (total_command > 0)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			while (token != NULL)
-			{
-				if (token->type != RawString)
-					token = get_next_command(token);
-				else
-				{
-					if (count == total_command - 1)
-						last = 1;
-					call_command(token->value, env, last);
-					token = get_next_command(token);
-					count++;
-				}
-			}
-			while (i < total_command)
-			{
-				wait(NULL);
-				i++;
-			}
-			exit(0);
-		}
-		wait(NULL);
-	}
-}
+// 	i = 0;
+// 	last = 0;
+// 	count = 0;
+// 	total_command = count_commands(token);
+// 	if (total_command > 0)
+// 	{
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			while (token != NULL)
+// 			{
+// 				if (token->type != RawString)
+// 					token = get_next_command(token);
+// 				else
+// 				{
+// 					if (count == total_command - 1)
+// 						last = 1;
+// 					call_command(token->value, env, last);
+// 					token = get_next_command(token);
+// 					count++;
+// 				}
+// 			}
+// 			while (i < total_command)
+// 			{
+// 				wait(NULL);
+// 				i++;
+// 			}
+// 			exit(0);
+// 		}
+// 		wait(NULL);
+// 	}
+// }
 
 int	main(int ac, char **av, char **env)
 {
