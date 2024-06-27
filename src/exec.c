@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 22:18:11 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 22:22:23 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	print_exec(t_exec *exec)
 		t_cmd	*cmds;
 
 		cmds = exec->cmds;
-		printf("-----------\n");
+		if (count != 0)
+			printf("-----------\n");
 		printf("exec_nb: %d\n", count);
 		printf("IN_FD: %d\n", exec->infile_fd);
 		printf("OUT_FD: %d\n", exec->outfile_fd);
@@ -96,6 +97,8 @@ t_exec	*build_exec(t_token *token, char **env)
 		}
 		else if (token->type == Pipe)
 		{
+			// recursive exec creation
+			// first time i use recursivity by myself, proud of it
 			if (new->outfile_fd != STDOUT_FILENO)
 			{
 				new->next_exec = build_exec(token, env);
