@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 12:24:40 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:56:54 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,21 +72,16 @@ t_token	*get_next_command(t_token *head)
 	return (NULL);
 }
 
-int	call_command(char *path, char **env, int in_fd, int last)
+int	call_command(char *path, char **env, int last)
 {
 	pid_t	pid;
 	int		fds[2];
 
 	pipe(fds);
-	if (last == -1)
-	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
-	}
 	pid = fork();
 	if (pid == 0)
 	{
-		if (last != 1)
+		if (last == 0)
 			dup2(fds[1], STDOUT_FILENO);
 		close(fds[0]);
 		close(fds[1]);
@@ -94,7 +89,7 @@ int	call_command(char *path, char **env, int in_fd, int last)
 	}
 	else
 	{
-		if (last != 1)
+		// if (last == 0)
 			dup2(fds[0], STDIN_FILENO);
 	}
 	close(fds[0]);
@@ -162,6 +157,7 @@ int	main(int ac, char **av, char **env)
 	char	*buf;
 	t_token	*token;
 	t_exec	*exec;
+	char	*prompt = ESCAPE_F COLOR_YELLOW ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
 
 	(void)ac;
 	(void)av;
@@ -169,7 +165,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
-		buf = readline(COLOR_YELLOW "prep -$ " COLOR_RESET);
+		buf = readline(prompt);
 		if (buf <= 0)
 			break ;
 		if (strncmp(buf, "exit", 4) == 0)

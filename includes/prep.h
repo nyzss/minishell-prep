@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 12:14:50 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:54:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,25 @@
 // # define BLUE_COLOR "\033[1;34m"
 // # define RESET_COLOR "\033[0m"
 
-#define COLOR_REDB     "\033[31m"
-#define COLOR_GREENB   "\033[32m"
-#define COLOR_YELLOWB  "\033[33m"
-#define COLOR_BLUEB    "\033[34m"
-#define COLOR_MAGENTAB "\033[35m"
-#define COLOR_CYANB    "\033[36m"
+# define COLOR_REDB     "\033[31m"
+# define COLOR_GREENB   "\033[32m"
+# define COLOR_YELLOWB  "\033[33m"
+# define COLOR_BLUEB    "\033[34m"
+# define COLOR_MAGENTAB "\033[35m"
+# define COLOR_CYANB    "\033[36m"
 
-#define COLOR_RED     "\033[1;31m"
-#define COLOR_GREEN   "\033[1;32m"
-#define COLOR_YELLOW  "\033[1;33m"
-#define COLOR_BLUE    "\033[1;34m"
-#define COLOR_MAGENTA "\033[1;35m"
-#define COLOR_CYAN    "\033[1;36m"
+# define COLOR_RED     "\033[1;31m"
+# define COLOR_GREEN   "\033[1;32m"
+# define COLOR_YELLOW  "\033[1;33m"
+# define COLOR_BLUE    "\033[1;34m"
+# define COLOR_MAGENTA "\033[1;35m"
+# define COLOR_CYAN    "\033[1;36m"
+
+// C1=$'\001\033[1;34m\002'
+// C0=$'\001\033[0;0m\002'
+
+# define ESCAPE_F "\001"
+# define ESCAPE_S "\002"
 
 #define COLOR_RESET   "\033[0m"
 
@@ -128,7 +134,7 @@ t_exec	*build_exec(t_token *token, char **env);
 
 void	print_exec(t_exec *exec);
 
-int		call_command(char *path, char **env, int in_fd, int last);
+int		call_command(char *path, char **env, int last);
 
 void	do_exec(t_exec *exec);
 
