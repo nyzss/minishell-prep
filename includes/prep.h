@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 13:54:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:01:05 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ t_exec	*build_exec(t_token *token, char **env);
 
 void	print_exec(t_exec *exec);
 
-int		call_command(char *path, char **env, int last);
+int		call_command(char *path, t_exec *exec, int last);
 
 void	do_exec(t_exec *exec);
 

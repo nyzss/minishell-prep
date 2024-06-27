@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 13:56:54 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:02:05 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_token	*get_next_command(t_token *head)
 	return (NULL);
 }
 
-int	call_command(char *path, char **env, int last)
+int	call_command(char *path, t_exec *exec, int last)
 {
 	pid_t	pid;
 	int		fds[2];
@@ -83,9 +83,11 @@ int	call_command(char *path, char **env, int last)
 	{
 		if (last == 0)
 			dup2(fds[1], STDOUT_FILENO);
+		else if (exec->outfile_fd != STDOUT_FILENO)
+			dup2(exec->outfile_fd, STDOUT_FILENO);
 		close(fds[0]);
 		close(fds[1]);
-		m_child(path, env);
+		m_child(path, exec->env);
 	}
 	else
 	{
