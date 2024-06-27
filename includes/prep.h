@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 19:02:03 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 08:28:07 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,24 @@ typedef struct s_token
 	struct s_token	*next_token;
 }	t_token;
 
-typedef struct s_parsed
+// t_exec will have the infile - outfile redirection,
+// with a pointer to t_cmd which contains all the commands,
+// first cmd will have a infile directed to its stdin and
+// once we get to the last cmd we redirect to outfile
+
+typedef struct s_cmd
 {
 	char			*value;
-	int				index;
-	t_token_type	type;
-	struct s_parsed *next_token;
-}	t_parsed;
+	struct s_cmd	*next_cmd
+}	t_cmd;
+
+typedef struct s_exec
+{
+	int				infile_fd;
+	int				outfile_fd;
+	t_cmd			*commands;
+	struct t_exec	*next_exec;
+}	t_exec;
 
 int		p_exec(char *path, char **args, char **envp);
 
