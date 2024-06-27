@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/06/25 07:59:57 by okoca            ###   ########.fr        #
+#    Updated: 2024/06/27 09:15:31 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,9 @@ CFLAGS = -Wall -Werror -Wextra -I${INCLUDES_DIR} -I${LIBFT} -g
 
 SRC_FILES = main.c \
 			utils.c \
-			lexer.c
+			lexer.c \
+			parser.c \
+			exec.c
 
 NAME = prep
 

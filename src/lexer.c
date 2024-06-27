@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 18:48:57 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:01:30 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	print_token(t_token *token)
 				printf("(DoubleQuoteString)");
 			else if (token->type == SingleQuoteString)
 				printf("(SingleQuoteString)");
-			else if (token->type == Command)
-				printf("(Command)");
+			else if (token->type == RawString)
+				printf("(RawString)");
 			else if (token->type == HereDoc)
 				printf("(HereDoc)");
 			else if (token->type == Append)
@@ -134,7 +134,7 @@ t_token *create_command(char *str, int *index)
 	new[i] = '\0';
 	tmp = ft_strtrim(new, " ");
 	free(new);
-	new_token = create_token(Command, tmp, *index);
+	new_token = create_token(RawString, tmp, *index);
 	*index += i;
 	*index -= 1;
 	return (new_token);
@@ -213,7 +213,7 @@ int	clear_token(t_token **token)
 	{
 		tmp = next;
 		next = next->next_token;
-		if (tmp->type == SingleQuoteString || tmp->type == DoubleQuoteString || tmp->type == Command)
+		if (tmp->type == SingleQuoteString || tmp->type == DoubleQuoteString || tmp->type == RawString)
 			free(tmp->value);
 		free(tmp);
 	}

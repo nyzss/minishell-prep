@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 08:28:07 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:12:49 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum e_token_type
 {
 	SingleQuoteString,
 	DoubleQuoteString,
-	Command,
+	RawString,
 	Infile,
 	Append,
 	Outfile,
@@ -60,7 +60,7 @@ typedef struct s_token
 typedef struct s_cmd
 {
 	char			*value;
-	struct s_cmd	*next_cmd
+	struct s_cmd	*next_cmd;
 }	t_cmd;
 
 typedef struct s_exec
@@ -98,5 +98,9 @@ t_token	*last_token(t_token *head);
 t_token	*create_token(t_token_type type, char *value, int index);
 
 int		print_token(t_token *token);
+
+// ------------------------------- PARSER (somewhat) ----------------------
+
+int		token_checker(t_token *token);
 
 #endif

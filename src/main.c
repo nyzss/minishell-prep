@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/26 16:19:26 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:18:55 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_token	*get_next_command(t_token *head)
 {
 	while (head != NULL && head->next_token != NULL)
 	{
-		if (head->next_token->type == Command)
+		if (head->next_token->type == RawString)
 			return (head->next_token);
 		head = head->next_token;
 	}
@@ -104,7 +104,7 @@ int	count_commands(t_token *token)
 	count = 0;
 	while (token != NULL)
 	{
-		if (token->type == Command)
+		if (token->type == RawString)
 			count++;
 		token = token->next_token;
 	}
@@ -128,13 +128,18 @@ void	handle_execution(t_token *token, char **env)
 		pid = fork();
 		if (pid == 0)
 		{
-			while (token != NULL && token->type == Command)
+			while (token != NULL)
 			{
-				if (count == total_command - 1)
-					last = 1;
-				call_command(token->value, env, last);
-				token = get_next_command(token);
-				count++;
+				if (token->type != RawString)
+					token = get_next_command(token);
+				else
+				{
+					if (count == total_command - 1)
+						last = 1;
+					call_command(token->value, env, last);
+					token = get_next_command(token);
+					count++;
+				}
 			}
 			while (i < total_command)
 			{
@@ -168,8 +173,11 @@ int	main(int ac, char **av, char **env)
 		}
 		token = tokenize_line(buf);
 		print_token(token);
-		handle_execution(token, env);
-		printf("%s\n", buf);
+		if (token_checker(token) != 0)
+			printf("nuh uh\n");
+		else
+			handle_execution(token, env);
+		printf("\ninput: \"%s\"\n", buf);
 		if (buf)
 			free(buf);
 		clear_token(&token);
