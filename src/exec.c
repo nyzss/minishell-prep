@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 13:25:43 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:59:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,19 @@ void	do_exec(t_exec *exec)
 		pid = fork();
 		if (pid == 0)
 		{
+			if (exec->infile_fd != STDIN_FILENO)
+			{
+				dup2(exec->infile_fd, STDIN_FILENO);
+				close(exec->infile_fd);
+			}
 			while (cmds != NULL)
 			{
 				if (i == exec->cmd_count - 1)
 					last = 1;
+				// else if (i == 0)
+				// 	last = -1;
+				// else
+				// 	last = 0;
 				call_command(cmds->value, exec->env, last);
 				cmds = cmds->next_cmd;
 				i++;
@@ -137,43 +146,3 @@ void	do_exec(t_exec *exec)
 		wait(NULL);
 	}
 }
-// void	handle_execution(t_token *token, char **env)
-// {
-// 	int		i;
-// 	int		count;
-// 	int		total_command;
-// 	int		last;
-// 	pid_t	pid;
-
-// 	i = 0;
-// 	last = 0;
-// 	count = 0;
-// 	total_command = count_commands(token);
-// 	if (total_command > 0)
-// 	{
-// 		pid = fork();
-// 		if (pid == 0)
-// 		{
-// 			while (token != NULL)
-// 			{
-// 				if (token->type != RawString)
-// 					token = get_next_command(token);
-// 				else
-// 				{
-// 					if (count == total_command - 1)
-// 						last = 1;
-// 					call_command(token->value, env, last);
-// 					token = get_next_command(token);
-// 					count++;
-// 				}
-// 			}
-// 			while (i < total_command)
-// 			{
-// 				wait(NULL);
-// 				i++;
-// 			}
-// 			exit(0);
-// 		}
-// 		wait(NULL);
-// 	}
-// }
