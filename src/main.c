@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 15:56:53 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 21:56:06 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int	main(int ac, char **av, char **env)
 	{
 		signal(SIGINT, handle_sigint);
 		buf = readline(prompt);
-		if (buf <= 0)
+		if (buf == 0)
 			break ;
 		if (strncmp(buf, "exit", 4) == 0)
 		{

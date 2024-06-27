@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 14:01:05 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 22:13:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct s_exec
 	int				cmd_count;
 	char			**env;
 	t_cmd			*cmds;
-	struct t_exec	*next_exec;
+	struct s_exec	*next_exec;
 }	t_exec;
 
 int		p_exec(char *path, char **args, char **envp);

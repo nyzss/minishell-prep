@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 18:02:22 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/27 22:18:11 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,31 @@ int	add_cmd(t_cmd **head, t_cmd *new)
 
 void	print_exec(t_exec *exec)
 {
-	t_cmd	*cmds;
+	int	count;
 
-	cmds = exec->cmds;
-	// printf("%s", BLUE_COLOR);
+	count = 0;
 	printf(COLOR_BLUE "-------------- EXEC -------------\n");
-	printf("IN_FD: %d\n", exec->infile_fd);
-	printf("OUT_FD: %d\n", exec->outfile_fd);
-	printf("CMD_COUNT: %d\n", exec->cmd_count);
-	printf("ENV: %p\n", exec->env);
-	printf("NEXT_EXEC: %p\n", exec->next_exec);
-	while (cmds != NULL)
+	while (exec != NULL)
 	{
-		printf("Command: %s\n", cmds->value);
-		cmds = cmds->next_cmd;
+		t_cmd	*cmds;
+
+		cmds = exec->cmds;
+		printf("-----------\n");
+		printf("exec_nb: %d\n", count);
+		printf("IN_FD: %d\n", exec->infile_fd);
+		printf("OUT_FD: %d\n", exec->outfile_fd);
+		printf("CMD_COUNT: %d\n", exec->cmd_count);
+		printf("ENV: %p\n", exec->env);
+		printf("NEXT_EXEC: %p\n", exec->next_exec);
+		while (cmds != NULL)
+		{
+			printf("Command: %s\n", cmds->value);
+			cmds = cmds->next_cmd;
+		}
+		count++;
+		exec = exec->next_exec;
 	}
 	printf("--------------------------------\n" COLOR_RESET);
-	// printf("%s", RESET_COLOR);
 }
 
 t_exec	*build_exec(t_token *token, char **env)
@@ -86,11 +94,14 @@ t_exec	*build_exec(t_token *token, char **env)
 			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			token = token->next_token;
 		}
-		// else if (token->type == Pipe)
-		// {
-		// 	if (new->outfile_fd != STDOUT_FILENO)
-		// 		break ;
-		// }
+		else if (token->type == Pipe)
+		{
+			if (new->outfile_fd != STDOUT_FILENO)
+			{
+				new->next_exec = build_exec(token, env);
+				break ;
+			}
+		}
 		else if (token->type == RawString)
 		{
 			add_cmd(&(new->cmds), create_cmd(token->value));
