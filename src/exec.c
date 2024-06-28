@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 18:00:07 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 18:09:48 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ t_cmd	*create_cmd(t_token *token)
 		&& (tok->type == DoubleQuoteString
 		|| tok->type == SingleQuoteString))
 	{
-		add_arg(&(cmd->extra_args), create_args(token->next_token->value));
+		// printf("args found: %s\n", tok->value);
+		add_arg(&(cmd->extra_args), create_args(tok->value));
 		tok = tok->next_token;
 	}
 	token->next_token = tok;
@@ -89,6 +90,7 @@ void	print_exec(t_exec *exec)
 	while (exec != NULL)
 	{
 		t_cmd	*cmds;
+		t_args	*args;
 
 		cmds = exec->cmds;
 		if (count != 0)
@@ -101,7 +103,13 @@ void	print_exec(t_exec *exec)
 		printf("NEXT_EXEC: %p\n", exec->next_exec);
 		while (cmds != NULL)
 		{
+			args = cmds->extra_args;
 			printf("Command: %s\n", cmds->value);
+			while (args != NULL)
+			{
+				printf("\targ: %s\n",args->value);
+				args = args->next_arg;
+			}
 			cmds = cmds->next_cmd;
 		}
 		count++;
