@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 13:11:37 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 14:16:23 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ void	do_exec(t_exec *exec)
 			{
 				if (i == exec->cmd_count - 1)
 					last = 1;
+				// printf("EXEC: %s\n", cmds->value);
 				call_command(cmds->value, exec, last);
 				cmds = cmds->next_cmd;
 				i++;

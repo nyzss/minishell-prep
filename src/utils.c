@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:53:22 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 11:49:27 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 14:47:34 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,13 @@ void	p_cleanup_array(char **arr)
 
 int	p_exec(char *path, char **args, char **envp)
 {
+	// int	i = 0;
+	// printf("path: %s\n", path);
+	// while (args[i] != NULL)
+	// {
+	// 	printf("arg: %s\n", args[i]);
+	// 	i++;
+	// }
 	if (execve(path, args, envp) < 0)
 	{
 		free(path);
