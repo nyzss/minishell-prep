@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:00:00 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 13:12:04 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 13:51:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,23 @@ void	split_filename_command(t_token *token)
 	token->value = arg[0];
 }
 
+void	handle_quoted_args(t_token *token)
+{
+	t_token	*tmp;
+
+	tmp = token->next_token;
+	while (tmp != NULL &&
+		(tmp->type == DoubleQuoteString
+		|| tmp->type == SingleQuoteString))
+	{
+		// concat every next strings into the value
+		token->value = ft_strjoin(token->value, " ");
+		token->value = ft_strjoin(token->value, tmp->value);
+		tmp = tmp->next_token;
+	}
+	token->next_token = tmp;
+}
+
 int	token_checker(t_token *token)
 {
 	int	error_code;
@@ -73,7 +90,10 @@ int	token_checker(t_token *token)
 				token->next_token->type = Filename;
 			}
 			if (token->type == RawString)
+			{
+				handle_quoted_args(token);
 				token->type = Command;
+			}
 			token = token->next_token;
 		}
 	}
