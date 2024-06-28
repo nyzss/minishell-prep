@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 19:32:33 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 19:33:52 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,26 +71,6 @@ void	handle_sigint(int status)
 	rl_redisplay();
 }
 
-// int	check_token(t_token *token)
-// {
-// 	int	single_quote_nb;
-// 	int	double_quote_nb;
-
-// 	single_quote_nb = 0;
-// 	double_quote_nb = 0;
-// 	while (token != NULL)
-// 	{
-// 		if (token->type == SingleQuoteString)
-// 			single_quote_nb++;
-// 		else if (token->type == DoubleQuoteString)
-// 			double_quote_nb++;
-// 		token = token->next_token;
-// 	}
-// 	if (single_quote_nb % 2 != 0 || double_quote_nb % 2 != 0)
-// 		return (1);
-// 	return (0);
-// }
-
 t_token	*get_next_command(t_token *head)
 {
 	while (head != NULL && head->next_token != NULL)
@@ -121,8 +101,7 @@ int	call_command(t_cmd *cmds, t_exec *exec, int last)
 	}
 	else
 	{
-		// if (last == 0)
-			dup2(fds[0], STDIN_FILENO);
+		dup2(fds[0], STDIN_FILENO);
 	}
 	close(fds[0]);
 	close(fds[1]);

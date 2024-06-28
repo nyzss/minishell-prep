@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 18:17:03 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 19:35:50 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,11 @@ void	print_exec(t_exec *exec)
 		{
 			args = cmds->extra_args;
 			printf("\tCommand: %s\n", cmds->value);
-			printf("\targ count: %d\n", cmds->arg_nb);
+			if (cmds->arg_nb > 0)
+				printf("\targ count: %d\n", cmds->arg_nb);
 			while (args != NULL)
 			{
-				printf("\t\targ: %s\n",args->value);
+				printf("\t\targ: \'%s\'\n",args->value);
 				args = args->next_arg;
 			}
 			cmds = cmds->next_cmd;
