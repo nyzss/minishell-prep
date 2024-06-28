@@ -6,21 +6,59 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 14:16:23 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 18:00:07 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
 
-t_cmd	*create_cmd(char *value)
+t_args	*create_args(char *value)
+{
+	t_args	*arg;
+
+	arg = malloc(sizeof(t_args));
+	arg->value = value;
+	arg->next_arg = NULL;
+	return (arg);
+}
+t_args	*last_arg(t_args *head)
+{
+	while (head->next_arg != NULL)
+		head = head->next_arg;
+	return (head);
+}
+
+int	add_arg(t_args **head, t_args *new)
+{
+	if (new == NULL)
+		return (1);
+	if (*head == NULL)
+		*head = new;
+	else
+		last_arg((*head))->next_arg = new;
+	return (0);
+}
+
+t_cmd	*create_cmd(t_token *token)
 {
 	t_cmd	*cmd;
+	t_token	*tok;
 
+	tok = token->next_token;
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->value = value;
+	cmd->value = token->value;
 	cmd->next_cmd = NULL;
+	cmd->extra_args = NULL;
+	while (tok != NULL
+		&& (tok->type == DoubleQuoteString
+		|| tok->type == SingleQuoteString))
+	{
+		add_arg(&(cmd->extra_args), create_args(token->next_token->value));
+		tok = tok->next_token;
+	}
+	token->next_token = tok;
 	return (cmd);
 }
 
@@ -112,7 +150,7 @@ t_exec	*build_exec(t_token *token, char **env)
 		}
 		else if (token->type == Command)
 		{
-			add_cmd(&(new->cmds), create_cmd(token->value));
+			add_cmd(&(new->cmds), create_cmd(token));
 			// check if next token is pipe, if true then go to the next cmd after that one.
 			new->cmd_count += 1;
 			while (token->next_token != NULL && token->next_token->type == Pipe)
@@ -120,7 +158,7 @@ t_exec	*build_exec(t_token *token, char **env)
 				if (token->next_token->next_token != NULL && token->next_token->next_token->type == Command)
 				{
 					token = token->next_token->next_token;
-					add_cmd(&(new->cmds), create_cmd(token->value));
+					add_cmd(&(new->cmds), create_cmd(token));
 					new->cmd_count += 1;
 				}
 				else
@@ -157,7 +195,7 @@ void	do_exec(t_exec *exec)
 				if (i == exec->cmd_count - 1)
 					last = 1;
 				// printf("EXEC: %s\n", cmds->value);
-				call_command(cmds->value, exec, last);
+				call_command(cmds, exec, last);
 				cmds = cmds->next_cmd;
 				i++;
 			}

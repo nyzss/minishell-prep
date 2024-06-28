@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:00:00 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 14:16:10 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 17:24:04 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	token_checker(t_token *token)
 			}
 			if (token->type == RawString)
 			{
-				handle_quoted_args(token);
+				// handle_quoted_args(token);
 				token->type = Command;
 			}
 			token = token->next_token;

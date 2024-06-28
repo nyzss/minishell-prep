@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 09:04:50 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 17:55:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,16 @@ typedef struct s_token
 // first cmd will have a infile directed to its stdin and
 // once we get to the last cmd we redirect to outfile
 
+typedef struct s_args
+{
+	char			*value;
+	struct s_args	*next_arg;
+}	t_args;
+
 typedef struct s_cmd
 {
 	char			*value;
+	t_args			*extra_args;
 	struct s_cmd	*next_cmd;
 }	t_cmd;
 
@@ -138,7 +145,7 @@ t_exec	*build_exec(t_token *token, char **env);
 
 void	print_exec(t_exec *exec);
 
-int		call_command(char *path, t_exec *exec, int last);
+int		call_command(t_cmd *cmds, t_exec *exec, int last);
 
 void	do_exec(t_exec *exec);
 
