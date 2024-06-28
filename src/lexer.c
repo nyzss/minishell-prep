@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 11:29:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 08:28:55 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	print_token(t_token *token)
 				printf("(HereDoc)");
 			else if (token->type == Append)
 				printf("(Append)");
+			else if (token->type == Filename)
+				printf("(Filename)");
 			printf(" - index: \"%d\"", token->index);
 			printf(" - value: \"%s\"\n", token->value);
 		}

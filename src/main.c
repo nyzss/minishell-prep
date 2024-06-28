@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 21:56:06 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 08:27:13 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,11 +176,11 @@ int	main(int ac, char **av, char **env)
 			break ;
 		}
 		token = tokenize_line(buf);
-		print_token(token);
 		if (token_checker(token) != 0)
 			printf("nuh uh\n");
 		else
 		{
+			print_token(token);
 			exec = build_exec(token, env);
 			do_exec(exec);
 			// handle_execution(token, env);

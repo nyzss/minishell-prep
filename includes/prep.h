@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 22:13:37 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 09:04:50 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ typedef enum e_token_type
 	Outfile,
 	HereDoc,
 	Pipe,
+	Command,
+	Filename
 }	t_token_type;
 
 typedef struct s_token
@@ -127,6 +129,8 @@ int		print_token(t_token *token);
 // ------------------------------- PARSER (somewhat) ----------------------
 
 int		token_checker(t_token *token);
+
+char	**split_once(char *value);
 
 // -------------------------------- EXEC BUILDER --------------------------
 

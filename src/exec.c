@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/27 22:22:23 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 09:38:58 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,11 @@ t_exec	*build_exec(t_token *token, char **env)
 		else if (token->type == Outfile)
 		{
 			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			token = token->next_token;
+		}
+		else if (token->type == Append)
+		{
+			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND, 0777);
 			token = token->next_token;
 		}
 		else if (token->type == Pipe)
