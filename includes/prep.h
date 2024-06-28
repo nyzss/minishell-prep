@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 17:55:26 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 18:14:40 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_args
 
 typedef struct s_cmd
 {
+	int				arg_nb;
 	char			*value;
 	t_args			*extra_args;
 	struct s_cmd	*next_cmd;

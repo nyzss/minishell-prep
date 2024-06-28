@@ -6,18 +6,30 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 17:55:14 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 18:31:24 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
 
-int	m_child(char *buf, char **env)
+char	**combine_args(t_cmd *cmd, char **args)
+{
+	int		i;
+	char	**new;
+
+	i = 0;
+	while (args[i])
+		i++;
+	new = malloc(sizeof(char *) * (cmd->arg_nb + i + 1));
+	// make new list with both of them
+}
+
+int	m_child(t_cmd *cmds, char **env)
 {
 	char	**args;
 	char	*path;
 
-	args = ft_split(buf, ' ');
+	args = ft_split(cmds->value, ' ');
 	if (!args)
 		return (2);
 	path = p_get_path(args[0]);
@@ -87,7 +99,7 @@ int	call_command(t_cmd *cmds, t_exec *exec, int last)
 			dup2(exec->outfile_fd, STDOUT_FILENO);
 		close(fds[0]);
 		close(fds[1]);
-		m_child(cmds->value, exec->env);
+		m_child(cmds, exec->env);
 	}
 	else
 	{
