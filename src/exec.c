@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 10:30:32 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 10:39:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_exec	*build_exec(t_token *token, char **env)
 		{
 			// recursive exec creation
 			// first time i use recursivity by myself, proud of it
-			if (new->outfile_fd != STDOUT_FILENO)
+			if (new->outfile_fd != STDOUT_FILENO || new->infile_fd != STDIN_FILENO)
 			{
 				new->next_exec = build_exec(token, env);
 				break ;
@@ -123,9 +123,14 @@ t_exec	*build_exec(t_token *token, char **env)
 			new->cmd_count += 1;
 			while (token->next_token != NULL && token->next_token->type == Pipe)
 			{
-				token = token->next_token->next_token;
-				add_cmd(&(new->cmds), create_cmd(token->value));
-				new->cmd_count += 1;
+				if (token->next_token->next_token != NULL && token->next_token->next_token->type == RawString)
+				{
+					token = token->next_token->next_token;
+					add_cmd(&(new->cmds), create_cmd(token->value));
+					new->cmd_count += 1;
+				}
+				else
+					break ;
 			}
 		}
 		token = token->next_token;
