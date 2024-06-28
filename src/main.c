@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 18:31:24 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 19:32:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,30 @@
 char	**combine_args(t_cmd *cmd, char **args)
 {
 	int		i;
+	int		j;
 	char	**new;
+	t_args	*extra_args;
 
 	i = 0;
+	j = 0;
+	extra_args = cmd->extra_args;
 	while (args[i])
 		i++;
 	new = malloc(sizeof(char *) * (cmd->arg_nb + i + 1));
-	// make new list with both of them
+	while (args[j])
+	{
+		new[j] = args[j];
+		j++;
+	}
+	i = 0;
+	while (extra_args != NULL && i < cmd->arg_nb)
+	{
+		new[j + i] = extra_args->value;
+		extra_args = extra_args->next_arg;
+		i++;
+	}
+	new[j + i] = NULL;
+	return (new);
 }
 
 int	m_child(t_cmd *cmds, char **env)
@@ -32,6 +49,7 @@ int	m_child(t_cmd *cmds, char **env)
 	args = ft_split(cmds->value, ' ');
 	if (!args)
 		return (2);
+	args = combine_args(cmds, args);
 	path = p_get_path(args[0]);
 	if (access(path, F_OK | X_OK) != 0)
 	{
