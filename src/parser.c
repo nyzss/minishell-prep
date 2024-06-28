@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:00:00 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 09:33:48 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 10:31:02 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ void	split_filename_command(t_token *token)
 	t_token	*new_token;
 
 	arg = split_once(token->value);
+	if (arg == NULL)
+	{
+		printf("GOES IN HERE %s\n", token->value);
+		return ;
+	}
 	// raw string for now but should be command next time
 	new_token = create_token(RawString, arg[1], 0);
 	new_token->next_token = token->next_token;
@@ -93,8 +98,8 @@ int	token_checker(t_token *token)
 			if (token->type == Outfile || token-> type == Infile
 				|| token->type == Append || token->type == HereDoc)
 			{
-				// if (token->next_token->type == RawString)
-				// 	split_filename_command(token->next_token);
+				if (token->next_token->type == RawString)
+					split_filename_command(token->next_token);
 				token->next_token->type = Filename;
 			}
 			token = token->next_token;
