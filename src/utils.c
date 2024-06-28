@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:53:22 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 10:10:44 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 11:46:19 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ char	**split_once(char *value)
 		s2_len++;
 	if (s2_len == 0)
 		return (NULL);
-	s2_len++;
+	// s2_len++;
 	s1 = malloc(sizeof(char) * (s1_len + 1));
 	s2 = malloc(sizeof(char) * (s2_len + 1));
 	while (value[i])
@@ -160,6 +160,7 @@ char	**split_once(char *value)
 	}
 	s1[s1_len] = '\0';
 	s2[s2_len] = '\0';
+	printf("s1_len: %d - s2_len: %d\n", s1_len, s2_len);
 	arg[0] = s1;
 	arg[1] = s2;
 	return (arg);
