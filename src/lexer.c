@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 08:28:55 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 13:12:44 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	print_token(t_token *token)
 				printf("(SingleQuoteString)");
 			else if (token->type == RawString)
 				printf("(RawString)");
+			else if (token->type == Command)
+				printf("(Command)");
 			else if (token->type == HereDoc)
 				printf("(HereDoc)");
 			else if (token->type == Append)
@@ -216,7 +218,7 @@ int	clear_token(t_token **token)
 	{
 		tmp = next;
 		next = next->next_token;
-		if (tmp->type == SingleQuoteString || tmp->type == DoubleQuoteString || tmp->type == RawString)
+		if (tmp->type == SingleQuoteString || tmp->type == DoubleQuoteString || tmp->type == RawString || tmp->type == Command || tmp->type == Filename)
 			free(tmp->value);
 		free(tmp);
 	}

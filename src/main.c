@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 08:27:13 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/28 13:13:44 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,47 +112,6 @@ int	count_commands(t_token *token)
 	}
 	return (count);
 }
-
-// void	handle_execution(t_token *token, char **env)
-// {
-// 	int		i;
-// 	int		count;
-// 	int		total_command;
-// 	int		last;
-// 	pid_t	pid;
-
-// 	i = 0;
-// 	last = 0;
-// 	count = 0;
-// 	total_command = count_commands(token);
-// 	if (total_command > 0)
-// 	{
-// 		pid = fork();
-// 		if (pid == 0)
-// 		{
-// 			while (token != NULL)
-// 			{
-// 				if (token->type != RawString)
-// 					token = get_next_command(token);
-// 				else
-// 				{
-// 					if (count == total_command - 1)
-// 						last = 1;
-// 					call_command(token->value, env, last);
-// 					token = get_next_command(token);
-// 					count++;
-// 				}
-// 			}
-// 			while (i < total_command)
-// 			{
-// 				wait(NULL);
-// 				i++;
-// 			}
-// 			exit(0);
-// 		}
-// 		wait(NULL);
-// 	}
-// }
 
 int	main(int ac, char **av, char **env)
 {
