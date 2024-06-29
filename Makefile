@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/06/29 22:38:25 by okoca            ###   ########.fr        #
+#    Updated: 2024/06/29 23:14:38 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,9 @@ SRC_DIR = src/
 
 INCLUDES_DIR = includes
 
-CFLAGS = -Wall -Werror -Wextra -I${INCLUDES_DIR} -I${LIBFT} -g
+DEBUG ?= 1
+
+CFLAGS = -Wall -Werror -Wextra -I${INCLUDES_DIR} -I${LIBFT} -D DEBUG=${DEBUG} -g
 
 SRC_FILES = main.c \
 			utils.c \
@@ -68,6 +70,7 @@ OBJS = ${SRC:.c=.o}
 
 ${NAME}: ${LIBFT_TARGET} ${OBJS}
 	@echo "$$BANNER"
+	@echo "##### DEBUG MODE: ${DEBUG}"
 	@echo -e "${FRed}\n>>>Building ${FPurple}${NAME}${RESET}${Red}...${RESET}"
 	@${CC} ${CFLAGS} ${OBJS} -lreadline ${LDFLAGS} -o ${NAME}
 	@echo "${FGreen}   Done [${TICK}]"
@@ -76,6 +79,12 @@ ${LIBFT_TARGET}:
 	make -C ${LIBFT}
 
 all: ${NAME}
+
+debug:
+	${MAKE} DEBUG=1 all
+
+release:
+	${MAKE} DEBUG=0 all
 
 clean:
 	@echo "$(FRed)Cleaning $(NAME)$(FGreen)              [$(TICK)]"
@@ -87,10 +96,41 @@ fclean: clean
 	@echo "$(FYellow)------------------------------------------------------"
 
 define BANNER
-${FRed}hello${RESET}
-${FRed}lexer${RESET}
+${FRed}
+              _       _      __         ____
+   ____ ___  (_)___  (_)____/ /_  ___  / / /
+  / __ `__ \/ / __ \/ / ___/ __ \/ _ \/ / /
+ / / / / / / / / / / (__  ) / / /  __/ / /
+/_/ /_/ /_/_/_/ /_/_/____/_/ /_/\___/_/_/
+${RESET}
 endef
 export BANNER
+
+
+define BANNER2
+${FRed}
+• ▌ ▄ ·. ▪   ▐ ▄ ▪  .▄▄ ·  ▄ .▄▄▄▄ .▄▄▌  ▄▄▌
+·██ ▐███▪██ •█▌▐███ ▐█ ▀. ██▪▐█▀▄.▀·██•  ██•
+▐█ ▌▐▌▐█·▐█·▐█▐▐▌▐█·▄▀▀▀█▄██▀▐█▐▀▀▪▄██▪  ██▪
+██ ██▌▐█▌▐█▌██▐█▌▐█▌▐█▄▪▐███▌▐▀▐█▄▄▌▐█▌▐▌▐█▌▐▌
+▀▀  █▪▀▀▀▀▀▀▀▀ █▪▀▀▀ ▀▀▀▀ ▀▀▀ · ▀▀▀ .▀▀▀ .▀▀▀
+${RESET}
+endef
+export BANNER2
+
+define BANNER3
+${FRed}
+█▀▄▀█ ▄█    ▄   ▄█    ▄▄▄▄▄    ▄  █ ▄███▄   █    █
+█ █ █ ██     █  ██   █     ▀▄ █   █ █▀   ▀  █    █
+█ ▄ █ ██ ██   █ ██ ▄  ▀▀▀▀▄   ██▀▀█ ██▄▄    █    █
+█   █ ▐█ █ █  █ ▐█  ▀▄▄▄▄▀    █   █ █▄   ▄▀ ███▄ ███▄
+   █   ▐ █  █ █  ▐               █  ▀███▀       ▀    ▀
+  ▀      █   ██                 ▀
+
+${RESET}
+endef
+export BANNER3
+
 
 re: fclean all
 

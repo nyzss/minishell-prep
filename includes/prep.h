@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 22:38:00 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 23:02:52 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@
 # include <fcntl.h>
 
 # include "libft.h"
+
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
 
 typedef enum e_token_type
 {

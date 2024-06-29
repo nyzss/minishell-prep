@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 22:40:33 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 23:15:05 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,15 +151,21 @@ int	main(int ac, char **av, char **env)
 		else
 		{
 			handle_env_expand(token);
+			#if DEBUG
 			print_token(token);
+			#endif
 			exec = build_exec(token, env);
 			do_exec(exec);
 		}
 		print_exec(exec);
+		#if DEBUG
 		printf("\ninput: \"%s\"\n", buf);
+		#endif
 		add_history(buf);
 		state = history_get_history_state();
+		#if DEBUG
 		print_history(state);
+		#endif
 		if (buf)
 			free(buf);
 		clear_token(&token);
