@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 19:33:52 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 16:08:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,26 +62,6 @@ int	m_child(t_cmd *cmds, char **env)
 	return (0);
 }
 
-void	handle_sigint(int status)
-{
-	(void)status;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-t_token	*get_next_command(t_token *head)
-{
-	while (head != NULL && head->next_token != NULL)
-	{
-		if (head->next_token->type == RawString)
-			return (head->next_token);
-		head = head->next_token;
-	}
-	return (NULL);
-}
-
 int	call_command(t_cmd *cmds, t_exec *exec, int last)
 {
 	pid_t	pid;
@@ -106,6 +86,26 @@ int	call_command(t_cmd *cmds, t_exec *exec, int last)
 	close(fds[0]);
 	close(fds[1]);
 	return (0);
+}
+
+void	handle_sigint(int status)
+{
+	(void)status;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+t_token	*get_next_command(t_token *head)
+{
+	while (head != NULL && head->next_token != NULL)
+	{
+		if (head->next_token->type == RawString)
+			return (head->next_token);
+		head = head->next_token;
+	}
+	return (NULL);
 }
 
 int	count_commands(t_token *token)

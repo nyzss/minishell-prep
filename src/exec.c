@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 19:35:50 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 16:08:28 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,14 +189,14 @@ void	do_exec(t_exec *exec)
 	int		last;
 	t_cmd	*cmds;
 
-	i = 0;
-	last = 0;
-	cmds = exec->cmds;
-	if (exec->cmd_count > 0)
+	pid = fork();
+	if (pid == 0)
 	{
-		pid = fork();
-		if (pid == 0)
+		while (exec != NULL)
 		{
+			i = 0;
+			last = 0;
+			cmds = exec->cmds;
 			if (exec->infile_fd != STDIN_FILENO)
 			{
 				dup2(exec->infile_fd, STDIN_FILENO);
@@ -206,7 +206,6 @@ void	do_exec(t_exec *exec)
 			{
 				if (i == exec->cmd_count - 1)
 					last = 1;
-				// printf("EXEC: %s\n", cmds->value);
 				call_command(cmds, exec, last);
 				cmds = cmds->next_cmd;
 				i++;
@@ -217,8 +216,51 @@ void	do_exec(t_exec *exec)
 				wait(NULL);
 				i++;
 			}
-			exit(EXIT_SUCCESS);
+			exec = exec->next_exec;
 		}
-		wait(NULL);
+		exit(EXIT_SUCCESS);
 	}
+	wait(NULL);
 }
+
+
+// void	do_exec(t_exec *exec)
+// {
+// 	int		i;
+// 	pid_t	pid;
+// 	int		last;
+// 	t_cmd	*cmds;
+
+// 	i = 0;
+// 	last = 0;
+// 	cmds = exec->cmds;
+// 	if (exec->cmd_count > 0)
+// 	{
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			if (exec->infile_fd != STDIN_FILENO)
+// 			{
+// 				dup2(exec->infile_fd, STDIN_FILENO);
+// 				close(exec->infile_fd);
+// 			}
+// 			while (cmds != NULL)
+// 			{
+// 				if (i == exec->cmd_count - 1)
+// 					last = 1;
+// 				// printf("EXEC: %s\n", cmds->value);
+// 				call_command(cmds, exec, last);
+// 				cmds = cmds->next_cmd;
+// 				i++;
+// 			}
+// 			i = 0;
+// 			while (i < exec->cmd_count)
+// 			{
+// 				wait(NULL);
+// 				i++;
+// 			}
+// 			exit(EXIT_SUCCESS);
+// 		}
+// 		wait(NULL);
+// 	}
+// }
