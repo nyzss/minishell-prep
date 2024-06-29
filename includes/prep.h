@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 20:00:48 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 22:38:00 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 #define COLOR_RESET   "\033[0m"
 
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
@@ -153,5 +154,10 @@ void	do_exec(t_exec *exec);
 // -------------------------------- BUILTIN -------------------------------
 
 int		handle_env_expand(t_token *token);
+
+
+// -------------------------------- HISTORY --------------------------------
+
+void	print_history(HISTORY_STATE *state);
 
 #endif

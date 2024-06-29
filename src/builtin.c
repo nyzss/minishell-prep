@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 22:08:54 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 23:00:01 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	handle_env_expand(t_token *token)
 	while (token != NULL)
 	{
 		env_len = 0;
+		tmp = NULL;
 		if (token->type == DoubleQuoteString
 			|| token->type == Command)
 		{
@@ -35,7 +36,10 @@ int	handle_env_expand(t_token *token)
 						env_len++;
 					str = ft_strndup(found, env_len);
 					str = getenv(++str);
-					tmp = ft_strndup(token->value, found - token->value);
+					if (found - token->value == 0)
+						tmp = ft_strdup("");
+					else
+						tmp = ft_strndup(token->value, found - token->value);
 					if (str != NULL)
 						tmp = ft_strjoin(tmp, str);
 					tmp = ft_strjoin(tmp, token->value + env_len + (found - token->value));

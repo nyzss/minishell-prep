@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 21:00:55 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 22:40:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,13 +128,15 @@ int	main(int ac, char **av, char **env)
 	t_token	*token;
 	t_exec	*exec;
 	char	*prompt = ESCAPE_F COLOR_YELLOW ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
+	HISTORY_STATE *state;
 
 	(void)ac;
 	(void)av;
 	token = NULL;
+	using_history();
+	signal(SIGINT, handle_sigint);
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
 		buf = readline(prompt);
 		if (buf == 0)
 			break ;
@@ -155,6 +157,9 @@ int	main(int ac, char **av, char **env)
 		}
 		print_exec(exec);
 		printf("\ninput: \"%s\"\n", buf);
+		add_history(buf);
+		state = history_get_history_state();
+		print_history(state);
 		if (buf)
 			free(buf);
 		clear_token(&token);
