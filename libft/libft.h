@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/11 11:17:53 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 20:46:55 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char	*ft_strjoin_add(char *first, char *second, char *add);
 char	*ft_strcat(char *dest, char *src);
 
 char	*ft_strdup_free(char *str);
+
+char	*ft_strndup(const char *str, int nb);
 //end
 
 int		ft_isalpha(int c);

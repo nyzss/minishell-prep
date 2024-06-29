@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/11 09:05:02 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 21:54:42 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	new = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!new)
 		return (NULL);
-	while (s1[i])
+	while (s1 && s1[i])
 	{
 		new[i] = s1[i];
 		i++;
 	}
-	while (s2[j])
+	while (s2 && s2[j])
 	{
 		new[i + j] = s2[j];
 		j++;
