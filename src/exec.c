@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 16:08:28 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 16:21:13 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ void	do_exec(t_exec *exec)
 			}
 			while (cmds != NULL)
 			{
-				if (i == exec->cmd_count - 1)
+				if (i == exec->cmd_count - 1 && exec->next_exec == NULL)
 					last = 1;
 				call_command(cmds, exec, last);
 				cmds = cmds->next_cmd;
