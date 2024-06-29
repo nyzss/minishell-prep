@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 16:21:13 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 20:29:08 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,15 @@ t_exec	*build_exec(t_token *token, char **env)
 		}
 		else if (token->type == Command)
 		{
+			// if (token->next_token != NULL)
+			// {
+			// 	if (token->next_token->type == Infile)
+			// 	{
+			// 		dprintf(2, "\n\n\nhello world\n\n\n");
+			// 		new->next_exec = build_exec(token, env);
+			// 		break ;
+			// 	}
+			// }
 			add_cmd(&(new->cmds), create_cmd(token));
 			// check if next token is pipe, if true then go to the next cmd after that one.
 			new->cmd_count += 1;

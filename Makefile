@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/06/27 09:15:31 by okoca            ###   ########.fr        #
+#    Updated: 2024/06/29 20:00:16 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,8 @@ SRC_FILES = main.c \
 			utils.c \
 			lexer.c \
 			parser.c \
-			exec.c
+			exec.c \
+			builtin.c
 
 NAME = prep
 

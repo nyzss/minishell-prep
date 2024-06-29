@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 16:08:35 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/29 19:59:10 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int	main(int ac, char **av, char **env)
 			printf("nuh uh\n");
 		else
 		{
+			handle_env_expand(token);
 			print_token(token);
 			exec = build_exec(token, env);
 			do_exec(exec);
