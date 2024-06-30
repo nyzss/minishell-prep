@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:54:31 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 13:07:14 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ int	call_command(t_cmd *cmds, t_exec *exec, int last)
 		if (last == 0)
 			dup2(fds[1], STDOUT_FILENO);
 		else if (exec->outfile_fd != STDOUT_FILENO)
+		{
 			dup2(exec->outfile_fd, STDOUT_FILENO);
+			close(exec->outfile_fd);
+		}
 		close(fds[0]);
 		close(fds[1]);
 		m_child(cmds, exec->env);

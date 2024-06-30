@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 13:03:35 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 13:07:49 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,10 @@ void	do_exec(t_exec *exec)
 				wait(NULL);
 				i++;
 			}
+			if (exec->infile_fd != STDIN_FILENO)
+				close(exec->infile_fd);
+			if (exec->outfile_fd != STDOUT_FILENO)
+				close(exec->outfile_fd);
 			exec = exec->next_exec;
 		}
 		exit(EXIT_SUCCESS);
