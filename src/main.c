@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 16:10:56 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 16:38:25 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int	handle_loop(char *buf, char **env)
 	t_token	*token;
 	t_exec	*exec;
 	HISTORY_STATE *state;
+	t_pipe	*pipes;
 
 	token = NULL;
 	exec = NULL;
@@ -137,6 +138,11 @@ int	handle_loop(char *buf, char **env)
 	else
 	{
 		handle_env_expand(token);
+
+		pipes = build_pipe(token, env);
+		// (void)pipes;
+		print_pipe(pipes);
+
 		exec = build_exec(token, env);
 		do_exec(exec);
 	}

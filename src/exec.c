@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 16:10:56 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 16:45:46 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,3 +249,103 @@ void	do_exec(t_exec *exec)
 // in_fd, out_fd
 
 // -> next pipe struct
+// typedef struct s_pipe
+// {
+// 	int				in_fd;
+// 	int				out_fd;
+// 	char			**env;
+// 	t_cmd			*cmd;
+// 	struct s_pipe	*next;
+// }	t_pipe;
+
+// void	handle_redirections(t_token *token, t_pipe *new)
+// {
+
+// }
+
+t_pipe	*build_pipe(t_token *token, char **env)
+{
+	t_pipe	*new;
+
+	new = malloc(sizeof(t_pipe));
+	new->env = env;
+	new->cmd = NULL;
+	new->in_fd = STDIN_FILENO;
+	new->out_fd = STDOUT_FILENO;
+	new->next = NULL;
+	while (token != NULL)
+	{
+		if (token->type == Infile)
+		{
+			if (new->in_fd != STDIN_FILENO)
+				close(new->in_fd);
+			new->in_fd = open(token->next_token->value, O_RDONLY | __O_CLOEXEC);
+			token = token->next_token;
+		}
+		else if (token->type == HereDoc)
+		{
+			if (new->in_fd != STDIN_FILENO)
+				close(new->in_fd);
+			new->in_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0777);
+			token = token->next_token;
+		}
+		else if (token->type == Outfile)
+		{
+			if (new->out_fd != STDOUT_FILENO)
+				close(new->out_fd);
+			new->out_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0777);
+			token = token->next_token;
+		}
+		else if (token->type == Append)
+		{
+			if (new->out_fd != STDOUT_FILENO)
+				close(new->out_fd);
+			new->out_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0777);
+			token = token->next_token;
+		}
+		// handle_redirections(token, new);
+		if (token->type == Command)
+		{
+			add_cmd(&(new->cmd), create_cmd(token));
+		}
+		else if (token->type == Pipe)
+		{
+			new->next = build_pipe(token->next_token, env);
+			break ;
+		}
+		token = token->next_token;
+	}
+	return (new);
+}
+
+void	print_pipe(t_pipe *pipe)
+{
+	int	count;
+
+	count = 0;
+	printf(COLOR_MAGENTA_A "-------------- PIPE -------------\n");
+	while (pipe != NULL)
+	{
+		t_args	*args;
+
+		if (count != 0)
+			printf("-----------\n");
+		printf("exec_nb: %d\n", count);
+		printf("IN_FD: %d\n", pipe->in_fd);
+		printf("OUT_FD: %d\n", pipe->out_fd);
+		printf("ENV: %p\n", pipe->env);
+		printf("NEXT_PIPE: %p\n", pipe->next);
+		args = pipe->cmd->extra_args;
+		printf("\tCommand: %s\n", pipe->cmd->value);
+		if (pipe->cmd->arg_count > 0)
+			printf("arg count: %d\n", pipe->cmd->arg_count);
+		while (args != NULL)
+		{
+			printf("\targ: \'%s\'\n",args->value);
+			args = args->next_arg;
+		}
+		count++;
+		pipe = pipe->next;
+	}
+	printf("--------------------------------\n" COLOR_RESET);
+}
