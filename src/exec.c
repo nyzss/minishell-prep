@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:18:29 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 13:03:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,17 +137,23 @@ t_exec	*build_exec(t_token *token, char **env)
 	{
 		if (token->type == Infile)
 		{
-			new->infile_fd = open(token->next_token->value, O_RDONLY);
+			if (new->infile_fd != STDIN_FILENO)
+				close(new->infile_fd);
+			new->infile_fd = open(token->next_token->value, O_RDONLY | __O_CLOEXEC);
 			token = token->next_token;
 		}
 		else if (token->type == Outfile)
 		{
-			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			if (new->outfile_fd != STDOUT_FILENO)
+				close(new->outfile_fd);
+			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0777);
 			token = token->next_token;
 		}
 		else if (token->type == Append)
 		{
-			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			if (new->outfile_fd != STDOUT_FILENO)
+				close(new->outfile_fd);
+			new->outfile_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0777);
 			token = token->next_token;
 		}
 		else if (token->type == Pipe)
