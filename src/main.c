@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:36:24 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:54:31 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,6 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		buf = readline(prompt);
-		handle_arrow_keys();
 		if (buf == 0)
 			break ;
 		if (check_line(buf) == 0)

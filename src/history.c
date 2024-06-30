@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 22:27:18 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:39:18 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:54:40 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,43 @@ void	print_history(HISTORY_STATE *state)
 	printf("--------------------------------\n" COLOR_RESET);
 }
 
-void	handle_arrow_keys()
-{
-	struct termios	term;
-	struct termios	raw;
+// void	handle_arrow_keys()
+// {
+// 	struct termios	term;
+// 	struct termios	raw;
 
-	tcgetattr(STDIN_FILENO, &term);
-	raw.c_lflag &= ~(ECHO | ICANON);
-	raw.c_cc[VMIN] = 1;
-	raw.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
-	printf("hello world!\n");
-}
+// 	tcgetattr(STDIN_FILENO, &term);
+// 	raw.c_lflag &= ~(ECHO | ICANON);
+// 	raw.c_cc[VMIN] = 1;
+// 	raw.c_cc[VTIME] = 0;
+// 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+
+// 	while (1)
+// 	{
+// 		char seq[3];
+// 		if (read(STDIN_FILENO, &seq[0], 1) != 1) break;
+// 		if (seq[0] == 27) {
+// 			if (read(STDIN_FILENO, &seq[1], 1) != 1) break;
+// 			if (read(STDIN_FILENO, &seq[2], 1) != 1) break;
+
+// 			if (seq[1] == '[') {
+// 				if (seq[2] == 'A')
+// 				{
+// 					printf("\nUp arrow key pressed\n");
+// 				}
+// 				else if (seq[2] == 'B')
+// 				{
+// 					printf("\nDown arrow key pressed\n");
+// 				}
+// 			}
+// 		}
+// 		else
+// 		{
+// 			ungetc(seq[0], stdin);
+// 			break;
+// 		}
+// 	}
+
+// 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
+// 	printf("hello world!\n");
+// }
