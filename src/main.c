@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 23:15:05 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:21:40 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,31 +108,54 @@ t_token	*get_next_command(t_token *head)
 	return (NULL);
 }
 
-int	count_commands(t_token *token)
+int	check_line(char *line)
 {
-	int	count;
+	if (line[0] == '\0')
+		return (1);
+	return (0);
+}
 
-	count = 0;
-	while (token != NULL)
+int	handle_loop(char *buf, char **env)
+{
+	t_token	*token;
+	t_exec	*exec;
+	HISTORY_STATE *state;
+
+	token = NULL;
+	exec = NULL;
+	if (strncmp(buf, "exit", 4) == 0)
 	{
-		if (token->type == RawString)
-			count++;
-		token = token->next_token;
+		free(buf);
+		return (1);
 	}
-	return (count);
+	token = tokenize_line(buf);
+	if (token_checker(token) != 0)
+		printf("nuh uh\n");
+	else
+	{
+		handle_env_expand(token);
+		exec = build_exec(token, env);
+		do_exec(exec);
+	}
+	add_history(buf);
+	state = history_get_history_state();
+	#if DEBUG
+	print_token(token);
+	print_exec(exec);
+	printf("\ninput: \"%s\"\n", buf);
+	print_history(state);
+	#endif
+	clear_token(&token);
+	return (0);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	char	*buf;
-	t_token	*token;
-	t_exec	*exec;
-	char	*prompt = ESCAPE_F COLOR_YELLOW ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
-	HISTORY_STATE *state;
+	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
 
 	(void)ac;
 	(void)av;
-	token = NULL;
 	using_history();
 	signal(SIGINT, handle_sigint);
 	while (1)
@@ -140,35 +163,12 @@ int	main(int ac, char **av, char **env)
 		buf = readline(prompt);
 		if (buf == 0)
 			break ;
-		if (strncmp(buf, "exit", 4) == 0)
+		if (check_line(buf) == 0)
 		{
-			free(buf);
-			break ;
+			if (handle_loop(buf, env) != 0)
+				break ;
 		}
-		token = tokenize_line(buf);
-		if (token_checker(token) != 0)
-			printf("nuh uh\n");
-		else
-		{
-			handle_env_expand(token);
-			#if DEBUG
-			print_token(token);
-			#endif
-			exec = build_exec(token, env);
-			do_exec(exec);
-		}
-		print_exec(exec);
-		#if DEBUG
-		printf("\ninput: \"%s\"\n", buf);
-		#endif
-		add_history(buf);
-		state = history_get_history_state();
-		#if DEBUG
-		print_history(state);
-		#endif
-		if (buf)
-			free(buf);
-		clear_token(&token);
+		free(buf);
 	}
 	printf("exiting shell...\n");
 	return (0);

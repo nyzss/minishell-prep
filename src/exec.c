@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 20:29:08 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:18:29 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	print_exec(t_exec *exec)
 	int	count;
 
 	count = 0;
-	printf(COLOR_BLUE "-------------- EXEC -------------\n");
+	printf(COLOR_BLUE_A "-------------- EXEC -------------\n");
 	while (exec != NULL)
 	{
 		t_cmd	*cmds;

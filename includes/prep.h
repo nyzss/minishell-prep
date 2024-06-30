@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 23:02:52 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:18:45 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 # define COLOR_MAGENTAB "\033[35m"
 # define COLOR_CYANB    "\033[36m"
 
-# define COLOR_RED     "\033[1;31m"
-# define COLOR_GREEN   "\033[1;32m"
-# define COLOR_YELLOW  "\033[1;33m"
-# define COLOR_BLUE    "\033[1;34m"
-# define COLOR_MAGENTA "\033[1;35m"
-# define COLOR_CYAN    "\033[1;36m"
+# define COLOR_RED_A     "\033[1;31m"
+# define COLOR_GREEN_A   "\033[1;32m"
+# define COLOR_YELLOW_A  "\033[1;33m"
+# define COLOR_BLUE_A    "\033[1;34m"
+# define COLOR_MAGENTA_A "\033[1;35m"
+# define COLOR_CYAN_A    "\033[1;36m"
 
 // C1=$'\001\033[1;34m\002'
 // C0=$'\001\033[0;0m\002'
@@ -48,6 +48,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <errno.h>
+# include <ncurses.h>
 # include <termios.h>
 # include <sys/types.h>
 # include <sys/wait.h>
