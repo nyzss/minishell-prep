@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 16:45:46 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 17:08:01 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ t_cmd	*create_cmd(t_token *token)
 	cmd->arg_count = 0;
 	while (tok != NULL
 		&& (tok->type == DoubleQuoteString
-		|| tok->type == SingleQuoteString))
+		|| tok->type == SingleQuoteString
+		|| tok->type == Command))
 	{
 		// printf("args found: %s\n", tok->value);
 		add_arg(&(cmd->extra_args), create_args(tok->value));
