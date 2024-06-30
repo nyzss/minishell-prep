@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 17:06:55 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 17:26:04 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,18 +139,21 @@ int	handle_loop(char *buf, char **env)
 	{
 		handle_env_expand(token);
 
-		// pipes = build_pipe(token, env);
-		// print_pipe(pipes);
-		(void)pipes;
+		pipes = build_pipe(token, env);
 
-		exec = build_exec(token, env);
-		do_exec(exec);
+		do_pipes(pipes);
+
+		(void)exec;
+		// (void)pipes;
+		// exec = build_exec(token, env);
+		// do_exec(exec);
 	}
 	add_history(buf);
 	state = history_get_history_state();
 	#if DEBUG
 	print_token(token);
-	print_exec(exec);
+	print_pipe(pipes);
+	// print_exec(exec);
 	printf("\ninput: \"%s\"\n", buf);
 	print_history(state);
 	#endif

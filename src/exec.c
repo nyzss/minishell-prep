@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 17:08:01 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 17:31:02 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,9 +285,10 @@ t_pipe	*build_pipe(t_token *token, char **env)
 		}
 		else if (token->type == HereDoc)
 		{
+			//TODO HEREDOC
 			if (new->in_fd != STDIN_FILENO)
 				close(new->in_fd);
-			new->in_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0777);
+			new->in_fd = open(token->next_token->value, O_RDONLY | __O_CLOEXEC, 0777);
 			token = token->next_token;
 		}
 		else if (token->type == Outfile)
@@ -319,6 +320,73 @@ t_pipe	*build_pipe(t_token *token, char **env)
 	return (new);
 }
 
+int	call_command_pipe(t_pipe *pipes, int last)
+{
+	pid_t	pid;
+	int		fds[2];
+
+	pipe(fds);
+	pid = fork();
+	if (pid == 0)
+	{
+		if (last == 0)
+			dup2(fds[1], STDOUT_FILENO);
+		else if (pipes->out_fd != STDOUT_FILENO)
+		{
+			dup2(pipes->out_fd, STDOUT_FILENO);
+			close(pipes->out_fd);
+		}
+		// dprintf(2, "\ndeep in here\n");
+		close(fds[0]);
+		close(fds[1]);
+		m_child(pipes->cmd, pipes->env);
+	}
+	else
+	{
+		dup2(fds[0], STDIN_FILENO);
+	}
+	close(fds[0]);
+	close(fds[1]);
+	return (0);
+}
+
+void	do_pipes(t_pipe *pipes)
+{
+	pid_t	pid;
+	t_pipe	*tmp;
+	int		last;
+
+	last = 0;
+	tmp = pipes;
+	pid = fork();
+	if (pid == 0)
+	{
+		while (pipes != NULL)
+		{
+			if (pipes->in_fd != STDIN_FILENO)
+			{
+				dup2(pipes->in_fd, STDIN_FILENO);
+				close(pipes->in_fd);
+			}
+			if (pipes->next == NULL)
+				last = 1;
+			call_command_pipe(pipes, last);
+			if (pipes->in_fd != STDIN_FILENO)
+				close(pipes->in_fd);
+			if (pipes->out_fd != STDOUT_FILENO)
+				close(pipes->out_fd);
+			pipes = pipes->next;
+		}
+		while (tmp != NULL)
+		{
+			wait(NULL);
+			tmp = tmp->next;
+		}
+		exit(EXIT_SUCCESS);
+	}
+	wait(NULL);
+}
+
 void	print_pipe(t_pipe *pipe)
 {
 	int	count;
@@ -337,7 +405,7 @@ void	print_pipe(t_pipe *pipe)
 		printf("ENV: %p\n", pipe->env);
 		printf("NEXT_PIPE: %p\n", pipe->next);
 		args = pipe->cmd->extra_args;
-		printf("\tCommand: %s\n", pipe->cmd->value);
+		printf("Command: %s\n", pipe->cmd->value);
 		if (pipe->cmd->arg_count > 0)
 			printf("arg count: %d\n", pipe->cmd->arg_count);
 		while (args != NULL)

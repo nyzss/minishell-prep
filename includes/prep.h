@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 16:35:44 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 17:27:16 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,5 +179,9 @@ void	print_history(HISTORY_STATE *state);
 t_pipe	*build_pipe(t_token *token, char **env);
 
 void	print_pipe(t_pipe *pipe);
+
+void	do_pipes(t_pipe *pipes);
+
+int		m_child(t_cmd *cmds, char **env);
 
 #endif
