@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/06/29 23:14:38 by okoca            ###   ########.fr        #
+#    Updated: 2024/06/30 12:23:01 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ OBJS = ${SRC:.c=.o}
 	@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}: ${LIBFT_TARGET} ${OBJS}
-	@echo "$$BANNER"
+	@echo "$$BANNER3"
 	@echo "##### DEBUG MODE: ${DEBUG}"
 	@echo -e "${FRed}\n>>>Building ${FPurple}${NAME}${RESET}${Red}...${RESET}"
 	@${CC} ${CFLAGS} ${OBJS} -lreadline ${LDFLAGS} -o ${NAME}
