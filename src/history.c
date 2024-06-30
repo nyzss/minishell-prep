@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 22:27:18 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:18:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:39:18 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,17 @@ void	print_history(HISTORY_STATE *state)
 		i++;
 	}
 	printf("--------------------------------\n" COLOR_RESET);
+}
+
+void	handle_arrow_keys()
+{
+	struct termios	term;
+	struct termios	raw;
+
+	tcgetattr(STDIN_FILENO, &term);
+	raw.c_lflag &= ~(ECHO | ICANON);
+	raw.c_cc[VMIN] = 1;
+	raw.c_cc[VTIME] = 0;
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+	printf("hello world!\n");
 }

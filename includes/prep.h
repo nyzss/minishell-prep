@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:18:45 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 12:35:45 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,7 @@ int		handle_env_expand(t_token *token);
 // -------------------------------- HISTORY --------------------------------
 
 void	print_history(HISTORY_STATE *state);
+
+void	handle_arrow_keys();
 
 #endif
