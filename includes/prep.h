@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 17:27:16 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 21:00:57 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PREP_H
 
 # define READ_BUFFER 1024
+# define HERE_DOC_TMP 10
 
 // # define RED_COLOR "\033[0;31m"
 // # define BLUE_COLOR "\033[1;34m"
@@ -117,6 +118,7 @@ typedef struct s_pipe
 	int				in_fd;
 	int				out_fd;
 	char			**env;
+	t_args			*filenames;
 	t_cmd			*cmd;
 	struct s_pipe	*next;
 }	t_pipe;
@@ -134,6 +136,12 @@ char	*p_helper_path(char *arg, char *path, char **paths, int i);
 size_t	ft_strlen(const char *str);
 
 char	**ft_split(char const *str, char c);
+
+void	handle_sigint(int status);
+
+t_args	*create_args(char *value);
+
+int		add_arg(t_args **head, t_args *new);
 
 // --------------------------------- LEXER -------------------------------
 
@@ -183,5 +191,7 @@ void	print_pipe(t_pipe *pipe);
 void	do_pipes(t_pipe *pipes);
 
 int		m_child(t_cmd *cmds, char **env);
+
+int		handle_here_doc(t_pipe *pipes, char *filename);
 
 #endif

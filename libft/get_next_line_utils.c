@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:30 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 18:13:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 19:14:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*gnl_strjoin(char *old, char *tmp)
 
 	i = 0;
 	j = 0;
-	new = (char *)malloc(sizeof(char) * (ft_strlen(old) + ft_strlen(tmp) + 1));
+	new = (char *)malloc(sizeof(char) * (gnl_strlen(old) + gnl_strlen(tmp) + 1));
 	if (!new)
 		return (NULL);
 	while (old && old[i])

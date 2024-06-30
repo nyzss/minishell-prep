@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: Invalid date        by okoca             #+#    #+#              #
-#    Updated: 2024/05/30 20:37:44 by okoca            ###   ########.fr        #
+#    Updated: 2024/06/30 19:14:05 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,9 @@ SRC = ft_atoi.c \
 	ft_lstdelone_bonus.c \
 	ft_lstclear_bonus.c \
 	ft_lstiter_bonus.c \
-	ft_lstmap_bonus.c
+	ft_lstmap_bonus.c \
+	get_next_line.c \
+	get_next_line_utils.c
 
 NAME = libft.a
 

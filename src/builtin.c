@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 18:12:04 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 21:01:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,68 @@ int	handle_env_expand(t_token *token)
 	return (0);
 }
 
+unsigned int	pseudo_rand_num(int i)
+{
+	static unsigned int	seed;
+
+    seed = (1103515245 * seed + 12345) & 0x7fffffff;
+	return (i * seed);
+}
+
+char	*random_name(char *filename)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(char) * (HERE_DOC_TMP + 1));
+	new[0] = '.';
+	i++;
+	while (i < HERE_DOC_TMP)
+	{
+		new[i] = 'A' + (pseudo_rand_num(i + filename[0]) % 26);
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
+}
+
+int	handle_here_doc(t_pipe *pipes, char *filename)
+{
+	char	*line;
+	int		fd;
+	char	*tmp;
+
+	line = NULL;
+	printf("\n");
+	tmp = random_name(filename);
+	printf("random name: %s\n", tmp);
+	fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd < 0)
+		printf(COLOR_RED_A "fd not valid!\n\n");
+	while (1)
+	{
+		dprintf(2, "> ");
+		line = get_next_line(STDIN_FILENO);
+		// line = readline("> ");
+		if (ft_strcmp(line, filename) == '\n')
+		{
+			free(line);
+			break ;
+		}
+		write(fd, line, ft_strlen(line));
+		free(line);
+	}
+	close(fd);
+	fd = open(tmp, O_RDONLY | __O_CLOEXEC);
+	if (fd < 0)
+		printf(COLOR_RED_A "fd not valid -- second one!!\n\n");
+	add_arg(&(pipes->filenames), create_args(tmp));
+	return (fd);
+}
+
 void	handle_built_in(char *buf)
 {
+	(void)buf;
 	//todo
 }

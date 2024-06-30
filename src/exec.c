@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 17:46:03 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 21:05:49 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,7 @@ t_pipe	*build_pipe(t_token *token, char **env)
 	new->in_fd = STDIN_FILENO;
 	new->out_fd = STDOUT_FILENO;
 	new->next = NULL;
+	new->filenames = NULL;
 	while (token != NULL)
 	{
 		if (token->type == Infile)
@@ -298,29 +299,29 @@ t_pipe	*build_pipe(t_token *token, char **env)
 			if (new->in_fd != STDIN_FILENO)
 				close(new->in_fd);
 			new->in_fd = open(token->next_token->value, O_RDONLY | __O_CLOEXEC);
-			token = token->next_token;
+			// token = token->next_token;
 		}
 		else if (token->type == HereDoc)
 		{
 			//TODO HEREDOC
 			if (new->in_fd != STDIN_FILENO)
 				close(new->in_fd);
-			new->in_fd = open(token->next_token->value, O_RDONLY | __O_CLOEXEC, 0777);
-			token = token->next_token;
+			new->in_fd = handle_here_doc(new, token->next_token->value);
+			// token = token->next_token;
 		}
 		else if (token->type == Outfile)
 		{
 			if (new->out_fd != STDOUT_FILENO)
 				close(new->out_fd);
 			new->out_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0777);
-			token = token->next_token;
+			// token = token->next_token;
 		}
 		else if (token->type == Append)
 		{
 			if (new->out_fd != STDOUT_FILENO)
 				close(new->out_fd);
 			new->out_fd = open(token->next_token->value, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0777);
-			token = token->next_token;
+			// token = token->next_token;
 		}
 		// handle_redirections(token, new);
 		if (token->type == Command)
@@ -372,6 +373,7 @@ void	do_pipes(t_pipe *pipes)
 	pid_t	pid;
 	t_pipe	*tmp;
 	int		last;
+	t_args	*filenames;
 
 	last = 0;
 	tmp = pipes;
@@ -396,7 +398,13 @@ void	do_pipes(t_pipe *pipes)
 		}
 		while (tmp != NULL)
 		{
+			filenames = tmp->filenames;
 			wait(NULL);
+			while (filenames != NULL)
+			{
+				unlink(filenames->value);
+				filenames = filenames->next_arg;
+			}
 			tmp = tmp->next;
 		}
 		exit(EXIT_SUCCESS);
@@ -413,6 +421,7 @@ void	print_pipe(t_pipe *pipe)
 	while (pipe != NULL)
 	{
 		t_args	*args;
+		t_args	*filenames;
 
 		if (count != 0)
 			printf("-----------\n");
@@ -425,6 +434,12 @@ void	print_pipe(t_pipe *pipe)
 		printf("Command: %s\n", pipe->cmd->value);
 		if (pipe->cmd->arg_count > 0)
 			printf("arg count: %d\n", pipe->cmd->arg_count);
+		filenames = pipe->filenames;
+		while (filenames != NULL)
+		{
+			printf("\tfilenames: \'%s\'\n", filenames->value);
+			filenames = filenames->next_arg;
+		}
 		while (args != NULL)
 		{
 			printf("\targ: \'%s\'\n",args->value);
