@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/29 20:46:55 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 18:11:51 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "ft_printf.h"
+# include "get_next_line.h"
 # define FIRST 0
 # define SECOND 0
 
