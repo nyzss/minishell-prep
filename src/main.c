@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 13:07:14 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 16:10:56 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ char	**combine_args(t_cmd *cmd, char **args)
 	extra_args = cmd->extra_args;
 	while (args[i])
 		i++;
-	new = malloc(sizeof(char *) * (cmd->arg_nb + i + 1));
+	new = malloc(sizeof(char *) * (cmd->arg_count + i + 1));
 	while (args[j])
 	{
 		new[j] = args[j];
 		j++;
 	}
 	i = 0;
-	while (extra_args != NULL && i < cmd->arg_nb)
+	while (extra_args != NULL && i < cmd->arg_count)
 	{
 		new[j + i] = extra_args->value;
 		extra_args = extra_args->next_arg;

@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 13:07:49 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 16:10:56 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ t_cmd	*create_cmd(t_token *token)
 	cmd->value = token->value;
 	cmd->next_cmd = NULL;
 	cmd->extra_args = NULL;
-	cmd->arg_nb = 0;
+	cmd->arg_count = 0;
 	while (tok != NULL
 		&& (tok->type == DoubleQuoteString
 		|| tok->type == SingleQuoteString))
 	{
 		// printf("args found: %s\n", tok->value);
 		add_arg(&(cmd->extra_args), create_args(tok->value));
-		cmd->arg_nb++;
+		cmd->arg_count++;
 		tok = tok->next_token;
 	}
 	token->next_token = tok;
@@ -107,8 +107,8 @@ void	print_exec(t_exec *exec)
 		{
 			args = cmds->extra_args;
 			printf("\tCommand: %s\n", cmds->value);
-			if (cmds->arg_nb > 0)
-				printf("\targ count: %d\n", cmds->arg_nb);
+			if (cmds->arg_count > 0)
+				printf("\targ count: %d\n", cmds->arg_count);
 			while (args != NULL)
 			{
 				printf("\t\targ: \'%s\'\n",args->value);
@@ -243,43 +243,9 @@ void	do_exec(t_exec *exec)
 }
 
 
-// void	do_exec(t_exec *exec)
-// {
-// 	int		i;
-// 	pid_t	pid;
-// 	int		last;
-// 	t_cmd	*cmds;
+// pipe struct:
 
-// 	i = 0;
-// 	last = 0;
-// 	cmds = exec->cmds;
-// 	if (exec->cmd_count > 0)
-// 	{
-// 		pid = fork();
-// 		if (pid == 0)
-// 		{
-// 			if (exec->infile_fd != STDIN_FILENO)
-// 			{
-// 				dup2(exec->infile_fd, STDIN_FILENO);
-// 				close(exec->infile_fd);
-// 			}
-// 			while (cmds != NULL)
-// 			{
-// 				if (i == exec->cmd_count - 1)
-// 					last = 1;
-// 				// printf("EXEC: %s\n", cmds->value);
-// 				call_command(cmds, exec, last);
-// 				cmds = cmds->next_cmd;
-// 				i++;
-// 			}
-// 			i = 0;
-// 			while (i < exec->cmd_count)
-// 			{
-// 				wait(NULL);
-// 				i++;
-// 			}
-// 			exit(EXIT_SUCCESS);
-// 		}
-// 		wait(NULL);
-// 	}
-// }
+// command, args
+// in_fd, out_fd
+
+// -> next pipe struct

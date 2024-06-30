@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 12:35:45 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 16:12:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ typedef struct s_args
 
 typedef struct s_cmd
 {
-	int				arg_nb;
+	int				arg_count;
 	char			*value;
 	t_args			*extra_args;
 	struct s_cmd	*next_cmd;
@@ -111,6 +111,15 @@ typedef struct s_exec
 	t_cmd			*cmds;
 	struct s_exec	*next_exec;
 }	t_exec;
+
+typedef struct s_pipe
+{
+	int				in_fd;
+	int				out_fd;
+	char			**env;
+	t_cmd			*cmd;
+	struct s_pipe	*next;
+}	t_pipe;
 
 int		p_exec(char *path, char **args, char **envp);
 
