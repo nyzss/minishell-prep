@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 17:31:02 by okoca            ###   ########.fr       */
+/*   Updated: 2024/06/30 17:46:03 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,11 @@ t_cmd	*create_cmd(t_token *token)
 {
 	t_cmd	*cmd;
 	t_token	*tok;
+	char	**args;
+	int		i;
 
+	i = 0;
+	args = NULL;
 	tok = token->next_token;
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
@@ -58,8 +62,21 @@ t_cmd	*create_cmd(t_token *token)
 		|| tok->type == Command))
 	{
 		// printf("args found: %s\n", tok->value);
-		add_arg(&(cmd->extra_args), create_args(tok->value));
-		cmd->arg_count++;
+		if (tok->type == Command)
+		{
+			args = ft_split(tok->value, ' ');
+			while (args[i])
+			{
+				add_arg(&(cmd->extra_args), create_args(args[i]));
+				cmd->arg_count++;
+				i++;
+			}
+		}
+		else
+		{
+			add_arg(&(cmd->extra_args), create_args(tok->value));
+			cmd->arg_count++;
+		}
 		tok = tok->next_token;
 	}
 	token->next_token = tok;
