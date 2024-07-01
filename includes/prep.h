@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 21:00:57 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 09:12:41 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # define READ_BUFFER 1024
 # define HERE_DOC_TMP 10
+
+# define SHOULD_EXIT 2
 
 // # define RED_COLOR "\033[0;31m"
 // # define BLUE_COLOR "\033[1;34m"
@@ -188,10 +190,12 @@ t_pipe	*build_pipe(t_token *token, char **env);
 
 void	print_pipe(t_pipe *pipe);
 
-void	do_pipes(t_pipe *pipes);
+int		do_pipes(t_pipe *pipes);
 
 int		m_child(t_cmd *cmds, char **env);
 
 int		handle_here_doc(t_pipe *pipes, char *filename);
+
+int		handle_built_in(t_cmd *cmd);
 
 #endif

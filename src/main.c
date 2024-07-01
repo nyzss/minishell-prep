@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 17:50:44 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 09:28:17 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,27 +124,27 @@ int	handle_loop(char *buf, char **env)
 	t_exec	*exec;
 	HISTORY_STATE *state;
 	t_pipe	*pipes;
+	int		status;
 
 	token = NULL;
 	exec = NULL;
-	if (strncmp(buf, "exit", 4) == 0)
-	{
-		free(buf);
-		return (1);
-	}
+	pipes = NULL;
+	status = 0;
 	token = tokenize_line(buf);
 	if (token_checker(token) != 0)
+	{
 		printf("nuh uh\n");
+		free(buf);
+		return (0);
+	}
 	else
 	{
 		handle_env_expand(token);
 
 		pipes = build_pipe(token, env);
+		status = do_pipes(pipes);
 
-		do_pipes(pipes);
-
-		(void)exec;
-		// (void)pipes;
+		// (void)exec;
 		// exec = build_exec(token, env);
 		// do_exec(exec);
 	}
@@ -155,9 +155,14 @@ int	handle_loop(char *buf, char **env)
 	print_pipe(pipes);
 	// print_exec(exec);
 	printf("\ninput: \"%s\"\n", buf);
-	print_history(state);
+	// print_history(state);
 	#endif
 	clear_token(&token);
+	if (status == SHOULD_EXIT)
+	{
+		free(buf);
+		return (status);
+	}
 	return (0);
 }
 

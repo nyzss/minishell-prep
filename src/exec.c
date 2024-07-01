@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 21:05:49 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 09:57:00 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,7 +342,10 @@ int	call_command_pipe(t_pipe *pipes, int last)
 {
 	pid_t	pid;
 	int		fds[2];
+	int		status;
 
+	status = 0;
+	(void)status;
 	pipe(fds);
 	pid = fork();
 	if (pid == 0)
@@ -357,7 +360,10 @@ int	call_command_pipe(t_pipe *pipes, int last)
 		// dprintf(2, "\ndeep in here\n");
 		close(fds[0]);
 		close(fds[1]);
+		// status = handle_built_in(pipes->cmd);
+		// if (status == 0)
 		m_child(pipes->cmd, pipes->env);
+		// exit(0);
 	}
 	else
 	{
@@ -365,16 +371,21 @@ int	call_command_pipe(t_pipe *pipes, int last)
 	}
 	close(fds[0]);
 	close(fds[1]);
+	printf("status: %d, pid: %d\n", status, pid);
+	if (status == SHOULD_EXIT)
+		return (status);
 	return (0);
 }
 
-void	do_pipes(t_pipe *pipes)
+int	do_pipes(t_pipe *pipes)
 {
 	pid_t	pid;
 	t_pipe	*tmp;
 	int		last;
 	t_args	*filenames;
+	int		status;
 
+	status = 0;
 	last = 0;
 	tmp = pipes;
 	pid = fork();
@@ -389,7 +400,7 @@ void	do_pipes(t_pipe *pipes)
 			}
 			if (pipes->next == NULL)
 				last = 1;
-			call_command_pipe(pipes, last);
+			status = call_command_pipe(pipes, last);
 			if (pipes->in_fd != STDIN_FILENO)
 				close(pipes->in_fd);
 			if (pipes->out_fd != STDOUT_FILENO)
@@ -410,6 +421,7 @@ void	do_pipes(t_pipe *pipes)
 		exit(EXIT_SUCCESS);
 	}
 	wait(NULL);
+	return (status);
 }
 
 void	print_pipe(t_pipe *pipe)

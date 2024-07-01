@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/30 21:01:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 09:13:24 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,12 @@ int	handle_here_doc(t_pipe *pipes, char *filename)
 	return (fd);
 }
 
-void	handle_built_in(char *buf)
+int	handle_built_in(t_cmd *cmd)
 {
-	(void)buf;
-	//todo
+	if (ft_strcmp(cmd->value, "exit") == 0)
+	{
+		return (SHOULD_EXIT);
+	}
+	printf("receveived buf: %s\n", cmd->value);
+	return (0);
 }
