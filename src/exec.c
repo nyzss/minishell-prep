@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 10:39:47 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 13:03:45 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,13 +177,10 @@ int	call_command_pipe(t_pipe *pipes, int last)
 			dup2(pipes->out_fd, STDOUT_FILENO);
 			close(pipes->out_fd);
 		}
-		// dprintf(2, "\ndeep in here\n");
 		close(fds[0]);
 		close(fds[1]);
-		// status = handle_built_in(pipes->cmd);
-		// if (status == 0)
 		m_child(pipes->cmd, pipes->env);
-		// exit(0);
+		exit(0);
 	}
 	else
 	{

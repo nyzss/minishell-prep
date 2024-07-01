@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 10:40:50 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 13:34:44 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,18 @@ int	m_child(t_cmd *cmds, char **env)
 	if (!args)
 		return (2);
 	args = combine_args(cmds, args);
-	path = p_get_path(args[0]);
-	if (access(path, F_OK | X_OK) != 0)
+	if (handle_built_in(cmds) == 0)
 	{
-		if (path)
-			free(path);
-		p_cleanup_array(args);
-		return (1);
+		path = p_get_path(args[0]);
+		if (access(path, F_OK | X_OK) != 0)
+		{
+			if (path)
+				free(path);
+			p_cleanup_array(args);
+			return (1);
+		}
+		p_exec(path, args, env);
 	}
-	p_exec(path, args, env);
 	return (0);
 }
 
@@ -92,15 +95,16 @@ int	check_line(char *line)
 int	handle_loop(char *buf, char **env)
 {
 	t_token	*token;
-	HISTORY_STATE *state;
 	t_pipe	*pipes;
 	int		status;
 
+	(void)env;
 	token = NULL;
 	pipes = NULL;
 	status = 0;
-	token = tokenize_line(buf);
-	if (token_checker(token) != 0)
+	// token = tokenize_line(buf);
+	token = new_tokenizer(buf);
+	if (new_token_checker(token) != 0)
 	{
 		printf("nuh uh\n");
 		free(buf);
@@ -110,20 +114,14 @@ int	handle_loop(char *buf, char **env)
 	{
 		handle_env_expand(token);
 
-		pipes = build_pipe(token, env);
-		status = do_pipes(pipes);
-
-		// (void)exec;
-		// exec = build_exec(token, env);
-		// do_exec(exec);
+		// pipes = build_pipe(token, env);
+		// status = do_pipes(pipes);
 	}
 	add_history(buf);
-	state = history_get_history_state();
 	#if DEBUG
 	print_token(token);
 	print_pipe(pipes);
 	printf("\ninput: \"%s\"\n", buf);
-	// print_history(state);
 	#endif
 	clear_token(&token);
 	if (status == SHOULD_EXIT)

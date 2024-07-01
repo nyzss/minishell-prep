@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:00:00 by okoca             #+#    #+#             */
-/*   Updated: 2024/06/28 17:24:04 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 14:39:18 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,61 @@ int	token_checker(t_token *token)
 				// handle_quoted_args(token);
 				token->type = Command;
 			}
+			token = token->next_token;
+		}
+	}
+	return (error_code);
+}
+
+int	handle_arguments(t_token *token)
+{
+	while (token!= NULL)
+	{
+		if (token->type == RawString)
+			token->type = Argument;
+		else
+			break ;
+		token = token->next_token;
+	}
+	return (0);
+}
+
+int	new_token_checker(t_token *token)
+{
+	int	error_code;
+	t_token	*tmp;
+
+	tmp = token;
+	error_code = 0;
+	while (tmp != NULL)
+	{
+		error_code = check_non_next(tmp, Outfile);
+		error_code = check_non_next(tmp, Infile);
+		error_code = check_non_next(tmp, Append);
+		error_code = check_non_next(tmp, HereDoc);
+		error_code = check_non_next(tmp, Pipe);
+		tmp = tmp->next_token;
+	}
+	if (error_code == 0)
+	{
+		while (token != NULL)
+		{
+			if (token->type == Outfile || token-> type == Infile
+				|| token->type == Append || token->type == HereDoc)
+			{
+				if (token->next_token->type == RawString)
+					split_filename_command(token->next_token);
+				token->next_token->type = Filename;
+			}
+			else if (token->type == RawString)
+			{
+				// handle_quoted_args(token);
+				token->type = Command;
+				if (token->next_token != NULL)
+					handle_arguments(token->next_token);
+			}
+			else if (token->type == SingleQuoteString || token->type == DoubleQuoteString)
+				handle_arguments(token->next_token);
 			token = token->next_token;
 		}
 	}

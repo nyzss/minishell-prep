@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 10:40:23 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 13:36:16 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef enum e_token_type
 	HereDoc,
 	Pipe,
 	Command,
+	Argument,
 	Filename
 }	t_token_type;
 
@@ -149,11 +150,17 @@ t_token	*create_token(t_token_type type, char *value, int index);
 
 int		print_token(t_token *token);
 
+t_token *new_create_command(char *str, int *index);
+
+t_token	*new_tokenizer(char *buf);
+
 // ------------------------------- PARSER (somewhat) ----------------------
 
 int		token_checker(t_token *token);
 
 char	**split_once(char *value);
+
+int		new_token_checker(t_token *token);
 
 // -------------------------------- HISTORY --------------------------------
 
