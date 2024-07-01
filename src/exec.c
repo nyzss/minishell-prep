@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 14:55:15 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 21:09:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,6 @@ int	call_command_pipe(t_pipe *pipes, int last)
 	int		status;
 
 	status = 0;
-	(void)status;
 	pipe(fds);
 	pid = fork();
 	if (pid == 0)

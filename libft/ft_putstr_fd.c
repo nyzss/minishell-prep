@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okoca <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/02/08 15:11:58 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 21:42:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,5 @@ void	ft_putstr_fd(char *s, int fd)
 	if (!s)
 		return ;
 	i = 0;
-	while (s[i])
-	{
-		ft_putchar_fd(s[i], fd);
-		i++;
-	}
+	write(fd, s, ft_strlen(s));
 }
