@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 13:34:44 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 14:43:08 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ int	handle_loop(char *buf, char **env)
 	{
 		handle_env_expand(token);
 
-		// pipes = build_pipe(token, env);
-		// status = do_pipes(pipes);
+		pipes = build_pipe(token, env);
+		status = do_pipes(pipes);
 	}
 	add_history(buf);
 	#if DEBUG
