@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 09:12:41 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 10:40:23 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,6 @@ typedef struct s_cmd
 	struct s_cmd	*next_cmd;
 }	t_cmd;
 
-typedef struct s_exec
-{
-	int				infile_fd;
-	int				outfile_fd;
-	int				cmd_count;
-	char			**env;
-	t_cmd			*cmds;
-	struct s_exec	*next_exec;
-}	t_exec;
-
 typedef struct s_pipe
 {
 	int				in_fd;
@@ -165,21 +155,6 @@ int		token_checker(t_token *token);
 
 char	**split_once(char *value);
 
-// -------------------------------- EXEC BUILDER --------------------------
-
-t_exec	*build_exec(t_token *token, char **env);
-
-void	print_exec(t_exec *exec);
-
-int		call_command(t_cmd *cmds, t_exec *exec, int last);
-
-void	do_exec(t_exec *exec);
-
-// -------------------------------- BUILTIN -------------------------------
-
-int		handle_env_expand(t_token *token);
-
-
 // -------------------------------- HISTORY --------------------------------
 
 void	print_history(HISTORY_STATE *state);
@@ -197,5 +172,7 @@ int		m_child(t_cmd *cmds, char **env);
 int		handle_here_doc(t_pipe *pipes, char *filename);
 
 int		handle_built_in(t_cmd *cmd);
+
+int		handle_env_expand(t_token *token);
 
 #endif

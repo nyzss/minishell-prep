@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 09:28:17 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 10:40:50 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,35 +62,6 @@ int	m_child(t_cmd *cmds, char **env)
 	return (0);
 }
 
-int	call_command(t_cmd *cmds, t_exec *exec, int last)
-{
-	pid_t	pid;
-	int		fds[2];
-
-	pipe(fds);
-	pid = fork();
-	if (pid == 0)
-	{
-		if (last == 0)
-			dup2(fds[1], STDOUT_FILENO);
-		else if (exec->outfile_fd != STDOUT_FILENO)
-		{
-			dup2(exec->outfile_fd, STDOUT_FILENO);
-			close(exec->outfile_fd);
-		}
-		close(fds[0]);
-		close(fds[1]);
-		m_child(cmds, exec->env);
-	}
-	else
-	{
-		dup2(fds[0], STDIN_FILENO);
-	}
-	close(fds[0]);
-	close(fds[1]);
-	return (0);
-}
-
 void	handle_sigint(int status)
 {
 	(void)status;
@@ -121,13 +92,11 @@ int	check_line(char *line)
 int	handle_loop(char *buf, char **env)
 {
 	t_token	*token;
-	t_exec	*exec;
 	HISTORY_STATE *state;
 	t_pipe	*pipes;
 	int		status;
 
 	token = NULL;
-	exec = NULL;
 	pipes = NULL;
 	status = 0;
 	token = tokenize_line(buf);
@@ -153,7 +122,6 @@ int	handle_loop(char *buf, char **env)
 	#if DEBUG
 	print_token(token);
 	print_pipe(pipes);
-	// print_exec(exec);
 	printf("\ninput: \"%s\"\n", buf);
 	// print_history(state);
 	#endif
