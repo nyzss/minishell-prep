@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 13:04:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 17:56:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,17 @@ int	handle_here_doc(t_pipe *pipes, char *filename)
 
 int	handle_built_in(t_cmd *cmd)
 {
+	t_args	*args;
+
+	args = cmd->extra_args;
 	printf("received: %s\n", cmd->value);
 	if (ft_strcmp(cmd->value, "exit") == 0)
 	{
+		while (args != NULL)
+		{
+			printf("args: %s\n", args->value);
+			args = args->next_arg;
+		}
 		return (SHOULD_EXIT);
 	}
 	return (0);
