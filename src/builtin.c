@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 21:43:02 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 22:32:15 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,38 @@ int	exit_builtin(t_cmd *cmd)
 	return (code);
 }
 
-int	handle_built_in(t_cmd *cmd)
+int	cd_builtin(t_cmd *cmd)
 {
+	t_args	*args;
+	char	s[100];
+
+	args = cmd->extra_args;
+	if (cmd->arg_count > 1)
+	{
+		ft_fprintf(2, "cd: \ntoo many arguments\n");
+		return (1);
+	}
+	printf("cd builtin\n");
+	chdir(args->value);
+	printf("cwd: %s\n", getcwd(s, 100));
+	return (0);
+}
+
+int	handle_built_in(t_cmd *cmd, int *status)
+{
+	int	found;
+
+	found = 0;
 	printf("received: %s\n", cmd->value);
 	if (ft_strcmp(cmd->value, "exit") == 0)
 	{
-		return(exit_builtin(cmd));
+		found = 1;
+		*status = exit_builtin(cmd);
 	}
-	return (0);
+	else if (ft_strcmp(cmd->value, "cd") == 0)
+	{
+		found = 2;
+		*status = cd_builtin(cmd);
+	}
+	return (found);
 }

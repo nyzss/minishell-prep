@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 13:36:16 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/01 22:26:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int		m_child(t_cmd *cmds, char **env);
 
 int		handle_here_doc(t_pipe *pipes, char *filename);
 
-int		handle_built_in(t_cmd *cmd);
+int		handle_built_in(t_cmd *cmd, int *status);
 
 int		handle_env_expand(t_token *token);
 
