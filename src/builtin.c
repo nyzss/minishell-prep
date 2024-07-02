@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 08:14:03 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:51:40 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,17 @@ int	handle_here_doc(t_pipe *pipes, char *filename)
 	return (fd);
 }
 
-int	exit_builtin(t_cmd *cmd)
+void	free_all(t_ctx *ctx)
+{
+	// if (ctx->line)
+	// 	free(ctx->line);
+	if (ctx->pipes)
+		free(ctx->pipes);
+	if (ctx->token)
+		free(ctx->token);
+}
+
+int	exit_builtin(t_ctx *ctx, t_cmd *cmd)
 {
 	t_args			*args;
 	unsigned char	code;
@@ -125,7 +135,9 @@ int	exit_builtin(t_cmd *cmd)
 	}
 	code = ft_atoi(args->value);
 	printf("return: %d\n", code);
-	return (code);
+	// free_all(ctx);
+	(void)ctx;
+	exit(code);
 }
 
 int	cd_builtin(t_cmd *cmd)
@@ -145,7 +157,16 @@ int	cd_builtin(t_cmd *cmd)
 	return (0);
 }
 
-int	handle_built_in(t_cmd *cmd, int *status)
+int	is_builtin(char *value)
+{
+	if (ft_strcmp(value, "exit") == 0)
+		return (1);
+	else if (ft_strcmp(value, "cd") == 0)
+		return (2);
+	return (0);
+}
+
+int	handle_built_in(t_ctx *ctx, t_cmd *cmd, int *status)
 {
 	int	found;
 
@@ -153,7 +174,7 @@ int	handle_built_in(t_cmd *cmd, int *status)
 	if (ft_strcmp(cmd->value, "exit") == 0)
 	{
 		found = 1;
-		*status = exit_builtin(cmd);
+		*status = exit_builtin(ctx, cmd);
 	}
 	else if (ft_strcmp(cmd->value, "cd") == 0)
 	{

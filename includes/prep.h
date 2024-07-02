@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:25:17 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:49:12 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_cmd
 	int				arg_count;
 	char			*value;
 	t_args			*extra_args;
-	struct s_cmd	*next_cmd;
 }	t_cmd;
 
 typedef struct s_pipe
@@ -187,12 +186,18 @@ int		do_pipes(t_ctx *ctx);
 
 int		call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last);
 
-int		m_child(t_cmd *cmds, char **env);
+int		m_child(t_ctx *ctx, t_cmd *cmds, char **env);
+
+// --------------------------------- BUILTIN ------------------------------
 
 int		handle_here_doc(t_pipe *pipes, char *filename);
 
-int		handle_built_in(t_cmd *cmd, int *status);
+int		handle_built_in(t_ctx *ctx, t_cmd *cmd, int *status);
 
 int		handle_env_expand(t_token *token);
+
+int		is_builtin(char *value);
+
+int		exit_builtin(t_ctx *ctx, t_cmd *cmd);
 
 #endif

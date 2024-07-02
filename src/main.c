@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:24:37 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:28:58 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ char	**list_to_args(t_cmd *cmd)
 	return (args);
 }
 
-int	m_child(t_cmd *cmds, char **env)
+int	m_child(t_ctx *ctx, t_cmd *cmds, char **env)
 {
 	char	**args;
 	char	*path;
 	int		status;
 
-	if (handle_built_in(cmds, &status) == 0)
+	if (handle_built_in(ctx, cmds, &status) == 0)
 	{
 		path = p_get_path(cmds->value);
 		if (access(path, F_OK | X_OK) != 0)

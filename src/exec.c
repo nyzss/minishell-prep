@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:35:08 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:29:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ t_cmd	*create_cmd(t_token *token)
 	cmd->value = NULL;
 	if (token->value)
 		cmd->value = token->value;
-	cmd->next_cmd = NULL;
 	cmd->extra_args = NULL;
 	cmd->arg_count = 0;
 	while (tok != NULL
@@ -84,24 +83,6 @@ t_cmd	*create_cmd(t_token *token)
 	}
 	// token->next_token = tok;
 	return (cmd);
-}
-
-t_cmd	*last_cmd(t_cmd *head)
-{
-	while (head->next_cmd != NULL)
-		head = head->next_cmd;
-	return (head);
-}
-
-int	add_cmd(t_cmd **head, t_cmd *new)
-{
-	if (new == NULL)
-		return (1);
-	if (*head == NULL)
-		*head = new;
-	else
-		last_cmd((*head))->next_cmd = new;
-	return (0);
 }
 
 t_pipe	*build_pipe(t_token *token)
@@ -150,7 +131,8 @@ t_pipe	*build_pipe(t_token *token)
 		{
 			if (token->type == DoubleQuoteString)
 				token->type = Command;
-			add_cmd(&(new->cmd), create_cmd(token));
+			new->cmd = create_cmd(token);
+			// add_cmd(&(new->cmd), create_cmd(token));
 		}
 		else if (token->type == Pipe)
 		{
@@ -185,7 +167,7 @@ int	call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last)
 		}
 		close(fds[0]);
 		close(fds[1]);
-		m_child(pipes->cmd, ctx->env);
+		m_child(ctx, pipes->cmd, ctx->env);
 		exit(0);
 	}
 	else
@@ -199,7 +181,6 @@ int	call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last)
 
 int	do_pipes(t_ctx *ctx)
 {
-	// pid_t	pid;
 	t_pipe	*tmp;
 	t_pipe	*tmp_pipes;
 	int		last;
@@ -211,6 +192,14 @@ int	do_pipes(t_ctx *ctx)
 	tmp = ctx->pipes;
 	tmp_pipes = ctx->pipes;
 	get_stds(ctx);
+	if (tmp_pipes->next == NULL && is_builtin(tmp_pipes->cmd->value))
+	{
+		if (tmp->in_fd != STDIN_FILENO)
+			dup2(tmp->in_fd, STDIN_FILENO);
+		if (tmp->out_fd != STDOUT_FILENO)
+			dup2(tmp->out_fd, STDOUT_FILENO);
+		handle_built_in(ctx, tmp->cmd, &status);
+	}
 	while (tmp_pipes != NULL)
 	{
 		if (tmp_pipes->out_fd != STDOUT_FILENO || tmp_pipes->next == NULL)
