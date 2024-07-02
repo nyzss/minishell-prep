@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 11:51:40 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 12:55:17 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ int	handle_here_doc(t_pipe *pipes, char *filename)
 
 void	free_all(t_ctx *ctx)
 {
-	// if (ctx->line)
-	// 	free(ctx->line);
+	if (ctx->line)
+		free(ctx->line);
 	if (ctx->pipes)
 		free(ctx->pipes);
 	if (ctx->token)
@@ -127,16 +127,19 @@ int	exit_builtin(t_ctx *ctx, t_cmd *cmd)
 	t_args			*args;
 	unsigned char	code;
 
+	code = 0;
 	args = cmd->extra_args;
 	if (cmd->arg_count > 1)
 	{
 		ft_fprintf(2, "exit\nexit: too many arguments\n");
 		return (1);
 	}
-	code = ft_atoi(args->value);
-	printf("return: %d\n", code);
-	// free_all(ctx);
-	(void)ctx;
+	if (args)
+	{
+		code = ft_atoi(args->value);
+		printf("return: %d\n", code);
+	}
+	free_all(ctx);
 	exit(code);
 }
 
