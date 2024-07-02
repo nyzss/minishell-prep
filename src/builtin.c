@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 12:55:17 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 13:02:09 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,7 @@ int	exit_builtin(t_ctx *ctx, t_cmd *cmd)
 		return (1);
 	}
 	if (args)
-	{
 		code = ft_atoi(args->value);
-		printf("return: %d\n", code);
-	}
 	free_all(ctx);
 	exit(code);
 }

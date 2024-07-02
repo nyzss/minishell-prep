@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/05/22 08:58:00 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 13:28:12 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,27 @@ void	*ft_calloc(size_t n, size_t size)
 		return (NULL);
 	ft_bzero(allocated, (n * size));
 	return (allocated);
+}
+
+/*
+* Has to take a NULL-Terminated array.
+*/
+void	*ft_realloc(void *ptr, size_t size)
+{
+	unsigned char	*new;
+
+	if (ptr == NULL)
+		return (NULL);
+	new = calloc(sizeof(unsigned char), size);
+	if (new == NULL)
+		return (NULL);
+	if (ft_strlen((char *)ptr) > size)
+	{
+		free(new);
+		return (NULL);
+	}
+	ft_memcpy(new, ptr, ft_strlen((char *)ptr));
+	return ((void *)new);
 }
 
 // erreur bizarre par des tests if n == 0 && size == 0
