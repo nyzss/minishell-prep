@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 08:10:13 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 08:15:10 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,8 +219,10 @@ int	do_pipes(t_pipe *pipes)
 				dup2(pipes->in_fd, STDIN_FILENO);
 				close(pipes->in_fd);
 			}
-			if (pipes->next == NULL)
+			if (pipes->out_fd != STDOUT_FILENO || pipes->next == NULL)
 				last = 1;
+			else
+				last = 0;
 			status = call_command_pipe(pipes, last);
 			if (pipes->in_fd != STDIN_FILENO)
 				close(pipes->in_fd);
