@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 21:09:37 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 08:10:13 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ t_cmd	*create_cmd(t_token *token)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->value = token->value;
+	cmd->value = NULL;
+	if (token->value)
+		cmd->value = token->value;
 	cmd->next_cmd = NULL;
 	cmd->extra_args = NULL;
 	cmd->arg_count = 0;
@@ -61,7 +63,8 @@ t_cmd	*create_cmd(t_token *token)
 		|| tok->type == SingleQuoteString
 		|| tok->type == Argument))
 	{
-		// printf("args found: %s\n", tok->value);
+		if (tok->type == DoubleQuoteString || tok->type == SingleQuoteString)
+			tok->type = Argument;
 		if (tok->type == Command)
 		{
 			args = ft_split(tok->value, ' ');
@@ -79,7 +82,7 @@ t_cmd	*create_cmd(t_token *token)
 		}
 		tok = tok->next_token;
 	}
-	token->next_token = tok;
+	// token->next_token = tok;
 	return (cmd);
 }
 
@@ -144,8 +147,10 @@ t_pipe	*build_pipe(t_token *token, char **env)
 			// token = token->next_token;
 		}
 		// handle_redirections(token, new);
-		if (token->type == Command)
+		if (token->type == Command || token->type == DoubleQuoteString)
 		{
+			if (token->type == DoubleQuoteString)
+				token->type = Command;
 			add_cmd(&(new->cmd), create_cmd(token));
 		}
 		else if (token->type == Pipe)
