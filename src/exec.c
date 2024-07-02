@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:13:08 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:35:08 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,7 @@ int	call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last)
 {
 	pid_t	pid;
 	int		fds[2];
-	int		status;
 
-	status = 0;
 	pipe(fds);
 	pid = fork();
 	if (pid == 0)
@@ -196,9 +194,6 @@ int	call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last)
 	}
 	close(fds[0]);
 	close(fds[1]);
-	printf("status: %d, pid: %d\n", status, pid);
-	if (status == SHOULD_EXIT)
-		return (status);
 	return (0);
 }
 
@@ -218,11 +213,6 @@ int	do_pipes(t_ctx *ctx)
 	get_stds(ctx);
 	while (tmp_pipes != NULL)
 	{
-		// if (tmp_pipes->in_fd != STDIN_FILENO)
-		// {
-		// 	dup2(tmp_pipes->in_fd, STDIN_FILENO);
-		// 	close(tmp_pipes->in_fd);
-		// }
 		if (tmp_pipes->out_fd != STDOUT_FILENO || tmp_pipes->next == NULL)
 			last = 1;
 		else
