@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 22:26:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 09:59:53 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,20 @@ typedef struct s_pipe
 {
 	int				in_fd;
 	int				out_fd;
-	char			**env;
 	t_args			*filenames;
 	t_cmd			*cmd;
 	struct s_pipe	*next;
 }	t_pipe;
+
+typedef struct s_ctx
+{
+	int		def_in;
+	int		def_out;
+	char	*line;
+	char	**env;
+	t_token	*token;
+	t_pipe	*pipes;
+}	t_ctx;
 
 int		p_exec(char *path, char **args, char **envp);
 
@@ -135,6 +144,8 @@ void	handle_sigint(int status);
 t_args	*create_args(char *value);
 
 int		add_arg(t_args **head, t_args *new);
+
+void	set_stds(t_ctx *ctx);
 
 // --------------------------------- LEXER -------------------------------
 
@@ -168,11 +179,13 @@ void	print_history(HISTORY_STATE *state);
 
 // --------------------------------- NEW_EXEC BUILDER ----------------------
 
-t_pipe	*build_pipe(t_token *token, char **env);
+t_pipe	*build_pipe(t_token *token);
 
 void	print_pipe(t_pipe *pipe);
 
-int		do_pipes(t_pipe *pipes);
+int		do_pipes(t_ctx *ctx);
+
+int		call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last);
 
 int		m_child(t_cmd *cmds, char **env);
 

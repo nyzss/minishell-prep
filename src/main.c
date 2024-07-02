@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 08:20:28 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:00:36 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,70 +107,81 @@ t_token	*get_next_command(t_token *head)
 
 int	check_line(char *line)
 {
-	if (line[0] == '\0')
+	if (line == NULL)
+		return (1);
+	else if (line[0] == '\0')
 		return (1);
 	return (0);
 }
 
-int	handle_loop(char *buf, char **env)
+int	handle_loop(t_ctx *ctx)
 {
-	t_token	*token;
 	t_pipe	*pipes;
 	int		status;
 
-	(void)env;
-	token = NULL;
 	pipes = NULL;
 	status = 0;
 	// token = tokenize_line(buf);
-	token = new_tokenizer(buf);
-	if (new_token_checker(token) != 0)
+	ctx->token = new_tokenizer(ctx->line);
+	if (new_token_checker(ctx->token) != 0)
 	{
 		printf("nuh uh\n");
-		free(buf);
 		return (0);
 	}
 	else
 	{
-		handle_env_expand(token);
+		handle_env_expand(ctx->token);
 
-		pipes = build_pipe(token, env);
-		status = do_pipes(pipes);
+		pipes = build_pipe(ctx->token);
+		ctx->pipes = pipes;
+		status = do_pipes(ctx);
 	}
-	add_history(buf);
+	add_history(ctx->line);
 	#if DEBUG
-	print_token(token);
+	print_token(ctx->token);
 	print_pipe(pipes);
-	printf("\ninput: \"%s\"\n", buf);
+	printf("\ninput: \"%s\"\n", ctx->line);
 	#endif
-	clear_token(&token);
+	clear_token(&(ctx->token));
 	if (status == SHOULD_EXIT)
 	{
-		free(buf);
+		free(ctx->line);
 		return (status);
 	}
 	return (0);
 }
 
+void	set_stds(t_ctx *ctx)
+{
+	ctx->def_in = dup(STDIN_FILENO);
+	ctx->def_out = dup(STDOUT_FILENO);
+}
+
 int	main(int ac, char **av, char **env)
 {
-	char	*buf;
 	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
+	t_ctx	ctx;
 
 	(void)ac;
 	(void)av;
 	signal(SIGINT, handle_sigint);
+	ctx.line = NULL;
+	ctx.pipes = NULL;
+	ctx.token = NULL;
+	ctx.env = env;
+	set_stds(&ctx);
 	while (1)
 	{
-		buf = readline(prompt);
-		if (buf == 0)
-			break ;
-		if (check_line(buf) == 0)
+		ctx.line = readline(prompt);
+		if (check_line(ctx.line) == 0)
 		{
-			if (handle_loop(buf, env) != 0)
+			if (handle_loop(&ctx) != 0)
 				break ;
 		}
-		free(buf);
+		else
+			break ;
+		free(ctx.line);
+		ctx.line = NULL;
 	}
 	printf("exiting shell...\n");
 	return (0);

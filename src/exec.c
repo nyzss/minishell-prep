@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 08:15:10 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:00:25 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,11 @@ int	add_cmd(t_cmd **head, t_cmd *new)
 	return (0);
 }
 
-t_pipe	*build_pipe(t_token *token, char **env)
+t_pipe	*build_pipe(t_token *token)
 {
 	t_pipe	*new;
 
 	new = malloc(sizeof(t_pipe));
-	new->env = env;
 	new->cmd = NULL;
 	new->in_fd = STDIN_FILENO;
 	new->out_fd = STDOUT_FILENO;
@@ -155,7 +154,7 @@ t_pipe	*build_pipe(t_token *token, char **env)
 		}
 		else if (token->type == Pipe)
 		{
-			new->next = build_pipe(token->next_token, env);
+			new->next = build_pipe(token->next_token);
 			break ;
 		}
 		token = token->next_token;
@@ -163,7 +162,7 @@ t_pipe	*build_pipe(t_token *token, char **env)
 	return (new);
 }
 
-int	call_command_pipe(t_pipe *pipes, int last)
+int	call_command_pipe(t_ctx *ctx, t_pipe *pipes, int last)
 {
 	pid_t	pid;
 	int		fds[2];
@@ -174,6 +173,11 @@ int	call_command_pipe(t_pipe *pipes, int last)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (pipes->in_fd != STDIN_FILENO)
+		{
+			dup2(pipes->in_fd, STDIN_FILENO);
+			close(pipes->in_fd);
+		}
 		if (last == 0)
 			dup2(fds[1], STDOUT_FILENO);
 		else if (pipes->out_fd != STDOUT_FILENO)
@@ -183,7 +187,7 @@ int	call_command_pipe(t_pipe *pipes, int last)
 		}
 		close(fds[0]);
 		close(fds[1]);
-		m_child(pipes->cmd, pipes->env);
+		m_child(pipes->cmd, ctx->env);
 		exit(0);
 	}
 	else
@@ -198,37 +202,39 @@ int	call_command_pipe(t_pipe *pipes, int last)
 	return (0);
 }
 
-int	do_pipes(t_pipe *pipes)
+int	do_pipes(t_ctx *ctx)
 {
-	pid_t	pid;
+	// pid_t	pid;
 	t_pipe	*tmp;
+	t_pipe	*tmp_pipes;
 	int		last;
 	t_args	*filenames;
 	int		status;
 
 	status = 0;
 	last = 0;
-	tmp = pipes;
-	pid = fork();
-	if (pid == 0)
-	{
-		while (pipes != NULL)
+	tmp = ctx->pipes;
+	tmp_pipes = ctx->pipes;
+	// pid = fork();
+	// if (pid == 0)
+	// {
+		while (tmp_pipes != NULL)
 		{
-			if (pipes->in_fd != STDIN_FILENO)
-			{
-				dup2(pipes->in_fd, STDIN_FILENO);
-				close(pipes->in_fd);
-			}
-			if (pipes->out_fd != STDOUT_FILENO || pipes->next == NULL)
+			// if (pipes->in_fd != STDIN_FILENO)
+			// {
+			// 	dup2(pipes->in_fd, STDIN_FILENO);
+			// 	close(pipes->in_fd);
+			// }
+			if (tmp_pipes->out_fd != STDOUT_FILENO || tmp_pipes->next == NULL)
 				last = 1;
 			else
 				last = 0;
-			status = call_command_pipe(pipes, last);
-			if (pipes->in_fd != STDIN_FILENO)
-				close(pipes->in_fd);
-			if (pipes->out_fd != STDOUT_FILENO)
-				close(pipes->out_fd);
-			pipes = pipes->next;
+			status = call_command_pipe(ctx, tmp_pipes, last);
+			if (tmp_pipes->in_fd != STDIN_FILENO)
+				close(tmp_pipes->in_fd);
+			if (tmp_pipes->out_fd != STDOUT_FILENO)
+				close(tmp_pipes->out_fd);
+			tmp_pipes = tmp_pipes->next;
 		}
 		while (tmp != NULL)
 		{
@@ -241,9 +247,9 @@ int	do_pipes(t_pipe *pipes)
 			}
 			tmp = tmp->next;
 		}
-		exit(EXIT_SUCCESS);
-	}
-	wait(NULL);
+		// exit(EXIT_SUCCESS);
+	// }
+	// wait(NULL);
 	return (status);
 }
 
@@ -263,7 +269,7 @@ void	print_pipe(t_pipe *pipe)
 		printf("exec_nb: %d\n", count);
 		printf("IN_FD: %d\n", pipe->in_fd);
 		printf("OUT_FD: %d\n", pipe->out_fd);
-		printf("ENV: %p\n", pipe->env);
+		// printf("ENV: %p\n", pipe->env);
 		printf("NEXT_PIPE: %p\n", pipe->next);
 		args = pipe->cmd->extra_args;
 		printf("Command: %s\n", pipe->cmd->value);
