@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 11:28:58 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 20:37:59 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ int	handle_loop(t_ctx *ctx)
 	add_history(ctx->line);
 	#if DEBUG
 	print_token(ctx->token);
-	print_pipe(pipes);
-	printf("\ninput: \"%s\"\n", ctx->line);
+	// print_pipe(pipes);
+	// printf("\ninput: \"%s\"\n", ctx->line);
 	#endif
 	clear_token(&(ctx->token));
 	if (status == SHOULD_EXIT)

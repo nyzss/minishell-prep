@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 11:52:46 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 20:39:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,12 @@ t_pipe	*build_pipe(t_token *token)
 			// token = token->next_token;
 		}
 		// handle_redirections(token, new);
-		if (token->type == Command || token->type == DoubleQuoteString)
+		if (token->type == Command
+			|| token->type == DoubleQuoteString
+			|| token->type == SingleQuoteString)
 		{
-			if (token->type == DoubleQuoteString)
+			if (token->type == DoubleQuoteString
+				|| token->type == SingleQuoteString)
 				token->type = Command;
 			new->cmd = create_cmd(token);
 			// add_cmd(&(new->cmd), create_cmd(token));
