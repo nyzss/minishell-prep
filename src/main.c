@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/01 22:41:28 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 08:20:28 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int	m_child(t_cmd *cmds, char **env)
 		args = list_to_args(cmds);
 		p_exec(path, args, env);
 	}
+	else
+		exit(status);
 	return (0);
 }
 
