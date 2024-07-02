@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 13:28:12 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 14:50:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	*ft_realloc(void *ptr, size_t size)
 		return (NULL);
 	}
 	ft_memcpy(new, ptr, ft_strlen((char *)ptr));
+	free(ptr);
 	return ((void *)new);
 }
 

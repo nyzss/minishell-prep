@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 13:02:09 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 14:59:09 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ int	exit_builtin(t_ctx *ctx, t_cmd *cmd)
 int	cd_builtin(t_cmd *cmd)
 {
 	t_args	*args;
-	char	s[100];
 
 	args = cmd->extra_args;
 	if (cmd->arg_count > 1)
@@ -151,9 +150,28 @@ int	cd_builtin(t_cmd *cmd)
 		ft_fprintf(2, "cd: \ntoo many arguments\n");
 		return (1);
 	}
-	printf("cd builtin\n");
-	chdir(args->value);
-	printf("cwd: %s\n", getcwd(s, 100));
+	if (args)
+		chdir(args->value);
+	return (0);
+}
+
+int	pwd_builtin()
+{
+	char	*str;
+	int		size;
+
+	size = 128;
+	str = ft_calloc(sizeof(char), size);
+	if (!str)
+		return (-1);
+	while (getcwd(str, size) == NULL)
+	{
+		size *= 2;
+		free(str);
+		str = ft_calloc(sizeof(char), size);
+	}
+	printf("%s\n", str);
+	free(str);
 	return (0);
 }
 
@@ -162,6 +180,12 @@ int	is_builtin(char *value)
 	if (ft_strcmp(value, "exit") == 0)
 		return (1);
 	else if (ft_strcmp(value, "cd") == 0)
+		return (2);
+	else if (ft_strcmp(value, "pwd") == 0)
+		return (2);
+	else if (ft_strcmp(value, "unset") == 0)
+		return (2);
+	else if (ft_strcmp(value, "export") == 0)
 		return (2);
 	return (0);
 }
@@ -173,13 +197,18 @@ int	handle_built_in(t_ctx *ctx, t_cmd *cmd, int *status)
 	found = 0;
 	if (ft_strcmp(cmd->value, "exit") == 0)
 	{
-		found = 1;
 		*status = exit_builtin(ctx, cmd);
+		found = 1;
 	}
 	else if (ft_strcmp(cmd->value, "cd") == 0)
 	{
-		found = 2;
 		*status = cd_builtin(cmd);
+		found = 1;
+	}
+	else if (ft_strcmp(cmd->value, "pwd") == 0)
+	{
+		*status = pwd_builtin();
+		found = 1;
 	}
 	return (found);
 }
