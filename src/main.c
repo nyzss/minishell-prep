@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 20:37:59 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 21:47:22 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,12 @@ void	handle_sigint(int status)
 	rl_redisplay();
 }
 
+void	handle_sigquit(int status)
+{
+	(void)status;
+	// printf("\n");
+}
+
 t_token	*get_next_command(t_token *head)
 {
 	while (head != NULL && head->next_token != NULL)
@@ -137,7 +143,7 @@ int	handle_loop(t_ctx *ctx)
 	}
 	add_history(ctx->line);
 	#if DEBUG
-	print_token(ctx->token);
+	// print_token(ctx->token);
 	// print_pipe(pipes);
 	// printf("\ninput: \"%s\"\n", ctx->line);
 	#endif
@@ -162,6 +168,12 @@ void	reset_stds(t_ctx *ctx)
 	dup2(ctx->def_out, STDOUT_FILENO);
 }
 
+void	handle_signals()
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
@@ -169,12 +181,12 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	signal(SIGINT, handle_sigint);
 	ctx.line = NULL;
 	ctx.pipes = NULL;
 	ctx.token = NULL;
 	ctx.env = env;
 	get_stds(&ctx);
+	handle_signals();
 	while (1)
 	{
 		ctx.line = readline(prompt);

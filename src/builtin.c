@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 14:59:09 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 22:39:52 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,18 +175,62 @@ int	pwd_builtin()
 	return (0);
 }
 
+int	env_builtin(t_ctx *ctx, t_cmd *cmd)
+{
+	int		i;
+
+	i = 0;
+	if (cmd->arg_count > 0)
+	{
+		ft_fprintf(2, "cd: \ntoo many arguments\n");
+		return (2);
+	}
+	while (ctx->env && ctx->env[i])
+	{
+		printf("%s\n", ctx->env[i]);
+		i++;
+	}
+	return (0);
+}
+
+int	unset_builtin(t_ctx *ctx, t_cmd *cmd)
+{
+	int		i;
+	t_args	*args;
+
+	i = 0;
+	while (ctx->env && ctx->env[i])
+	{
+		args = cmd->extra_args;
+		while (args != NULL)
+		{
+			if (ft_strncmp(ctx->env[i], args->value, ft_strlen(args->value)) == 0
+				&& ctx->env[i][ft_strlen(args->value)] == '=')
+			{
+				printf("found it: %s\n", ctx->env[i]);
+				break ;
+			}
+			args = args->next_arg;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	is_builtin(char *value)
 {
 	if (ft_strcmp(value, "exit") == 0)
 		return (1);
 	else if (ft_strcmp(value, "cd") == 0)
-		return (2);
+		return (1);
 	else if (ft_strcmp(value, "pwd") == 0)
-		return (2);
+		return (1);
+	else if (ft_strcmp(value, "env") == 0)
+		return (1);
 	else if (ft_strcmp(value, "unset") == 0)
-		return (2);
+		return (1);
 	else if (ft_strcmp(value, "export") == 0)
-		return (2);
+		return (1);
 	return (0);
 }
 
@@ -208,6 +252,16 @@ int	handle_built_in(t_ctx *ctx, t_cmd *cmd, int *status)
 	else if (ft_strcmp(cmd->value, "pwd") == 0)
 	{
 		*status = pwd_builtin();
+		found = 1;
+	}
+	else if (ft_strcmp(cmd->value, "env") == 0)
+	{
+		*status = env_builtin(ctx, cmd);
+		found = 1;
+	}
+	else if (ft_strcmp(cmd->value, "unset") == 0)
+	{
+		*status = unset_builtin(ctx, cmd);
 		found = 1;
 	}
 	return (found);
