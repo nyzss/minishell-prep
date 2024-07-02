@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 09:59:53 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:12:13 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,9 @@ t_args	*create_args(char *value);
 
 int		add_arg(t_args **head, t_args *new);
 
-void	set_stds(t_ctx *ctx);
+void	get_stds(t_ctx *ctx);
+
+void	reset_stds(t_ctx *ctx);
 
 // --------------------------------- LEXER -------------------------------
 

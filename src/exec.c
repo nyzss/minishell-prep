@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:00:25 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:13:08 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,41 +215,37 @@ int	do_pipes(t_ctx *ctx)
 	last = 0;
 	tmp = ctx->pipes;
 	tmp_pipes = ctx->pipes;
-	// pid = fork();
-	// if (pid == 0)
-	// {
-		while (tmp_pipes != NULL)
+	get_stds(ctx);
+	while (tmp_pipes != NULL)
+	{
+		// if (tmp_pipes->in_fd != STDIN_FILENO)
+		// {
+		// 	dup2(tmp_pipes->in_fd, STDIN_FILENO);
+		// 	close(tmp_pipes->in_fd);
+		// }
+		if (tmp_pipes->out_fd != STDOUT_FILENO || tmp_pipes->next == NULL)
+			last = 1;
+		else
+			last = 0;
+		call_command_pipe(ctx, tmp_pipes, last);
+		if (tmp_pipes->in_fd != STDIN_FILENO)
+			close(tmp_pipes->in_fd);
+		if (tmp_pipes->out_fd != STDOUT_FILENO)
+			close(tmp_pipes->out_fd);
+		tmp_pipes = tmp_pipes->next;
+	}
+	while (tmp != NULL)
+	{
+		filenames = tmp->filenames;
+		waitpid(-1, &status, 0);
+		while (filenames != NULL)
 		{
-			// if (pipes->in_fd != STDIN_FILENO)
-			// {
-			// 	dup2(pipes->in_fd, STDIN_FILENO);
-			// 	close(pipes->in_fd);
-			// }
-			if (tmp_pipes->out_fd != STDOUT_FILENO || tmp_pipes->next == NULL)
-				last = 1;
-			else
-				last = 0;
-			status = call_command_pipe(ctx, tmp_pipes, last);
-			if (tmp_pipes->in_fd != STDIN_FILENO)
-				close(tmp_pipes->in_fd);
-			if (tmp_pipes->out_fd != STDOUT_FILENO)
-				close(tmp_pipes->out_fd);
-			tmp_pipes = tmp_pipes->next;
+			unlink(filenames->value);
+			filenames = filenames->next_arg;
 		}
-		while (tmp != NULL)
-		{
-			filenames = tmp->filenames;
-			wait(NULL);
-			while (filenames != NULL)
-			{
-				unlink(filenames->value);
-				filenames = filenames->next_arg;
-			}
-			tmp = tmp->next;
-		}
-		// exit(EXIT_SUCCESS);
-	// }
-	// wait(NULL);
+		tmp = tmp->next;
+	}
+	reset_stds(ctx);
 	return (status);
 }
 

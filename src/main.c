@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:00:36 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:13:42 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,16 @@ int	handle_loop(t_ctx *ctx)
 	return (0);
 }
 
-void	set_stds(t_ctx *ctx)
+void	get_stds(t_ctx *ctx)
 {
 	ctx->def_in = dup(STDIN_FILENO);
 	ctx->def_out = dup(STDOUT_FILENO);
+}
+
+void	reset_stds(t_ctx *ctx)
+{
+	dup2(ctx->def_in, STDIN_FILENO);
+	dup2(ctx->def_out, STDOUT_FILENO);
 }
 
 int	main(int ac, char **av, char **env)
@@ -169,7 +175,7 @@ int	main(int ac, char **av, char **env)
 	ctx.pipes = NULL;
 	ctx.token = NULL;
 	ctx.env = env;
-	set_stds(&ctx);
+	get_stds(&ctx);
 	while (1)
 	{
 		ctx.line = readline(prompt);
