@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:12:13 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:25:17 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,6 @@ void	reset_stds(t_ctx *ctx);
 // --------------------------------- LEXER -------------------------------
 
 int		clear_token(t_token **token);
-
-t_token	*tokenize_line(char *buf);
 
 int		add_token(t_token **head, t_token *new);
 

@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 10:13:42 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:24:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int	handle_loop(t_ctx *ctx)
 
 	pipes = NULL;
 	status = 0;
-	// token = tokenize_line(buf);
 	ctx->token = new_tokenizer(ctx->line);
 	if (new_token_checker(ctx->token) != 0)
 	{
