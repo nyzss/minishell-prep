@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 13:53:57 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 18:09:24 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,23 @@ typedef struct s_pipe
 	t_cmd			*cmd;
 	struct s_pipe	*next;
 }	t_pipe;
+
+// typedef struct s_exec_table
+// {
+// 	t_pipe		*commands;
+// 	struct s_exec_table	*next;
+// 	int					exit_status;
+// }	t_exec_table;
+
+// typedef struct s_paranthesis_table
+// {
+// 	int					exit_status;
+// 	t_exec_table		*exec_table;
+// 	struct s_paranthesis_table		*next;
+// }	t_paranthesis_table;
+
+// t_exec_table *table;
+
 
 typedef struct s_ctx
 {

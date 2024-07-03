@@ -99,6 +99,7 @@ int	handle_loop(t_ctx *ctx)
 	pipes = NULL;
 	status = 0;
 	ctx->token = new_tokenizer(ctx->line);
+	// print_token(ctx->token);
 	if (new_token_checker(ctx->token) != 0)
 	{
 		printf("nuh uh\n");
@@ -107,7 +108,8 @@ int	handle_loop(t_ctx *ctx)
 	else
 	{
 		handle_env_expand(ctx->token);
-		print_token(ctx->token);
+		// print_token(ctx->token);
+		//new step to handle command arguments
 
 		pipes = build_pipe(ctx->token);
 		ctx->pipes = pipes;
