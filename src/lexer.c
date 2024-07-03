@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 08:53:09 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 09:06:47 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,21 +94,38 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 	int		i;
 	char	quote_type;
 	char	*new;
+	int		j;
+	int		new_len;
 
 	i = 0;
+	j = 0;
 	len = 0;
+	new_len = 0;
 	quote_type = '\"';
 	if (rec_type == SingleQuoteString)
 		quote_type = '\'';
-	while (str[len] && (str[len] != quote_type && (str[len + 1] != ' ' || str[len + 1] != '\0')))
+	while (str[len] && ((str[len + 1] != ' ' || str[len + 1] != '\0')))
 		len++;
-	new = malloc(sizeof(char) * (len + 1));
+	while (j < len)
+	{
+		if (str[j] != quote_type)
+			new_len++;
+		j++;
+	}
+	new = malloc(sizeof(char) * (new_len + 1));
+	if (!new)
+		return (NULL);
+	j = 0;
 	while (i < len)
 	{
-		new[i] = str[i];
+		if (str[i] != quote_type)
+		{
+			new[j] = str[i];
+			j++;
+		}
 		i++;
 	}
-	new[i] = '\0';
+	new[j] = '\0';
 	*index += i + 1;
 	return (new);
 }
