@@ -6,40 +6,11 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 21:47:22 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 08:54:58 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
-
-char	**combine_args(t_cmd *cmd, char **args)
-{
-	int		i;
-	int		j;
-	char	**new;
-	t_args	*extra_args;
-
-	i = 0;
-	j = 0;
-	extra_args = cmd->extra_args;
-	while (args[i])
-		i++;
-	new = malloc(sizeof(char *) * (cmd->arg_count + i + 1));
-	while (args[j])
-	{
-		new[j] = args[j];
-		j++;
-	}
-	i = 0;
-	while (extra_args != NULL && i < cmd->arg_count)
-	{
-		new[j + i] = extra_args->value;
-		extra_args = extra_args->next_arg;
-		i++;
-	}
-	new[j + i] = NULL;
-	return (new);
-}
 
 char	**list_to_args(t_cmd *cmd)
 {
@@ -143,7 +114,7 @@ int	handle_loop(t_ctx *ctx)
 	}
 	add_history(ctx->line);
 	#if DEBUG
-	// print_token(ctx->token);
+	print_token(ctx->token);
 	// print_pipe(pipes);
 	// printf("\ninput: \"%s\"\n", ctx->line);
 	#endif
@@ -190,13 +161,13 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		ctx.line = readline(prompt);
+		if (ctx.line == NULL)
+			break ;
 		if (check_line(ctx.line) == 0)
 		{
 			if (handle_loop(&ctx) != 0)
 				break ;
 		}
-		else
-			break ;
 		free(ctx.line);
 		ctx.line = NULL;
 	}

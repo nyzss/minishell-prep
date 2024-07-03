@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 22:39:52 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 08:41:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,7 @@ int	unset_builtin(t_ctx *ctx, t_cmd *cmd)
 {
 	int		i;
 	t_args	*args;
+	// char	**new_env;
 
 	i = 0;
 	while (ctx->env && ctx->env[i])
