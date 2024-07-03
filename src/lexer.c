@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 09:06:47 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 09:23:10 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,15 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 	quote_type = '\"';
 	if (rec_type == SingleQuoteString)
 		quote_type = '\'';
-	while (str[len] && ((str[len + 1] != ' ' || str[len + 1] != '\0')))
+	while (str[len])
+	{
+		if (str[len] == quote_type && (str[len + 1] == ' ' || str[len + 1] == '\0'))
+		{
+			len++;
+			break ;
+		}
 		len++;
+	}
 	while (j < len)
 	{
 		if (str[j] != quote_type)
