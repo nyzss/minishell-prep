@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 18:29:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 22:32:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 	int		i;
 	char	quote_type;
 	char	*new;
-	int		new_len;
+	// int		new_len;
 
 	i = 0;
 	len = 0;
-	new_len = 0;
+	// new_len = 0;
 	quote_type = '\"';
 	if (rec_type == SingleQuoteString)
 		quote_type = '\'';
@@ -177,35 +177,80 @@ t_token *new_create_command(char *str, int *index)
 	return (new_token);
 }
 
-// t_token	*create_string(char *str, int *index)
-// {
-// 	int		len;
-// 	int		i;
-// 	char	quote_type;
-// 	char	*new;
-// 	int		new_len;
+char	*new_create_string(char *str, int *index)
+{
+	int		i;
+	int		j;
+	int		len;
+	int		new_len;
+	char	*new;
 
-// 	while (0)
-// 	i = 0;
-// 	len = 0;
-// 	new_len = 0;
-// 	quote_type = '\"';
-// 	if (rec_type == SingleQuoteString)
-// 		quote_type = '\'';
-// 	while (str[len] && str[len] != quote_type)
-// 		len++;
-// 	new = malloc(sizeof(char) * (len + 1));
-// 	if (!new)
-// 		return (NULL);
-// 	while (i < len)
-// 	{
-// 		new[i] = str[i];
-// 		i++;
-// 	}
-// 	new[i] = '\0';
-// 	*index += i + 1;
-// 	return (new);
-// }
+	i = 0;
+	j = 0;
+	len = 0;
+	new_len = 0;
+	new = NULL;
+	while (str[len])
+	{
+		if ((str[i] == '\'' || str[i] == '\"') && (str[len + 1] == ' '))
+			break;
+		len++;
+	}
+	while (i < len)
+	{
+		if (str[i] == '\"')
+		{
+			i++;
+			while (i < len && str[i] != '\"')
+			{
+				new_len++;
+				i++;
+			}
+		}
+		else if (str[i] == '\'')
+		{
+			i++;
+			while (i < len && str[i] != '\'')
+			{
+				new_len++;
+				i++;
+			}
+		}
+		new_len++;
+		i++;
+	}
+	new = malloc(sizeof(char) * (new_len + 1));
+	i = 0;
+	while (i < len)
+	{
+		if (str[i] == '\"')
+		{
+			i++;
+			while (i < len && str[i] != '\"')
+			{
+				new[j] = str[i];
+				j++;
+				i++;
+			}
+		}
+		else if (str[i] == '\'')
+		{
+			i++;
+			while (i < len && str[i] != '\'')
+			{
+				new[j] = str[i];
+				j++;
+				i++;
+			}
+		}
+		i++;
+		new[j] = str[i];
+		j++;
+	}
+	new[j] = '\0';
+	*index += len + 1;
+	return (new);
+}
 
 t_token	*new_tokenizer(char *buf)
 {
@@ -217,12 +262,13 @@ t_token	*new_tokenizer(char *buf)
 	head = NULL;
 	while (buf[i])
 	{
-		// if (buf[i] == '\'' || buf[i] == '\"')
-		// {
-		// 	tmp = create_string(&(buf[i]), &i);
-		// 	add_token(&head, tmp);
-		// }
-		if (buf[i] == '\'')
+		if (buf[i] == '\'' || buf[i] == '\"')
+		{
+			// new_create_string(&(buf[i]), &i);
+			tmp = create_token(RawString, new_create_string(&(buf[i]), &i), i);
+			add_token(&head, tmp);
+		}
+		else if (buf[i] == '\'')
 		{
 			tmp = create_token(SingleQuoteString, create_string(&(buf[i + 1]), SingleQuoteString, &i), i);
 			if (ft_strlen(tmp->value) > 0)
