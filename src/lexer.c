@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 09:23:10 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 15:02:54 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	add_token(t_token **head, t_token *new)
 }
 
 // single quote by default
-char	*create_string(char *str, t_token_type rec_type, int *index)
+char	*old_create_string(char *str, t_token_type rec_type, int *index)
 {
 	int		len;
 	int		i;
@@ -133,6 +133,35 @@ char	*create_string(char *str, t_token_type rec_type, int *index)
 		i++;
 	}
 	new[j] = '\0';
+	*index += i + 1;
+	return (new);
+}
+
+char	*create_string(char *str, t_token_type rec_type, int *index)
+{
+	int		len;
+	int		i;
+	char	quote_type;
+	char	*new;
+	int		new_len;
+
+	i = 0;
+	len = 0;
+	new_len = 0;
+	quote_type = '\"';
+	if (rec_type == SingleQuoteString)
+		quote_type = '\'';
+	while (str[len] && str[len] != quote_type)
+		len++;
+	new = malloc(sizeof(char) * (len + 1));
+	if (!new)
+		return (NULL);
+	while (i < len)
+	{
+		new[i] = str[i];
+		i++;
+	}
+	new[i] = '\0';
 	*index += i + 1;
 	return (new);
 }

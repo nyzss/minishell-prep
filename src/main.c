@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:20 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 08:54:58 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/03 10:02:53by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	handle_loop(t_ctx *ctx)
 	else
 	{
 		handle_env_expand(ctx->token);
+		print_token(ctx->token);
 
 		pipes = build_pipe(ctx->token);
 		ctx->pipes = pipes;
