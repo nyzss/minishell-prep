@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:00:00 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 17:53:48 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 14:31:53 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	split_filename_command(t_token *token)
 	if (arg == NULL)
 		return ;
 	// raw string for now but should be command next time
-	new_token = create_token(RawString, arg[1], 0);
+	new_token = create_token(RawString, arg[1]);
 	new_token->next_token = token->next_token;
 	token->next_token = new_token;
 	token->value = arg[0];

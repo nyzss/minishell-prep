@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 10:22:21 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:52:18 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	char			*value;
-	int				index;
 	t_token_type	type;
 	struct s_token	*next_token;
 }	t_token;
@@ -173,7 +172,7 @@ int		add_token(t_token **head, t_token *new);
 
 t_token	*last_token(t_token *head);
 
-t_token	*create_token(t_token_type type, char *value, int index);
+t_token	*create_token(t_token_type type, char *value);
 
 int		print_token(t_token *token);
 
