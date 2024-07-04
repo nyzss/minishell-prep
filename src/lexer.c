@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 10:04:04 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 10:50:27 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,25 +177,13 @@ t_token *new_create_command(char *str, int *index)
 	return (new_token);
 }
 
-char	*new_create_string(char *str, int *index)
+int		get_len_str(int len, char *str)
 {
-	int		i;
-	int		j;
-	int		len;
-	int		new_len;
-	char	*new;
+	int	i;
+	int	new_len;
 
 	i = 0;
-	j = 0;
-	len = 0;
 	new_len = 0;
-	new = NULL;
-	while (str[len])
-	{
-		if ((str[i] == '\'' || str[i] == '\"') && (str[len + 1] == ' '))
-			break;
-		len++;
-	}
 	while (i < len)
 	{
 		if (str[i] == '\"')
@@ -220,7 +208,28 @@ char	*new_create_string(char *str, int *index)
 			new_len++;
 		i++;
 	}
-	new = malloc(sizeof(char) * (new_len + 1));
+	return (new_len);
+}
+
+char	*new_create_string(char *str, int *index)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*new;
+	// char	*tmp;
+
+	i = 0;
+	j = 0;
+	len = 0;
+	new = NULL;
+	while (str[len])
+	{
+		if ((str[i] == '\'' || str[i] == '\"') && (str[len + 1] == ' '))
+			break;
+		len++;
+	}
+	new = malloc(sizeof(char) * (get_len_str(len, str) + 1));
 	i = 0;
 	while (i < len)
 	{
