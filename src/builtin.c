@@ -6,11 +6,44 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 08:41:35 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 10:42:11 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
+
+int	expand_env(char **received)
+{
+	char	*found;
+	char	*str;
+	char	*tmp;
+	int		env_len;
+	char	*new;
+
+	env_len = 0;
+	tmp = NULL;
+	new = *received;
+	while (1)
+	{
+		found = ft_strchr(new, '$');
+		if (found == NULL)
+			break ;
+		while (found[env_len] && found[env_len] != ' ')
+			env_len++;
+		str = ft_strndup(found, env_len);
+		str = getenv(++str);
+		if (found - new == 0)
+			tmp = ft_strdup("");
+		else
+			tmp = ft_strndup(new, found - new);
+		if (str != NULL)
+			tmp = ft_strjoin(tmp, str);
+		tmp = ft_strjoin(tmp, new + env_len + (found - new));
+		new = tmp;
+	}
+	*received = new;
+	return (0);
+}
 
 int	handle_env_expand(t_token *token)
 {

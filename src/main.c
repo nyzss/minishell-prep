@@ -107,7 +107,7 @@ int	handle_loop(t_ctx *ctx)
 	}
 	else
 	{
-		handle_env_expand(ctx->token);
+		// handle_env_expand(ctx->token);
 		// print_token(ctx->token);
 		//new step to handle command arguments
 
@@ -152,7 +152,10 @@ int	main(int ac, char **av, char **env)
 {
 	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
 	t_ctx	ctx;
+	// char	*t = "Hello world! $PATH $envkl $lolz HELLOWORLD!!!!!!! $MANPAGER $LESS $PAGER $PWD";
 
+	// expand_env(&t);
+	// printf("%s\n", t);
 	(void)ac;
 	(void)av;
 	ctx.line = NULL;

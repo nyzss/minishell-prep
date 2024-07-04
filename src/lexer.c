@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 22:32:33 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 10:04:04 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,8 @@ char	*new_create_string(char *str, int *index)
 				i++;
 			}
 		}
-		new_len++;
+		else
+			new_len++;
 		i++;
 	}
 	new = malloc(sizeof(char) * (new_len + 1));
@@ -228,8 +229,7 @@ char	*new_create_string(char *str, int *index)
 			i++;
 			while (i < len && str[i] != '\"')
 			{
-				new[j] = str[i];
-				j++;
+				new[j++] = str[i];
 				i++;
 			}
 		}
@@ -238,14 +238,13 @@ char	*new_create_string(char *str, int *index)
 			i++;
 			while (i < len && str[i] != '\'')
 			{
-				new[j] = str[i];
-				j++;
+				new[j++] = str[i];
 				i++;
 			}
 		}
+		else
+				new[j++] = str[i];
 		i++;
-		new[j] = str[i];
-		j++;
 	}
 	new[j] = '\0';
 	*index += len + 1;
@@ -268,22 +267,22 @@ t_token	*new_tokenizer(char *buf)
 			tmp = create_token(RawString, new_create_string(&(buf[i]), &i), i);
 			add_token(&head, tmp);
 		}
-		else if (buf[i] == '\'')
-		{
-			tmp = create_token(SingleQuoteString, create_string(&(buf[i + 1]), SingleQuoteString, &i), i);
-			if (ft_strlen(tmp->value) > 0)
-				add_token(&head, tmp);
-			else
-				free(tmp);
-		}
-		else if (buf[i] == '\"')
-		{
-			tmp = create_token(DoubleQuoteString, create_string(&(buf[i + 1]), DoubleQuoteString, &i), i);
-			if (ft_strlen(tmp->value) > 0)
-				add_token(&head, tmp);
-			else
-				free(tmp);
-		}
+		// else if (buf[i] == '\'')
+		// {
+		// 	tmp = create_token(SingleQuoteString, create_string(&(buf[i + 1]), SingleQuoteString, &i), i);
+		// 	if (ft_strlen(tmp->value) > 0)
+		// 		add_token(&head, tmp);
+		// 	else
+		// 		free(tmp);
+		// }
+		// else if (buf[i] == '\"')
+		// {
+		// 	tmp = create_token(DoubleQuoteString, create_string(&(buf[i + 1]), DoubleQuoteString, &i), i);
+		// 	if (ft_strlen(tmp->value) > 0)
+		// 		add_token(&head, tmp);
+		// 	else
+		// 		free(tmp);
+		// }
 		else if (buf[i] == '<')
 		{
 			if (buf[i + 1] != '\0' && buf[i + 1] == '<')

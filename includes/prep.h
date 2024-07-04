@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/03 18:09:24 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 10:22:21 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,5 +216,7 @@ int		handle_env_expand(t_token *token);
 int		is_builtin(char *value);
 
 int		exit_builtin(t_ctx *ctx, t_cmd *cmd);
+
+int		expand_env(char **received);
 
 #endif
