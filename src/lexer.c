@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 16:51:57 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:13:48 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ t_token *new_create_command(char *str, int *index)
 	tmp = ft_strtrim(new, " ");
 	free(new);
 	new_token = create_token(RawString, tmp);
+	handle_env_expand(new_token);
 	*index += i - 1;
 	// *index -= 1;
 	return (new_token);
@@ -223,6 +224,21 @@ int	new_get_len_str(char *str)
 	}
 	return (i);
 }
+char	*new_ft_strcat(char *dest, char *src)
+{
+	int		i;
+	int		dst_len;
+
+	i = 0;
+	dst_len = ft_strlen(dest);
+	while (src[i] != '\0')
+	{
+		dest[dst_len + i] = src[i];
+		i++;
+	}
+	dest[dst_len + i] = '\0';
+	return (dest);
+}
 
 char	*combine_tokens(t_token *token)
 {
@@ -241,7 +257,8 @@ char	*combine_tokens(t_token *token)
 	new = ft_calloc(sizeof(char), (len + 1));
 	while (token != NULL)
 	{
-		ft_strcat(new, token->value);
+		if (token->value != NULL)
+			ft_strcat(new, token->value);
 		token = token->next_token;
 	}
 	return (new);
@@ -290,57 +307,9 @@ char	*newer_create_string(char *str, int *index)
 		}
 		i++;
 	}
-	*index += len + 1;
+	*index += i - 1;
 	handle_env_expand(tmp_token);
 	new = combine_tokens(tmp_token);
-	return (new);
-}
-
-char	*new_create_string(char *str, int *index)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	*new;
-
-	i = 0;
-	j = 0;
-	len = 0;
-	new = NULL;
-	while (str[len])
-	{
-		if ((str[len] == '\'' || str[len] == '\"') && (str[len + 1] == ' '))
-			break;
-		len++;
-	}
-	new = malloc(sizeof(char) * (get_len_str(len, str) + 1));
-	i = 0;
-	while (i < len)
-	{
-		if (str[i] == '\"')
-		{
-			i++;
-			while (i < len && str[i] != '\"')
-			{
-				new[j++] = str[i];
-				i++;
-			}
-		}
-		else if (str[i] == '\'')
-		{
-			i++;
-			while (i < len && str[i] != '\'')
-			{
-				new[j++] = str[i];
-				i++;
-			}
-		}
-		else
-				new[j++] = str[i];
-		i++;
-	}
-	new[j] = '\0';
-	*index += len + 1;
 	return (new);
 }
 
@@ -356,9 +325,9 @@ t_token	*new_tokenizer(char *buf)
 	{
 		if (buf[i] == '\'' || buf[i] == '\"')
 		{
-			// newer_create_string(&(buf[i]), &i);
 			tmp = create_token(RawString, newer_create_string(&(buf[i]), &i));
 			add_token(&head, tmp);
+			// printf("hello");
 		}
 		else if (buf[i] == '<')
 		{

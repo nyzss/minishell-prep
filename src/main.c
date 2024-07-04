@@ -107,7 +107,6 @@ int	handle_loop(t_ctx *ctx)
 	}
 	else
 	{
-		// handle_env_expand(ctx->token);
 		// print_token(ctx->token);
 		//new step to handle command arguments
 
@@ -117,7 +116,7 @@ int	handle_loop(t_ctx *ctx)
 	}
 	add_history(ctx->line);
 	#if DEBUG
-	print_token(ctx->token);
+	// print_token(ctx->token);
 	// print_pipe(pipes);
 	// printf("\ninput: \"%s\"\n", ctx->line);
 	#endif
