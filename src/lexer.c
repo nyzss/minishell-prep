@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 16:15:27 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:51:57 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,29 @@ int	new_get_len_str(char *str)
 	return (i);
 }
 
+char	*combine_tokens(t_token *token)
+{
+	t_token	*tmp;
+	int		len;
+	char	*new;
+
+	len = 0;
+	tmp = token;
+	new = NULL;
+	while (tmp != NULL)
+	{
+		len += ft_strlen(tmp->value);
+		tmp = tmp->next_token;
+	}
+	new = ft_calloc(sizeof(char), (len + 1));
+	while (token != NULL)
+	{
+		ft_strcat(new, token->value);
+		token = token->next_token;
+	}
+	return (new);
+}
+
 char	*newer_create_string(char *str, int *index)
 {
 	t_token	*tmp_token;
@@ -269,7 +292,7 @@ char	*newer_create_string(char *str, int *index)
 	}
 	*index += len + 1;
 	handle_env_expand(tmp_token);
-	print_token(tmp_token);
+	new = combine_tokens(tmp_token);
 	return (new);
 }
 
@@ -333,9 +356,9 @@ t_token	*new_tokenizer(char *buf)
 	{
 		if (buf[i] == '\'' || buf[i] == '\"')
 		{
-			newer_create_string(&(buf[i]), &i);
-			// tmp = create_token(RawString, new_create_string(&(buf[i]), &i));
-			// add_token(&head, tmp);
+			// newer_create_string(&(buf[i]), &i);
+			tmp = create_token(RawString, newer_create_string(&(buf[i]), &i));
+			add_token(&head, tmp);
 		}
 		else if (buf[i] == '<')
 		{

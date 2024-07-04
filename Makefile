@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/07/01 11:00:52 by okoca            ###   ########.fr        #
+#    Updated: 2024/07/04 16:28:53 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ ${NAME}: ${LIBFT_TARGET} ${OBJS}
 	@echo "${FGreen}   Done [${TICK}]"
 
 ${LIBFT_TARGET}:
-	make -C ${LIBFT}
+	make re -C ${LIBFT}
 
 all: ${NAME}
 
@@ -94,6 +94,8 @@ fclean: clean
 	@echo "$(FRed)Full Cleaning $(NAME)$(FGreen)         [$(TICK)]"
 	@rm -f ${NAME}
 	@echo "$(FYellow)------------------------------------------------------"
+
+re: fclean all ${LIBFT_TARGET}
 
 define BANNER
 ${FRed}
@@ -131,7 +133,5 @@ ${RESET}
 endef
 export BANNER3
 
-
-re: fclean all
 
 .PHONY: all clean fclean re
