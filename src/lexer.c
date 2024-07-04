@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 14:31:12 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:00:37 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	print_token(t_token *token)
 				printf("(Filename)");
 			else if (token->type == Argument)
 				printf("(Argument)");
-			printf(" - value: \"%s\"\n", token->value);
+			printf(" - value: [%s]\n", token->value);
 		}
 		token = token->next_token;
 	}
@@ -243,9 +243,9 @@ char	*newer_create_string(char *str, int *index)
 		j = 1;
 		if (str[i] == '\'')
 		{
-			while (str[i + j] && str[i + j] != '\'')
+			while (i + j < len && str[i + j] != '\'')
 				j++;
-			tmp = ft_strndup(&(str[i]), j);
+			tmp = ft_strndup(&(str[i + 1]), j - 1);
 			add_token(&(tmp_token), create_token(SingleQuoteString, tmp));
 			i += j;
 		}
@@ -253,7 +253,7 @@ char	*newer_create_string(char *str, int *index)
 		{
 			while (i + j < len && str[i + j] != '\"')
 				j++;
-			tmp = ft_strndup(&(str[i]), j);
+			tmp = ft_strndup(&(str[i + 1]), j - 1);
 			add_token(&(tmp_token), create_token(DoubleQuoteString, tmp));
 			i += j;
 		}
@@ -268,6 +268,7 @@ char	*newer_create_string(char *str, int *index)
 		i++;
 	}
 	*index += len + 1;
+	// handle_env_expand(tmp_token);
 	print_token(tmp_token);
 	return (new);
 }
