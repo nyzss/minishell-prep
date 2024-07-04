@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 17:13:48 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:23:16 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,7 +278,7 @@ char	*newer_create_string(char *str, int *index)
 	tmp = NULL;
 	new = NULL;
 	len = new_get_len_str(str);
-	while (str[i])
+	while (i < len)
 	{
 		j = 1;
 		if (str[i] == '\'')
