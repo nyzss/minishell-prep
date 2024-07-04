@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:03:36 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 13:25:16 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:10:25 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include "get_next_line.h"
 # define FIRST 0
 # define SECOND 0
+
+int		ft_isupper(int c);
+
+int		ft_islower(int c);
 
 /*
 * Joins two strings into a new string, optionally freeing the original strings.
