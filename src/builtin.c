@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 16:10:48 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:18:19 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,29 @@ int	handle_env_expand(t_token *token)
 
 	while (token != NULL)
 	{
-		env_len = 0;
+		env_len = 1;
 		tmp = NULL;
 		if (token->type == DoubleQuoteString
 			|| token->type == Argument
 			|| token->type == RawString)
 		{
-			found = ft_strchr(token->value, '$');
-			while (found != NULL)
+			while (1)
 			{
 				found = ft_strchr(token->value, '$');
-				if (found != NULL)
-				{
-					// while (found[env_len] && found[env_len] != ' ')
-					while (found[env_len] && ft_isalpha(found[env_len]))
-						env_len++;
-					str = ft_strndup(found, env_len);
-					str = getenv(++str);
-					if (found - token->value == 0)
-						tmp = ft_strdup("");
-					else
-						tmp = ft_strndup(token->value, found - token->value);
-					if (str != NULL)
-						tmp = ft_strjoin(tmp, str);
-					tmp = ft_strjoin(tmp, token->value + env_len + (found - token->value));
-					token->value = tmp;
-				}
+				if (found == NULL)
+					break ;
+				while (found[env_len] && ft_isalpha(found[env_len]))
+					env_len++;
+				str = ft_strndup(found, env_len);
+				str = getenv(++str);
+				if (found - token->value == 0)
+					tmp = ft_strdup("");
+				else
+					tmp = ft_strndup(token->value, found - token->value);
+				if (str != NULL)
+					tmp = ft_strjoin(tmp, str);
+				tmp = ft_strjoin(tmp, token->value + env_len + (found - token->value));
+				token->value = tmp;
 			}
 		}
 		token = token->next_token;
