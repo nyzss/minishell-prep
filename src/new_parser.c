@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:25:31 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:39:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:40:30 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,12 @@ int	ps_rename_types(t_token *token)
 
 	command = 0;
 	tmp = token;
-	while (token != NULL)
+	while (tmp != NULL)
 	{
-		if (ps_is_redir(token))
-			token->next_token->type = Filename;
-		token = token->next_token;
+		if (ps_is_redir(tmp))
+			tmp->next_token->type = Filename;
+		tmp = tmp->next_token;
 	}
-	token = tmp;
 	while (token != NULL)
 	{
 		if (token->type == Pipe)
