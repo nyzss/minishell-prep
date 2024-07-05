@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:25:31 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 14:59:41 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:39:20 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,26 @@ int	ps_rename_types(t_token *token)
 	return (0);
 }
 
+int	ps_handle_expand(t_token *token)
+{
+	while (token != NULL)
+	{
+		if (token->type == RawString)
+		{
+			token->value = ps_handle_quotes(token->value);
+			if (token->value == NULL)
+				return (PARSING_ERROR);
+		}
+		token = token->next_token;
+	}
+	return (0);
+}
+
 int	parser(t_token *token)
 {
 	if (ps_check_redir(token) == PARSING_ERROR)
 		return (PARSING_ERROR);
+	ps_handle_expand(token);
 	ps_rename_types(token);
 	return (0);
 }
