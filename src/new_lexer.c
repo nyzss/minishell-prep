@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:28:25 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:59:45 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	lex_is_meta(char c)
 
 	i = 0;
 	found = 0;
-	meta = ft_strdup("<>|\'\"");
+	meta = ft_strdup("()&<>|\'\"");
 	while (meta[i])
 	{
 		if (meta[i] == c)
@@ -109,9 +109,21 @@ t_token	*lexer(char *str)
 			add_token(&token, tmp);
 			i += ft_strlen(tmp->value);
 		}
+		else if (str[i] == OrChar && str[i + 1] == OrChar)
+		{
+			tmp = create_token(Or, ft_strndup(&(str[i]), 2));
+			add_token(&token, tmp);
+			i += ft_strlen(tmp->value);
+		}
 		else if (str[i] == PipeChar)
 		{
 			tmp = create_token(Pipe, ft_strndup(&(str[i]), 1));
+			add_token(&token, tmp);
+			i += ft_strlen(tmp->value);
+		}
+		else if (str[i] == AndChar && str[i + 1] == AndChar)
+		{
+			tmp = create_token(And, ft_strndup(&(str[i]), 2));
 			add_token(&token, tmp);
 			i += ft_strlen(tmp->value);
 		}
