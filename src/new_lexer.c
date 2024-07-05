@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 10:46:27 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 11:27:15 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,9 @@ int	lex_count_redirection(char *str, t_meta_char meta)
 	i = 0;
 	meta_char = meta;
 	if (str[i + 1] == meta_char)
-	{
-		printf("%c]\n", str[i]);
 		i += 2;
-	}
 	else
-	{
-		printf("]\n");
 		i++;
-	}
 	return (i);
 }
 
@@ -75,7 +69,6 @@ int	lex_count_raw(char *str)
 	{
 		if (lex_is_meta(str[i]))
 			break ;
-		printf("%c", str[i]);
 		i++;
 	}
 	return (i);
@@ -84,47 +77,55 @@ int	lex_count_raw(char *str)
 void	lexer(char *str)
 {
 	int	i;
-	int	count;
 	int	len;
+	t_token	*token;
+	t_token	*tmp;
 
 	i = 0;
-	count = 0;
-	len = ft_strlen(str);
+	len = 0;
+	token = NULL;
 	while (str[i])
 	{
 		if (str[i] == SingleQuote || str[i] == DoubleQuote)
 		{
-			printf("token: [");
-			count++;
-			i += lex_count_string(&(str[i]));
-			printf("]\n");
+			tmp = create_token(RawString, ft_strndup(&(str[i]), lex_count_string(&(str[i]))));
+			add_token(&token, tmp);
+			i += ft_strlen(tmp->value);
 		}
 		else if (str[i] == PipeChar)
 		{
-			printf("token: [%c]\n", str[i]);
-			count++;
+			tmp = create_token(Pipe, ft_strndup(&(str[i]), 1));
+			add_token(&token, tmp);
 			i++;
 		}
 		else if (str[i] == InfileChar)
 		{
-			printf("token: [%c", str[i]);
-			count++;
-			i += lex_count_redirection(&(str[i]), InfileChar);
+			len = lex_count_redirection(&(str[i]), InfileChar);
+			if (len == 1)
+				tmp = create_token(Infile, ft_strndup(&(str[i]), len));
+			else
+				tmp = create_token(HereDoc, ft_strndup(&(str[i]), len));
+			add_token(&token, tmp);
+			i += len;
 		}
 		else if (str[i] == OutfileChar)
 		{
-			printf("token: [%c", str[i]);
-			i += lex_count_redirection(&(str[i]), OutfileChar);
-			count++;
+			len = lex_count_redirection(&(str[i]), OutfileChar);
+			if (len == 1)
+				tmp = create_token(Outfile, ft_strndup(&(str[i]), len));
+			else
+				tmp = create_token(Append, ft_strndup(&(str[i]), len));
+			add_token(&token, tmp);
+			i += len;
 		}
 		else if (str[i] != SpaceChar)
 		{
-			count++;
-			printf("token: [");
-			i += lex_count_raw(&(str[i]));
-			printf("]\n");
+			tmp = create_token(RawString, ft_strndup(&(str[i]), lex_count_raw(&(str[i]))));
+			add_token(&token, tmp);
+			i += ft_strlen(tmp->value);
 		}
 		else
 			i++;
 	}
+	print_token(token);
 }

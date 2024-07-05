@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 17:23:16 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 11:26:25 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,29 @@ int	print_token(t_token *token)
 {
 	while (token != NULL)
 	{
-		if (token->type == Infile || token->type == Outfile
-			|| token->type == Pipe)
-		{
-			if (token->type == Infile)
-				printf("(Infile)");
-			else if (token->type == Outfile)
-				printf("(Outfile)");
-			else if (token->type == Pipe)
-				printf("(Pipe)");
-			printf(" - value: \"%c\"\n", *(token->value));
-		}
-		else
-		{
-			if (token->type == DoubleQuoteString)
-				printf("(DoubleQuoteString)");
-			else if (token->type == SingleQuoteString)
-				printf("(SingleQuoteString)");
-			else if (token->type == RawString)
-				printf("(RawString)");
-			else if (token->type == Command)
-				printf("(Command)");
-			else if (token->type == HereDoc)
-				printf("(HereDoc)");
-			else if (token->type == Append)
-				printf("(Append)");
-			else if (token->type == Filename)
-				printf("(Filename)");
-			else if (token->type == Argument)
-				printf("(Argument)");
-			printf(" - value: [%s]\n", token->value);
-		}
+		if (token->type == Infile)
+			printf("(Infile)");
+		else if (token->type == Outfile)
+			printf("(Outfile)");
+		else if (token->type == Pipe)
+			printf("(Pipe)");
+		else if (token->type == DoubleQuoteString)
+			printf("(DoubleQuoteString)");
+		else if (token->type == SingleQuoteString)
+			printf("(SingleQuoteString)");
+		else if (token->type == RawString)
+			printf("(RawString)");
+		else if (token->type == Command)
+			printf("(Command)");
+		else if (token->type == HereDoc)
+			printf("(HereDoc)");
+		else if (token->type == Append)
+			printf("(Append)");
+		else if (token->type == Filename)
+			printf("(Filename)");
+		else if (token->type == Argument)
+			printf("(Argument)");
+		printf(" - value: [%s]\n", token->value);
 		token = token->next_token;
 	}
 	printf("\n");
