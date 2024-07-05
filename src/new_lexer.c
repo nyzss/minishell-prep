@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 14:56:52 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:28:25 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@ int	lex_is_meta(char c)
 {
 	int		i;
 	char	*meta;
+	int		found;
 
 	i = 0;
+	found = 0;
 	meta = ft_strdup("<>|\'\"");
 	while (meta[i])
 	{
 		if (meta[i] == c)
-			return (1);
+			found = 1;
 		i++;
 	}
 	free(meta);
-	return (0);
+	return (found);
 }
 
 int	lex_count_string(char *str)

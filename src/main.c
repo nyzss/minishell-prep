@@ -170,6 +170,7 @@ int	main(int ac, char **av, char **env)
 			ctx.token = lexer(ctx.line);
 			if (parser(ctx.token) == PARSING_ERROR)
 			{
+				fprintf(stderr, "Parsing error...\n");
 				ctx.token = lex_clear_tokens(ctx.token);
 				break ;
 			}
