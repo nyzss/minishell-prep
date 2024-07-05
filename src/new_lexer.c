@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 11:27:15 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 11:33:06 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	lex_count_string(char *str)
 	i = 0;
 	while (str[i])
 	{
-		printf("%c", str[i]);
 		if ((str[i] == SingleQuote || str[i] == DoubleQuote) && str[i + 1] == ' ')
 		{
 			i++;
@@ -96,7 +95,7 @@ void	lexer(char *str)
 		{
 			tmp = create_token(Pipe, ft_strndup(&(str[i]), 1));
 			add_token(&token, tmp);
-			i++;
+			i += ft_strlen(tmp->value);
 		}
 		else if (str[i] == InfileChar)
 		{
@@ -106,7 +105,7 @@ void	lexer(char *str)
 			else
 				tmp = create_token(HereDoc, ft_strndup(&(str[i]), len));
 			add_token(&token, tmp);
-			i += len;
+			i += ft_strlen(tmp->value);
 		}
 		else if (str[i] == OutfileChar)
 		{
@@ -116,7 +115,7 @@ void	lexer(char *str)
 			else
 				tmp = create_token(Append, ft_strndup(&(str[i]), len));
 			add_token(&token, tmp);
-			i += len;
+			i += ft_strlen(tmp->value);
 		}
 		else if (str[i] != SpaceChar)
 		{
