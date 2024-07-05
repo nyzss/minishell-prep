@@ -6,13 +6,18 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 10:20:00 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 10:25:15 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
 
-int	count_tokens(char *str)
+// int	lex_count_string(char *str)
+// {
+
+// }
+
+void	lexer(char *str)
 {
 	int	i;
 	int	count;
@@ -92,19 +97,4 @@ int	count_tokens(char *str)
 		else
 			i++;
 	}
-	return (count);
-}
-
-// hello<filename | command
-
-void	lexer(char *str)
-{
-	printf("string: %s\ntokens: %d\n", str, count_tokens(str));
-	// int	i;
-
-	// i = 0;
-	// while (str[i])
-	// {
-	// 	i++;
-	// }
 }
