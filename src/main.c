@@ -116,7 +116,7 @@ int	handle_loop(t_ctx *ctx)
 	}
 	add_history(ctx->line);
 	#if DEBUG
-	// print_token(ctx->token);
+	print_token(ctx->token);
 	// print_pipe(pipes);
 	// printf("\ninput: \"%s\"\n", ctx->line);
 	#endif
@@ -151,10 +151,7 @@ int	main(int ac, char **av, char **env)
 {
 	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
 	t_ctx	ctx;
-	// char	*t = "Hello world! $PATH $envkl $lolz HELLOWORLD!!!!!!! $MANPAGER $LESS $PAGER $PWD";
 
-	// expand_env(&t);
-	// printf("%s\n", t);
 	(void)ac;
 	(void)av;
 	ctx.line = NULL;
@@ -170,7 +167,9 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (check_line(ctx.line) == 0)
 		{
-			lexer(ctx.line);
+			ctx.token = lexer(ctx.line);
+			print_token(ctx.token);
+			lex_clear_tokens(ctx.token);
 			// if (handle_loop(&ctx) != 0)
 			// 	break ;
 		}

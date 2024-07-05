@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 09:51:16 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 14:30:29 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # define HERE_DOC_TMP 10
 
 # define SHOULD_EXIT 2
+
+# define PARSING_ERROR 1
+// # define PARSING_ERROR 1
 
 // # define RED_COLOR "\033[0;31m"
 // # define BLUE_COLOR "\033[1;34m"
@@ -159,7 +162,11 @@ typedef struct s_ctx
 	t_pipe	*pipes;
 }	t_ctx;
 
-void	lexer(char *str);
+t_token	*lexer(char *str);
+
+void	lex_clear_tokens(t_token *token);
+
+char	*ps_handle_quotes(char *str);
 
 int		p_exec(char *path, char **args, char **envp);
 
@@ -184,6 +191,8 @@ int		add_arg(t_args **head, t_args *new);
 void	get_stds(t_ctx *ctx);
 
 void	reset_stds(t_ctx *ctx);
+
+char	*combine_tokens(t_token *token);
 
 // --------------------------------- LEXER -------------------------------
 

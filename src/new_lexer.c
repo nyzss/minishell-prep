@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 11:38:22 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 14:21:50 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	lex_count_raw(char *str)
 	return (i);
 }
 
-void	clear_tokens(t_token *token)
+void	lex_clear_tokens(t_token *token)
 {
 	t_token	*tmp;
 
@@ -88,7 +88,7 @@ void	clear_tokens(t_token *token)
 	}
 }
 
-void	lexer(char *str)
+t_token	*lexer(char *str)
 {
 	int	i;
 	int	len;
@@ -141,6 +141,5 @@ void	lexer(char *str)
 		else
 			i++;
 	}
-	print_token(token);
-	clear_tokens(token);
+	return (token);
 }

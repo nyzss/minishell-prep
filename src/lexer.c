@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 11:26:25 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 14:23:54 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,30 +232,6 @@ char	*new_ft_strcat(char *dest, char *src)
 	return (dest);
 }
 
-char	*combine_tokens(t_token *token)
-{
-	t_token	*tmp;
-	int		len;
-	char	*new;
-
-	len = 0;
-	tmp = token;
-	new = NULL;
-	while (tmp != NULL)
-	{
-		len += ft_strlen(tmp->value);
-		tmp = tmp->next_token;
-	}
-	new = ft_calloc(sizeof(char), (len + 1));
-	while (token != NULL)
-	{
-		if (token->value != NULL)
-			ft_strcat(new, token->value);
-		token = token->next_token;
-	}
-	return (new);
-}
-
 char	*newer_create_string(char *str, int *index)
 {
 	t_token	*tmp_token;
@@ -381,3 +357,41 @@ int	clear_token(t_token **token)
 	*token = NULL;
 	return (0);
 }
+
+// echo """"'hello world'"""" lol
+
+// 'hello world'
+
+// ''hello world''
+
+// "" -> \0
+
+// echo "'"""'hello world'"""'" lol
+
+// remove all quotes from string already before anything
+// would be a lot more safe in terms of allocations
+// while (str[i])
+// {
+// 	j = 0;
+// 	if (str[i] == '\"')
+// 	{
+// 		while (str[i + j + 1] != '\"')
+// 		{
+// 			len++;
+// 			j++;
+// 		}
+// 		i += j + 1;
+// 	}
+// 	else if (str[i] == '\'')
+// 	{
+// 		while (str[i + j + 1] != '\'')
+// 		{
+// 			len++;
+// 			j++;
+// 		}
+// 		i += j + 1;
+// 	}
+// 	else
+// 		len++;
+// 	i++;
+// }
