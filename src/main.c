@@ -177,6 +177,8 @@ int	main(int ac, char **av, char **env)
 		free(ctx.line);
 		ctx.line = NULL;
 	}
+	close(ctx.def_in);
+	close(ctx.def_out);
 	printf("exiting shell...\n");
 	return (0);
 }
