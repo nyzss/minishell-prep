@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 14:30:29 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 14:56:51 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,9 @@ typedef struct s_ctx
 
 t_token	*lexer(char *str);
 
-void	lex_clear_tokens(t_token *token);
+int		parser(t_token *token);
+
+void	*lex_clear_tokens(t_token *token);
 
 char	*ps_handle_quotes(char *str);
 

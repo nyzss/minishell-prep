@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/07/05 14:13:24 by okoca            ###   ########.fr        #
+#    Updated: 2024/07/05 14:57:52 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,8 @@ SRC_FILES = main.c \
 			builtin.c \
 			history.c \
 			new_lexer.c \
-			quotes.c
+			quotes.c \
+			new_parser.c
 
 NAME = prep
 

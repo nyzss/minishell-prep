@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:25:31 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 14:36:45 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 14:59:41 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ int	ps_check_redir(t_token *token)
 int	ps_rename_types(t_token *token)
 {
 	t_token	*tmp;
+	int		command;
 
+	command = 0;
 	tmp = token;
 	while (token != NULL)
 	{
@@ -45,6 +47,21 @@ int	ps_rename_types(t_token *token)
 			token->next_token->type = Filename;
 		token = token->next_token;
 	}
+	token = tmp;
+	while (token != NULL)
+	{
+		if (token->type == Pipe)
+			command = 0;
+		if (token->type == RawString && command == 0)
+		{
+			token->type = Command;
+			command = 1;
+		}
+		else if (token->type == RawString)
+			token->type = Argument;
+		token = token->next_token;
+	}
+	return (0);
 }
 
 int	parser(t_token *token)
