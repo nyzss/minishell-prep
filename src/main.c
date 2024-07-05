@@ -167,16 +167,16 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (check_line(ctx.line) == 0)
 		{
+			add_history(ctx.line);
 			ctx.token = lexer(ctx.line);
 			if (parser(ctx.token) == PARSING_ERROR)
 			{
 				fprintf(stderr, "Parsing error...\n");
 				ctx.token = lex_clear_tokens(ctx.token);
-				break ;
+				continue ;
 			}
 			print_token(ctx.token);
 			ctx.token = lex_clear_tokens(ctx.token);
-			add_history(ctx.line);
 			// if (handle_loop(&ctx) != 0)
 			// 	break ;
 		}

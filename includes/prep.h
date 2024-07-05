@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 14:56:51 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:47:05 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ typedef enum e_token_type
 	Pipe,
 	Command,
 	Argument,
-	Filename
+	Filename,
+	And,
+	Or,
+	Group
 }	t_token_type;
 
 
@@ -91,6 +94,10 @@ typedef enum e_meta_char
 	OutfileChar = '>',
 	PipeChar = '|',
 	SpaceChar = ' ',
+	OrChar = '|',
+	AndChar = '&',
+	GroupOpen = '(',
+	GroupClose = ')',
 }	t_meta_char;
 
 // typedef struct u_ast_node

@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:25:31 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:40:30 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:49:33 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ps_is_redir(t_token *token)
 	return (0);
 }
 
-int	ps_check_redir(t_token *token)
+int	ps_check_simple(t_token *token)
 {
 	while (token != NULL)
 	{
@@ -29,6 +29,8 @@ int	ps_check_redir(t_token *token)
 			if (!token->next_token || token->next_token->type != RawString)
 				return (PARSING_ERROR);
 		}
+		else if (token->type == Pipe && !token->next_token)
+				return (PARSING_ERROR);
 		token = token->next_token;
 	}
 	return (0);
@@ -80,7 +82,7 @@ int	ps_handle_expand(t_token *token)
 
 int	parser(t_token *token)
 {
-	if (ps_check_redir(token) == PARSING_ERROR)
+	if (ps_check_simple(token) == PARSING_ERROR)
 		return (PARSING_ERROR);
 	ps_handle_expand(token);
 	ps_rename_types(token);
