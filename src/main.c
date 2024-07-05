@@ -170,8 +170,9 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (check_line(ctx.line) == 0)
 		{
-			if (handle_loop(&ctx) != 0)
-				break ;
+			lexer(ctx.line);
+			// if (handle_loop(&ctx) != 0)
+			// 	break ;
 		}
 		free(ctx.line);
 		ctx.line = NULL;

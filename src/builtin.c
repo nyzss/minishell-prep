@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 16:18:19 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 09:00:57 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	handle_env_expand(t_token *token)
 				found = ft_strchr(token->value, '$');
 				if (found == NULL)
 					break ;
-				while (found[env_len] && ft_isalpha(found[env_len]))
+				while (found[env_len] && ft_isalnum(found[env_len]))
 					env_len++;
 				str = ft_strndup(found, env_len);
 				str = getenv(++str);

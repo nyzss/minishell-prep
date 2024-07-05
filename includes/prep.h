@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 13:52:18 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/05 09:51:16 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,25 @@ typedef enum e_token_type
 	Filename
 }	t_token_type;
 
+
+typedef enum e_meta_char
+{
+	SingleQuote = '\'',
+	DoubleQuote = '\"',
+	InfileChar = '<',
+	OutfileChar = '>',
+	PipeChar = '|',
+	SpaceChar = ' ',
+}	t_meta_char;
+
+// typedef struct u_ast_node
+// {
+// 	t_token_type	type;
+// 	union {
+
+// 	}	data;
+// }	t_ast_node;
+
 typedef struct s_token
 {
 	char			*value;
@@ -139,6 +158,8 @@ typedef struct s_ctx
 	t_token	*token;
 	t_pipe	*pipes;
 }	t_ctx;
+
+void	lexer(char *str);
 
 int		p_exec(char *path, char **args, char **envp);
 
