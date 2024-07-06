@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/06 19:05:08 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/06 19:10:43 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,33 +142,6 @@ typedef struct s_pipe
 	struct s_pipe	*next;
 }	t_pipe;
 
-// typedef struct s_exec_table
-// {
-// 	t_pipe		*commands;
-// 	struct s_exec_table	*next;
-// 	int					exit_status;
-// }	t_exec_table;
-
-// typedef struct s_paranthesis_table
-// {
-// 	int					exit_status;
-// 	t_exec_table		*exec_table;
-// 	struct s_paranthesis_table		*next;
-// }	t_paranthesis_table;
-
-// t_exec_table *table;
-
-
-typedef struct s_ctx
-{
-	int		def_in;
-	int		def_out;
-	char	*line;
-	char	**env;
-	t_token	*token;
-	t_pipe	*pipes;
-}	t_ctx;
-
 typedef enum e_sign_t
 {
 	NO_SIGN,
@@ -190,8 +163,6 @@ typedef struct s_group
 	struct s_cmd_tab	*next;
 }	t_group;
 
-
-
 /*
  structure goes like this:
  we start of by considering that even 'ls | cat'
@@ -207,6 +178,15 @@ typedef struct s_group
  each Group block will have
 */
 
+typedef struct s_ctx
+{
+	int		def_in;
+	int		def_out;
+	char	*line;
+	char	**env;
+	t_token	*token;
+	t_pipe	*pipes;
+}	t_ctx;
 
 t_token	*lexer(char *str);
 
