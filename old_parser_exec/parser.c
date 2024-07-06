@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:00:00 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/04 14:31:53 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/06 19:09:34 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,50 @@ int	check_non_next(t_token *token, t_token_type type)
 	}
 	return (0);
 }
+
+char	**split_once(char *value)
+{
+	char	**arg;
+	int		i;
+	int		j;
+	int		s1_len;
+	int		s2_len;
+	char	*s1;
+	char	*s2;
+
+	i = 0;
+	j = 0;
+	s1_len = 0;
+	s2_len = 0;
+	arg = malloc(sizeof(char *) * 2);
+	while (value[s1_len] && value[s1_len] != ' ')
+		s1_len++;
+	while (value[s1_len + s2_len])
+		s2_len++;
+	if (s2_len == 0)
+		return (NULL);
+	s1 = malloc(sizeof(char) * (s1_len + 1));
+	s2 = malloc(sizeof(char) * (s2_len + 1));
+	while (value[i])
+	{
+		if (i < s1_len)
+			s1[i] = value[i];
+		else if (i != s1_len && i < s1_len + s2_len)
+		{
+			s2[j] = value[i];
+			j++;
+		}
+		i++;
+	}
+	s2_len--;
+	s1[s1_len] = '\0';
+	s2[s2_len] = '\0';
+	printf("s1_len: %d - s2_len: %d\n", s1_len, s2_len);
+	arg[0] = s1;
+	arg[1] = s2;
+	return (arg);
+}
+
 
 // this takes in a token with a raw string which should normally be
 // a filename and a command
