@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 07:52:55 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:55:55 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/06 18:52:50 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,11 +174,9 @@ t_token *new_create_command(char *str, int *index)
 int		get_len_str(int len, char *str)
 {
 	int	i;
-	int	j;
 	int	new_len;
 
 	i = 0;
-	j = 0;
 	new_len = 0;
 	while (i < len)
 	{

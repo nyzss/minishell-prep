@@ -46,6 +46,7 @@ int	m_child(t_ctx *ctx, t_cmd *cmds, char **env)
 		path = p_get_path(cmds->value);
 		if (access(path, F_OK | X_OK) != 0)
 		{
+			fprintf(stderr, "monk: %s: command not found!\n", cmds->value);
 			return (1);
 		}
 		args = list_to_args(cmds);
@@ -176,6 +177,8 @@ int	main(int ac, char **av, char **env)
 				continue ;
 			}
 			print_token(ctx.token);
+			ctx.pipes = build_pipe(ctx.token);
+			do_pipes(&ctx);
 			ctx.token = lex_clear_tokens(ctx.token);
 			// if (handle_loop(&ctx) != 0)
 			// 	break ;

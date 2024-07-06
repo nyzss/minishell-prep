@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:47:05 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/06 18:52:15 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,45 @@ typedef struct s_ctx
 	t_token	*token;
 	t_pipe	*pipes;
 }	t_ctx;
+
+typedef enum e_sign_t
+{
+	NO_SIGN,
+	AND_SIGN,
+	OR_SIGN
+}	t_sign_t;
+
+typedef struct s_sign
+{
+	t_sign_t		type;
+	t_pipe			*cmds_t;
+	struct s_sign	*next;
+}	t_sign;
+
+// cmd table is for Groups
+typedef struct s_group
+{
+	t_sign				*routine;
+	struct s_cmd_tab	*next;
+}	t_group;
+
+
+
+/*
+ structure goes like this:
+ we start of by considering that even 'ls | cat'
+ is inside a group (paranthesis)
+
+ any && or || signs will still contribute to
+ the last status of the paranthesis since we need to
+ set something for echo $?
+
+ otherwise if we get another set of paranthesis in the line
+ its just going to be another group etc..
+
+ each Group block will have
+*/
+
 
 t_token	*lexer(char *str);
 
