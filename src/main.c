@@ -92,44 +92,6 @@ int	check_line(char *line)
 	return (0);
 }
 
-int	handle_loop(t_ctx *ctx)
-{
-	t_pipe	*pipes;
-	int		status;
-
-	pipes = NULL;
-	status = 0;
-	ctx->token = new_tokenizer(ctx->line);
-	// print_token(ctx->token);
-	if (new_token_checker(ctx->token) != 0)
-	{
-		printf("nuh uh\n");
-		return (0);
-	}
-	else
-	{
-		// print_token(ctx->token);
-		//new step to handle command arguments
-
-		pipes = build_pipe(ctx->token);
-		ctx->pipes = pipes;
-		status = do_pipes(ctx);
-	}
-	add_history(ctx->line);
-	#if DEBUG
-	print_token(ctx->token);
-	// print_pipe(pipes);
-	// printf("\ninput: \"%s\"\n", ctx->line);
-	#endif
-	clear_token(&(ctx->token));
-	if (status == SHOULD_EXIT)
-	{
-		free(ctx->line);
-		return (status);
-	}
-	return (0);
-}
-
 void	get_stds(t_ctx *ctx)
 {
 	ctx->def_in = dup(STDIN_FILENO);
@@ -180,8 +142,6 @@ int	main(int ac, char **av, char **env)
 			ctx.pipes = build_pipe(ctx.token);
 			do_pipes(&ctx);
 			ctx.token = lex_clear_tokens(ctx.token);
-			// if (handle_loop(&ctx) != 0)
-			// 	break ;
 		}
 		free(ctx.line);
 		ctx.line = NULL;
