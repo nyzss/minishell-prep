@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 09:29:00 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 09:37:52 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,13 @@ t_token	*lexer(char *str)
 			add_token(&token, tmp);
 			i += ft_strlen(tmp->value);
 		}
-		else if (str[i] == ParantheseOpen)
+		else if (str[i] == ParenthesisOpen)
 		{
 			tmp = create_token(GroupOpen, ft_strndup(&(str[i]), 1));
 			add_token(&token, tmp);
 			i += ft_strlen(tmp->value);
 		}
-		else if (str[i] == ParantheseClose)
+		else if (str[i] == ParenthesisClose)
 		{
 			tmp = create_token(GroupClose, ft_strndup(&(str[i]), 1));
 			add_token(&token, tmp);

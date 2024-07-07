@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 09:28:07 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 09:38:20 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ typedef enum e_meta_char
 	SpaceChar = ' ',
 	OrChar = '|',
 	AndChar = '&',
-	ParantheseOpen = '(',
-	ParantheseClose = ')',
+	ParenthesisOpen = '(',
+	ParenthesisClose = ')',
 }	t_meta_char;
 
 typedef struct s_token
@@ -196,13 +196,13 @@ typedef struct s_container
 /*
  structure goes like this:
  we start of by considering that even 'ls | cat'
- is inside a group (paranthesis)
+ is inside a group (parenthesis)
 
  any && or || signs will still contribute to
- the last status of the paranthesis since we need to
+ the last status of the parenthesis since we need to
  set something for echo $?
 
- otherwise if we get another set of paranthesis in the line
+ otherwise if we get another set of parenthesis in the line
  its just going to be another group etc..
 
  each Group block will have
