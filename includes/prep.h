@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 16:40:12 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 21:46:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,8 @@ typedef struct s_group
 
 typedef struct s_container
 {
-	t_operator_t	operator;
-	t_type_t		type;
-	void			*data;
+	t_operator_t		operator;
+	t_group				*group;
 	struct s_container	*next;
 }	t_container;
 // union
@@ -274,17 +273,13 @@ typedef struct s_ctx
 
 void	print_group(t_group *group);
 
+void	print_table(t_container *container);
+
 t_filename	*create_filename(char *value, t_token_type type);
 
 t_filename	*last_filename(t_filename *head);
 
 int			add_filename(t_filename **head, t_filename *new);
-
-t_container	*create_container(t_token *token);
-
-t_container	*last_container(t_container *head);
-
-int		add_container(t_container **head, t_container *new);
 
 t_token	*lexer(char *str);
 

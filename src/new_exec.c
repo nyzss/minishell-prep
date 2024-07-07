@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 19:03:59 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 16:43:07 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 21:53:18 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,68 +53,79 @@ t_pipe	*new_build_pipe(t_token **tokens)
 	return (pipe_tab);
 }
 
-t_group	*build_group(t_token *token, t_operator_t operator)
+t_group	*build_group(t_token **tokens, t_operator_t operator)
 {
 	t_group	*new;
+	t_token	*token;
 
 	new = malloc(sizeof(t_group));
 	new->pipe = NULL;
 	new->operator = operator;
 	new->next = NULL;
+	token = *tokens;
 	while (token != NULL)
 	{
 		new->pipe = new_build_pipe(&(token));
 		if (token == NULL)
 			break ;
-		else if (token->type == And)
+		else if (token->type == And && token->next_token->type != GroupOpen)
 		{
-			new->next = build_group(token->next_token, AND_OP);
+			new->next = build_group(&(token->next_token), AND_OP);
 			break ;
 		}
-		else if (token->type == Or)
+		else if (token->type == Or && token->next_token->type != GroupOpen)
 		{
-			new->next = build_group(token->next_token, OR_OP);
+			new->next = build_group(&(token->next_token), OR_OP);
 			break ;
 		}
 		else
 			break ;
 		token = token->next_token;
 	}
+	*tokens = token;
 	return (new);
 }
 
-t_container	*build_table(t_token *token, boolean is_child)
+t_container	*build_table(t_token *token, t_operator_t operator)
 {
 	t_container	*container;
-	t_token		*tmp;
-	int			is_group;
+	// int			is_group;
 
-	is_group = false;
-	tmp = token;
+	// is_group = false;
 	container = malloc(sizeof(t_container));
-	container->data = NULL;
 	container->next = NULL;
-	container->type = PIPE;
-	container->operator = NO_OP;
+	container->operator = operator;
+	container->group = NULL;
 	if (token->type == GroupOpen)
-	{
-		is_group = true;
 		token = token->next_token;
-		container->type = GROUP;
-	}
 	while (token != NULL)
 	{
-		if (is_group == true && is_child == true && token->type == GroupClose)
-			return (container);
-		container->data = new_build_pipe(&(token));
-		new_print_pipe((t_pipe *)container->data);
-		// if (token->type == And)
-		if (token != NULL)
-			printf("token value: %s\n", token->value);
-		if (token != NULL)
-			token = token->next_token;
+		container->group = build_group(&(token), NO_OP);
+		if (token == NULL)
+			break ;
+		else if (token->type == And)
+		{
+			if (token->next_token->type == GroupOpen)
+				token = token->next_token;
+			container->next = build_table(token->next_token, AND_OP);
+			break ;
+		}
+		else if (token->type == Or)
+		{
+			if (token->next_token->type == GroupOpen)
+				token = token->next_token;
+			container->next = build_table(token->next_token, OR_OP);
+			break ;
+		}
+		token = token->next_token;
 	}
 	return (container);
+	// if (token->type == GroupOpen)
+	// {
+	// 	is_group = true;
+	// 	token = token->next_token;
+	// 	container->type = GROUP;
+	// }
 }
 
 
@@ -124,15 +135,32 @@ void	do_exec(t_ctx *ctx)
 	int	status;
 
 	status = 0;
-	print_group(build_group(ctx->token, NO_OP));
-	// build_table(ctx->token, false);
-	// ctx->pipes = build_pipe(ctx->token);
+	t_container	*tab;
+
+	tab = build_table(ctx->token, NO_OP);
+	print_table(tab);
+	// print_group(build_group(ctx->token, NO_OP));
 	// status = do_pipes(ctx);
 	printf("status: %d\n", status);
 }
 
+void	print_table(t_container *container)
+{
+	printf(COLOR_RED_A "-------------- GROUP -------------\n");
+	while (container != NULL)
+	{
+		printf("operator: %c\n", container->operator);
+		printf("next: %p\n", container->next);
+		printf("group: %p\n", container->group);
+		print_group(container->group);
+		container = container->next;
+	}
+	printf("--------------------------------\n" COLOR_RESET);
+}
+
 void	print_group(t_group *group)
 {
+	printf(COLOR_RED_A "-------------- GROUP -------------\n");
 	while (group != NULL)
 	{
 		printf("operator: %c\n", group->operator);
@@ -141,6 +169,7 @@ void	print_group(t_group *group)
 		new_print_pipe(group->pipe);
 		group = group->next;
 	}
+	printf("--------------------------------\n" COLOR_RESET);
 }
 
 void	new_print_pipe(t_pipe *pipes)
