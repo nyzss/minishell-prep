@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 16:25:38 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:29:59 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,16 @@ typedef struct s_operator
 }	t_operator;
 
 // cmd table is for Groups
-// typedef struct s_group
-// {
-// 	struct s_group	*next;
-// }	t_group;
+
+// we will initialize the operator with the && op
+// since we will also have the status initialized at 0
+// then it will always execute the first command like we need it to
+typedef struct s_group
+{
+	t_pipe			*pipe;
+	t_operator_t	operator;
+	struct s_group	*next;
+}	t_group;
 
 typedef struct s_container
 {
