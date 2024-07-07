@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 19:59:24 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 14:13:02 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 14:57:11 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int	handle_here_doc(t_pipe *pipes, char *filename)
 	fd = open(tmp, O_RDONLY | __O_CLOEXEC);
 	if (fd < 0)
 		printf(COLOR_RED_A "fd not valid -- second one!!\n\n");
-	add_arg(&(pipes->filenames), create_args(tmp));
+	//REWORK HERE
+	add_filename(&(pipes->filename), create_filename(tmp, HereDoc));
 	return (fd);
 }
 
@@ -82,14 +83,15 @@ void	free_all(t_ctx *ctx)
 		free(ctx->token);
 }
 
-int	exit_builtin(t_ctx *ctx, t_cmd *cmd)
+// REWORK HERE
+int	exit_builtin(t_ctx *ctx, t_pipe *cmd)
 {
 	t_args			*args;
 	unsigned char	code;
 
 	code = 0;
-	args = cmd->extra_args;
-	if (cmd->arg_count > 1)
+	args = cmd->args;
+	if (cmd->nb_args > 1)
 	{
 		ft_fprintf(2, "exit\nexit: too many arguments\n");
 		return (1);
@@ -100,12 +102,12 @@ int	exit_builtin(t_ctx *ctx, t_cmd *cmd)
 	exit(code);
 }
 
-int	cd_builtin(t_cmd *cmd)
+int	cd_builtin(t_pipe *cmd)
 {
 	t_args	*args;
 
-	args = cmd->extra_args;
-	if (cmd->arg_count > 1)
+	args = cmd->args;
+	if (cmd->nb_args > 1)
 	{
 		ft_fprintf(2, "cd: \ntoo many arguments\n");
 		return (1);
@@ -135,12 +137,12 @@ int	pwd_builtin()
 	return (0);
 }
 
-int	env_builtin(t_ctx *ctx, t_cmd *cmd)
+int	env_builtin(t_ctx *ctx, t_pipe *cmd)
 {
 	int		i;
 
 	i = 0;
-	if (cmd->arg_count > 0)
+	if (cmd->nb_args > 0)
 	{
 		ft_fprintf(2, "cd: \ntoo many arguments\n");
 		return (2);
@@ -153,7 +155,7 @@ int	env_builtin(t_ctx *ctx, t_cmd *cmd)
 	return (0);
 }
 
-int	unset_builtin(t_ctx *ctx, t_cmd *cmd)
+int	unset_builtin(t_ctx *ctx, t_pipe *cmd)
 {
 	int		i;
 	t_args	*args;
@@ -162,7 +164,7 @@ int	unset_builtin(t_ctx *ctx, t_cmd *cmd)
 	i = 0;
 	while (ctx->env && ctx->env[i])
 	{
-		args = cmd->extra_args;
+		args = cmd->args;
 		while (args != NULL)
 		{
 			if (ft_strncmp(ctx->env[i], args->value, ft_strlen(args->value)) == 0
@@ -195,32 +197,32 @@ int	is_builtin(char *value)
 	return (0);
 }
 
-int	handle_built_in(t_ctx *ctx, t_cmd *cmd, int *status)
+int	handle_built_in(t_ctx *ctx, t_pipe *cmd, int *status)
 {
 	int	found;
 
 	found = 0;
-	if (ft_strcmp(cmd->value, "exit") == 0)
+	if (ft_strcmp(cmd->cmd, "exit") == 0)
 	{
 		*status = exit_builtin(ctx, cmd);
 		found = 1;
 	}
-	else if (ft_strcmp(cmd->value, "cd") == 0)
+	else if (ft_strcmp(cmd->cmd, "cd") == 0)
 	{
 		*status = cd_builtin(cmd);
 		found = 1;
 	}
-	else if (ft_strcmp(cmd->value, "pwd") == 0)
+	else if (ft_strcmp(cmd->cmd, "pwd") == 0)
 	{
 		*status = pwd_builtin();
 		found = 1;
 	}
-	else if (ft_strcmp(cmd->value, "env") == 0)
+	else if (ft_strcmp(cmd->cmd, "env") == 0)
 	{
 		*status = env_builtin(ctx, cmd);
 		found = 1;
 	}
-	else if (ft_strcmp(cmd->value, "unset") == 0)
+	else if (ft_strcmp(cmd->cmd, "unset") == 0)
 	{
 		*status = unset_builtin(ctx, cmd);
 		found = 1;

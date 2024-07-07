@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 10:05:06 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 14:43:26 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # define HERE_DOC_TMP 10
 
 # define SHOULD_EXIT 2
+
+# define true 1
+# define false 0
 
 # define PARSING_ERROR 1
 // # define PARSING_ERROR 1
@@ -118,6 +121,14 @@ typedef struct s_args
 	struct s_args	*next_arg;
 }	t_args;
 
+typedef struct s_filename
+{
+	char				*value;
+	t_token_type		type;
+	struct s_filename	*next;
+}	t_filename;
+
+
 typedef struct s_cmd
 {
 	int				arg_count;
@@ -129,50 +140,70 @@ typedef struct s_pipe
 {
 	int				in_fd;
 	int				out_fd;
-	t_args			*filenames;
-	t_cmd			*cmd;
+	t_filename		*filename;
+	char			*cmd;
+	t_args			*args;
+	int				nb_args;
 	struct s_pipe	*next;
 }	t_pipe;
 
-// typedef enum e_sign_t
+// typedef enum e_operator_t
 // {
 // 	NO_SIGN,
 // 	AND_SIGN,
 // 	OR_SIGN
-// }	t_sign_t;
+// }	t_operator_t;
 
-typedef enum e_sign_t
+typedef enum e_operator_t
 {
-	NO_CONTAINER,
-	PIPE_OP,
+	NO_OP,
 	AND_OP,
 	OR_OP
-}	t_sign_t;
+}	t_operator_t;
 
-typedef struct s_sign
+typedef enum e_type_t
 {
-	t_sign_t		type;
-	t_pipe			*cmds_t;
-	struct s_sign	*next;
-}	t_sign;
+	NO_TYPE,
+	PIPE,
+	GROUP,
+}	t_type_t;
+
+typedef struct s_operator
+{
+	t_operator_t		type;
+	t_pipe				*cmds_t;
+	struct s_operator	*next;
+}	t_operator;
 
 // cmd table is for Groups
-typedef struct s_group
-{
-	t_sign				*routine;
-	struct s_cmd_tab	*next;
-}	t_group;
-
+// typedef struct s_group
+// {
+// 	struct s_group	*next;
+// }	t_group;
 
 typedef struct s_container
 {
-	t_sign_t			type;
+	t_operator_t			operator;
+	t_type_t			type;
 	union
 	{
+		struct s_container	*group;
 		t_pipe	pipe;
-	}	data;
+	}	*data;
 	struct s_container	*next;
 }	t_container;
+
+/*
+	(ls && (ls -l -a | cat || (cat Makefile || grep "NAME")))
+
+	for this just recursively call create_group(), start with finding a first ( and then call it a
+
+	from the start take it as if every command starts of as a group ()
+	and if the first commands actually starts with a group () then,
+	well, check for that
+
+	if there is a group withnin a group just call the exec() function recursively.
+*/
 
 // int	status;
 // status = EXIT_SUCCESS;
@@ -205,6 +236,7 @@ typedef struct s_container
 // 	}
 // 	container = container->next;
 // }
+// return (status);
 
 /*
  structure goes like this:
@@ -221,6 +253,8 @@ typedef struct s_container
  each Group block will have
 */
 
+typedef	int	boolean;
+
 typedef struct s_ctx
 {
 	int		def_in;
@@ -231,7 +265,22 @@ typedef struct s_ctx
 	t_pipe	*pipes;
 }	t_ctx;
 
+
+t_filename	*create_filename(char *value, t_token_type type);
+
+t_filename	*last_filename(t_filename *head);
+
+int			add_filename(t_filename **head, t_filename *new);
+
+t_container	*create_container(t_token *token);
+
+t_container	*last_container(t_container *head);
+
+int		add_container(t_container **head, t_container *new);
+
 t_token	*lexer(char *str);
+
+void	do_exec(t_ctx *ctx);
 
 int		parser(t_token *token);
 
@@ -299,13 +348,13 @@ int		m_child(t_ctx *ctx, t_cmd *cmds, char **env);
 
 int		handle_here_doc(t_pipe *pipes, char *filename);
 
-int		handle_built_in(t_ctx *ctx, t_cmd *cmd, int *status);
+int		handle_built_in(t_ctx *ctx, t_pipe *cmd, int *status);
 
 int		handle_env_expand(t_token *token);
 
 int		is_builtin(char *value);
 
-int		exit_builtin(t_ctx *ctx, t_cmd *cmd);
+int		exit_builtin(t_ctx *ctx, t_pipe *cmd);
 
 int		expand_env(char **received);
 

@@ -41,7 +41,8 @@ int	m_child(t_ctx *ctx, t_cmd *cmds, char **env)
 	char	*path;
 	int		status;
 
-	if (handle_built_in(ctx, cmds, &status) == 0)
+	// REWORK HERE
+	if (handle_built_in(ctx, (t_pipe *)cmds, &status) == 0)
 	{
 		path = p_get_path(cmds->value);
 		if (access(path, F_OK | X_OK) != 0)
@@ -114,7 +115,6 @@ int	main(int ac, char **av, char **env)
 {
 	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
 	t_ctx	ctx;
-	int		status;
 
 	(void)ac;
 	(void)av;
@@ -122,7 +122,6 @@ int	main(int ac, char **av, char **env)
 	ctx.pipes = NULL;
 	ctx.token = NULL;
 	ctx.env = env;
-	status = 0;
 	get_stds(&ctx);
 	handle_signals();
 	while (1)
@@ -141,9 +140,7 @@ int	main(int ac, char **av, char **env)
 				continue ;
 			}
 			print_token(ctx.token);
-			ctx.pipes = build_pipe(ctx.token);
-			status = do_pipes(&ctx);
-			printf("status: %d\n", status);
+			do_exec(&ctx);
 			ctx.token = lex_clear_tokens(ctx.token);
 		}
 		free(ctx.line);
