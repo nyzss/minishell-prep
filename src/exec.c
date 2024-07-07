@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:00:56 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/02 20:39:35 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 10:02:35 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ int	do_pipes(t_ctx *ctx)
 		tmp = tmp->next;
 	}
 	reset_stds(ctx);
-	return (status);
+	return (WEXITSTATUS(status));
 }
 
 void	print_pipe(t_pipe *pipe)

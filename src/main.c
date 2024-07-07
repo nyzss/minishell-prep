@@ -114,6 +114,7 @@ int	main(int ac, char **av, char **env)
 {
 	char	*prompt = ESCAPE_F COLOR_YELLOW_A ESCAPE_S "prep -$ " ESCAPE_F COLOR_RESET ESCAPE_S;
 	t_ctx	ctx;
+	int		status;
 
 	(void)ac;
 	(void)av;
@@ -121,6 +122,7 @@ int	main(int ac, char **av, char **env)
 	ctx.pipes = NULL;
 	ctx.token = NULL;
 	ctx.env = env;
+	status = 0;
 	get_stds(&ctx);
 	handle_signals();
 	while (1)
@@ -139,8 +141,9 @@ int	main(int ac, char **av, char **env)
 				continue ;
 			}
 			print_token(ctx.token);
-			// ctx.pipes = build_pipe(ctx.token);
-			// do_pipes(&ctx);
+			ctx.pipes = build_pipe(ctx.token);
+			status = do_pipes(&ctx);
+			printf("status: %d\n", status);
 			ctx.token = lex_clear_tokens(ctx.token);
 		}
 		free(ctx.line);

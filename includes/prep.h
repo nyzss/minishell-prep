@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 09:38:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 10:05:06 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,20 +175,33 @@ typedef struct s_container
 }	t_container;
 
 // int	status;
-
 // status = EXIT_SUCCESS;
-
 // while (container != NULL)
 // {
-// 	if (container->type == AND_OP)
+// 	if (container->operator == NO_OP)
+// 	{
+// 		if (container->type == Group)
+// 			status = do_group();
+// 	}
+// 	if (container->operator == AND_OP)
 // 	{
 // 		if (status == EXIT_SUCCESS)
-// 			status = do_pipes();
+// 		{
+// 			if (container->type == PIPE)
+// 				status = do_pipes();
+// 			else if (container->type == Group)
+// 				status = do_group();
+// 		}
 // 	}
-// 	if (container->type == OR_OP)
+// 	if (container->operator == OR_OP)
 // 	{
 // 		if (status == EXIT_FAILURE)
-// 			status = do_pipes();
+// 		{
+// 			if (container->type == PIPE)
+// 				status = do_pipes();
+// 			else if (container->type == Group)
+// 				status = do_group();
+// 		}
 // 	}
 // 	container = container->next;
 // }
