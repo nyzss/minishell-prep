@@ -6,16 +6,18 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 19:03:59 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 15:42:52 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:26:58 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prep.h"
 
-t_pipe	*new_build_pipe(t_token *token)
+t_pipe	*new_build_pipe(t_token **tokens)
 {
 	t_pipe	*pipe_tab;
+	t_token	*token;
 
+	token = (*tokens);
 	pipe_tab = malloc(sizeof(t_pipe));
 	pipe_tab->cmd = NULL;
 	pipe_tab->args = NULL;
@@ -39,11 +41,15 @@ t_pipe	*new_build_pipe(t_token *token)
 		else if (token->type == Argument)
 			add_arg(&(pipe_tab->args), create_args(token->value));
 		else if (token->type == Pipe)
-			pipe_tab->next = new_build_pipe(token->next_token);
+		{
+			pipe_tab->next = new_build_pipe(&(token->next_token));
+			break ;
+		}
 		else if (token->type != Filename)
 			break ;
 		token = token->next_token;
 	}
+	*tokens = token;
 	return (pipe_tab);
 }
 
@@ -58,25 +64,29 @@ t_container	*build_table(t_token *token, boolean is_child)
 	container = malloc(sizeof(t_container));
 	container->data = NULL;
 	container->next = NULL;
-	container->type = NO_TYPE;
+	container->type = PIPE;
 	container->operator = NO_OP;
 	if (token->type == GroupOpen)
 	{
 		is_group = true;
 		token = token->next_token;
+		container->type = GROUP;
 	}
 	while (token != NULL)
 	{
 		if (is_group == true && is_child == true && token->type == GroupClose)
 			return (container);
-		// else if ()
-		token = token->next_token;
+		container->data = new_build_pipe(&(token));
+		new_print_pipe((t_pipe *)container->data);
+		// if (token->type == And)
+		if (token != NULL)
+			printf("token value: %s\n", token->value);
+		if (token != NULL)
+			token = token->next_token;
 	}
 	return (container);
 }
 
-
-void	new_print_pipe(t_pipe *pipes);
 
 void	do_exec(t_ctx *ctx)
 {
@@ -84,11 +94,12 @@ void	do_exec(t_ctx *ctx)
 	int	status;
 
 	status = 0;
-	new_print_pipe(new_build_pipe(ctx->token));
+	build_table(ctx->token, false);
 	// ctx->pipes = build_pipe(ctx->token);
 	// status = do_pipes(ctx);
 	printf("status: %d\n", status);
 }
+
 void	new_print_pipe(t_pipe *pipes)
 {
 	int	count;

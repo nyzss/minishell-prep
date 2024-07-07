@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 14:43:26 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:25:38 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,15 +183,16 @@ typedef struct s_operator
 
 typedef struct s_container
 {
-	t_operator_t			operator;
-	t_type_t			type;
-	union
-	{
-		struct s_container	*group;
-		t_pipe	pipe;
-	}	*data;
+	t_operator_t	operator;
+	t_type_t		type;
+	void			*data;
 	struct s_container	*next;
 }	t_container;
+// union
+// {
+// 	struct s_container	*group;
+// 	t_pipe	*pipe;
+// }	*data;
 
 /*
 	(ls && (ls -l -a | cat || (cat Makefile || grep "NAME")))
@@ -313,6 +314,8 @@ void	get_stds(t_ctx *ctx);
 void	reset_stds(t_ctx *ctx);
 
 char	*combine_tokens(t_token *token);
+
+void	new_print_pipe(t_pipe *pipes);
 
 // --------------------------------- LEXER -------------------------------
 
