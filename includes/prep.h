@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 16:29:59 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:40:12 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,9 +156,9 @@ typedef struct s_pipe
 
 typedef enum e_operator_t
 {
-	NO_OP,
-	AND_OP,
-	OR_OP
+	NO_OP = 'N',
+	AND_OP = 'A',
+	OR_OP = 'O',
 }	t_operator_t;
 
 typedef enum e_type_t
@@ -272,6 +272,7 @@ typedef struct s_ctx
 	t_pipe	*pipes;
 }	t_ctx;
 
+void	print_group(t_group *group);
 
 t_filename	*create_filename(char *value, t_token_type type);
 

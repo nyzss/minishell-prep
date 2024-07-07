@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 19:03:59 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 16:30:19 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:43:07 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,36 @@ t_pipe	*new_build_pipe(t_token **tokens)
 	return (pipe_tab);
 }
 
+t_group	*build_group(t_token *token, t_operator_t operator)
+{
+	t_group	*new;
+
+	new = malloc(sizeof(t_group));
+	new->pipe = NULL;
+	new->operator = operator;
+	new->next = NULL;
+	while (token != NULL)
+	{
+		new->pipe = new_build_pipe(&(token));
+		if (token == NULL)
+			break ;
+		else if (token->type == And)
+		{
+			new->next = build_group(token->next_token, AND_OP);
+			break ;
+		}
+		else if (token->type == Or)
+		{
+			new->next = build_group(token->next_token, OR_OP);
+			break ;
+		}
+		else
+			break ;
+		token = token->next_token;
+	}
+	return (new);
+}
+
 t_container	*build_table(t_token *token, boolean is_child)
 {
 	t_container	*container;
@@ -94,10 +124,23 @@ void	do_exec(t_ctx *ctx)
 	int	status;
 
 	status = 0;
-	build_table(ctx->token, false);
+	print_group(build_group(ctx->token, NO_OP));
+	// build_table(ctx->token, false);
 	// ctx->pipes = build_pipe(ctx->token);
 	// status = do_pipes(ctx);
 	printf("status: %d\n", status);
+}
+
+void	print_group(t_group *group)
+{
+	while (group != NULL)
+	{
+		printf("operator: %c\n", group->operator);
+		printf("next: %p\n", group->next);
+		printf("pipe: %p\n", group->pipe);
+		new_print_pipe(group->pipe);
+		group = group->next;
+	}
 }
 
 void	new_print_pipe(t_pipe *pipes)
