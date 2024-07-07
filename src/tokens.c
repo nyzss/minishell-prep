@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 19:07:35 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/06 19:07:53 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 09:29:30 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ int	print_token(t_token *token)
 			printf("(And)");
 		else if (token->type == Filename)
 			printf("(Filename)");
+		else if (token->type == GroupOpen)
+			printf("(GroupOpen)");
+		else if (token->type == GroupClose)
+			printf("(GroupClose)");
 		else if (token->type == Argument)
 			printf("(Argument)");
 		printf(" - value: [%s]\n", token->value);

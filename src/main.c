@@ -139,8 +139,8 @@ int	main(int ac, char **av, char **env)
 				continue ;
 			}
 			print_token(ctx.token);
-			ctx.pipes = build_pipe(ctx.token);
-			do_pipes(&ctx);
+			// ctx.pipes = build_pipe(ctx.token);
+			// do_pipes(&ctx);
 			ctx.token = lex_clear_tokens(ctx.token);
 		}
 		free(ctx.line);

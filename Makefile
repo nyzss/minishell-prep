@@ -6,7 +6,7 @@
 #    By: okoca <okoca@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 19:32:31 by okoca             #+#    #+#              #
-#    Updated: 2024/07/06 19:08:14 by okoca            ###   ########.fr        #
+#    Updated: 2024/07/07 09:25:46 by okoca            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,8 @@ SRC_FILES = main.c \
 			quotes.c \
 			new_parser.c \
 			new_exec.c \
-			tokens.c
+			tokens.c \
+			helper.c
 #			lexer.c
 #			parser.c
 

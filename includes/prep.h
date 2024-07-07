@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:22:48 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/06 19:10:43 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 09:28:07 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define ESCAPE_F "\001"
 # define ESCAPE_S "\002"
 
-#define COLOR_RESET   "\033[0m"
+# define COLOR_RESET "\033[0m"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -82,9 +82,9 @@ typedef enum e_token_type
 	Filename,
 	And,
 	Or,
-	Group
+	GroupOpen,
+	GroupClose
 }	t_token_type;
-
 
 typedef enum e_meta_char
 {
@@ -96,17 +96,9 @@ typedef enum e_meta_char
 	SpaceChar = ' ',
 	OrChar = '|',
 	AndChar = '&',
-	GroupOpen = '(',
-	GroupClose = ')',
+	ParantheseOpen = '(',
+	ParantheseClose = ')',
 }	t_meta_char;
-
-// typedef struct u_ast_node
-// {
-// 	t_token_type	type;
-// 	union {
-
-// 	}	data;
-// }	t_ast_node;
 
 typedef struct s_token
 {
@@ -142,11 +134,19 @@ typedef struct s_pipe
 	struct s_pipe	*next;
 }	t_pipe;
 
+// typedef enum e_sign_t
+// {
+// 	NO_SIGN,
+// 	AND_SIGN,
+// 	OR_SIGN
+// }	t_sign_t;
+
 typedef enum e_sign_t
 {
-	NO_SIGN,
-	AND_SIGN,
-	OR_SIGN
+	NO_CONTAINER,
+	PIPE_OP,
+	AND_OP,
+	OR_OP
 }	t_sign_t;
 
 typedef struct s_sign
@@ -162,6 +162,36 @@ typedef struct s_group
 	t_sign				*routine;
 	struct s_cmd_tab	*next;
 }	t_group;
+
+
+typedef struct s_container
+{
+	t_sign_t			type;
+	union
+	{
+		t_pipe	pipe;
+	}	data;
+	struct s_container	*next;
+}	t_container;
+
+// int	status;
+
+// status = EXIT_SUCCESS;
+
+// while (container != NULL)
+// {
+// 	if (container->type == AND_OP)
+// 	{
+// 		if (status == EXIT_SUCCESS)
+// 			status = do_pipes();
+// 	}
+// 	if (container->type == OR_OP)
+// 	{
+// 		if (status == EXIT_FAILURE)
+// 			status = do_pipes();
+// 	}
+// 	container = container->next;
+// }
 
 /*
  structure goes like this:
@@ -234,17 +264,7 @@ t_token	*create_token(t_token_type type, char *value);
 
 int		print_token(t_token *token);
 
-t_token *new_create_command(char *str, int *index);
-
-t_token	*new_tokenizer(char *buf);
-
 // ------------------------------- PARSER (somewhat) ----------------------
-
-int		token_checker(t_token *token);
-
-char	**split_once(char *value);
-
-int		new_token_checker(t_token *token);
 
 // -------------------------------- HISTORY --------------------------------
 

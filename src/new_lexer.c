@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:59:45 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 09:29:00 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,18 @@ t_token	*lexer(char *str)
 		else if (str[i] == PipeChar)
 		{
 			tmp = create_token(Pipe, ft_strndup(&(str[i]), 1));
+			add_token(&token, tmp);
+			i += ft_strlen(tmp->value);
+		}
+		else if (str[i] == ParantheseOpen)
+		{
+			tmp = create_token(GroupOpen, ft_strndup(&(str[i]), 1));
+			add_token(&token, tmp);
+			i += ft_strlen(tmp->value);
+		}
+		else if (str[i] == ParantheseClose)
+		{
+			tmp = create_token(GroupClose, ft_strndup(&(str[i]), 1));
 			add_token(&token, tmp);
 			i += ft_strlen(tmp->value);
 		}

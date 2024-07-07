@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:25:31 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/05 15:59:26 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/07 09:28:54 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ps_is_redir(t_token *token)
 int	ps_is_sep(t_token *token)
 {
 	if (token->type == Pipe || token->type == And
-		|| token->type == Group || token->type == Or)
+		|| token->type == GroupOpen || token->type == Or)
 		return (1);
 	return (0);
 }
