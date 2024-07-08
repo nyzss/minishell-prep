@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 19:03:59 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 21:53:18 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/08 08:24:18 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ t_pipe	*new_build_pipe(t_token **tokens)
 			add_arg(&(pipe_tab->args), create_args(token->value));
 		else if (token->type == Pipe)
 		{
-			pipe_tab->next = new_build_pipe(&(token->next_token));
+			token = token->next_token;
+			pipe_tab->next = new_build_pipe(&(token));
 			break ;
 		}
 		else if (token->type != Filename)
@@ -70,12 +71,14 @@ t_group	*build_group(t_token **tokens, t_operator_t operator)
 			break ;
 		else if (token->type == And && token->next_token->type != GroupOpen)
 		{
-			new->next = build_group(&(token->next_token), AND_OP);
+			token = token->next_token;
+			new->next = build_group(&(token), AND_OP);
 			break ;
 		}
 		else if (token->type == Or && token->next_token->type != GroupOpen)
 		{
-			new->next = build_group(&(token->next_token), OR_OP);
+			token = token->next_token;
+			new->next = build_group(&(token), OR_OP);
 			break ;
 		}
 		else
@@ -146,7 +149,7 @@ void	do_exec(t_ctx *ctx)
 
 void	print_table(t_container *container)
 {
-	printf(COLOR_RED_A "-------------- GROUP -------------\n");
+	printf(COLOR_GREEN_A "-------------- TABLE -------------\n");
 	while (container != NULL)
 	{
 		printf("operator: %c\n", container->operator);

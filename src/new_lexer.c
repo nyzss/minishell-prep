@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/07 09:37:52 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/08 09:00:20 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	lex_is_meta(char c)
 	while (meta[i])
 	{
 		if (meta[i] == c)
-			found = 1;
+			found = i;
 		i++;
 	}
 	free(meta);
@@ -38,7 +38,11 @@ int	lex_count_string(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((str[i] == SingleQuote || str[i] == DoubleQuote) && str[i + 1] == ' ')
+		if ((str[i] == SingleQuote || str[i] == DoubleQuote)
+			&& (str[i + 1] == SpaceChar || str[i + 1] == ParenthesisOpen
+			|| str[i + 1] == ParenthesisOpen || str[i + 1] == PipeChar
+			|| str[i + 1] == InfileChar || str[i + 1] == OutfileChar
+			|| str[i + 1] == AndChar))
 		{
 			i++;
 			break ;
@@ -106,6 +110,7 @@ t_token	*lexer(char *str)
 		if (str[i] == SingleQuote || str[i] == DoubleQuote)
 		{
 			tmp = create_token(RawString, ft_strndup(&(str[i]), lex_count_string(&(str[i]))));
+			printf("lex_count_string %d\n", lex_count_string(&(str[i])));
 			add_token(&token, tmp);
 			i += ft_strlen(tmp->value);
 		}
