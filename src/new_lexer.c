@@ -6,7 +6,7 @@
 /*   By: okoca <okoca@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 08:41:47 by okoca             #+#    #+#             */
-/*   Updated: 2024/07/08 09:00:20 by okoca            ###   ########.fr       */
+/*   Updated: 2024/07/08 09:02:12 by okoca            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	lex_count_string(char *str)
 	{
 		if ((str[i] == SingleQuote || str[i] == DoubleQuote)
 			&& (str[i + 1] == SpaceChar || str[i + 1] == ParenthesisOpen
-			|| str[i + 1] == ParenthesisOpen || str[i + 1] == PipeChar
+			|| str[i + 1] == ParenthesisClose || str[i + 1] == PipeChar
 			|| str[i + 1] == InfileChar || str[i + 1] == OutfileChar
 			|| str[i + 1] == AndChar))
 		{
